@@ -72,8 +72,8 @@ VL_INLINE_OPT void Valu___024root___ico_sequent__TOP__0(Valu___024root* vlSelf) 
                                              >> 0xfU) 
                                             & (~ ((IData)(vlSelfRef.B) 
                                                   >> 0xfU))) 
-                                           & ((IData)(vlSelfRef.C) 
-                                              >> 0xfU))));
+                                           & (~ ((IData)(vlSelfRef.C) 
+                                                 >> 0xfU)))));
     } else {
         vlSelfRef.C = (0xffffU & ((IData)(vlSelfRef.A) 
                                   + (IData)(vlSelfRef.B)));

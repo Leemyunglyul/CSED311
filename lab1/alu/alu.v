@@ -31,7 +31,7 @@ always @ (*)
 			end
 			4'b0001 : begin
 					C = A - B;
-					OverflowFlag = (~A[15] & B[15] & C[15]) | (A[15] & ~B[15] & C[15]);
+					OverflowFlag = (~A[15] & B[15] & C[15]) | (A[15] & ~B[15] & ~C[15]);
 			end
 			4'b0010 : C = A;
 			4'b0011 : C = ~A;
