@@ -24,10 +24,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vvending_machine___024root final : public Ver
     VL_OUT8(o_return_coin,2,0);
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __VicoFirstIteration;
-    CData/*2:0*/ __Vtrigprevexpr___TOP__i_input_coin__0;
-    CData/*3:0*/ __Vtrigprevexpr___TOP__i_select_item__0;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
-    CData/*0:0*/ __VactDidInit;
     CData/*0:0*/ __VactContinue;
     IData/*30:0*/ vending_machine__DOT__current_total;
     IData/*30:0*/ vending_machine__DOT__current_total_nxt;
@@ -42,8 +39,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vvending_machine___024root final : public Ver
     VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;
-    VlTriggerVec<3> __VactTriggered;
-    VlTriggerVec<3> __VnbaTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vvending_machine__Syms* const vlSymsp;

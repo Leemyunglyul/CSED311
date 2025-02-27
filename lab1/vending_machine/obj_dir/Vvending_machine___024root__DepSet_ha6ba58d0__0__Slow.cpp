@@ -21,10 +21,6 @@ VL_ATTR_COLD void Vvending_machine___024root___eval_initial(Vvending_machine___0
     // Body
     Vvending_machine___024root___eval_initial__TOP(vlSelf);
     Vvending_machine___024root____Vm_traceActivitySetAll(vlSelf);
-    vlSelfRef.__Vtrigprevexpr___TOP__i_input_coin__0 
-        = vlSelfRef.i_input_coin;
-    vlSelfRef.__Vtrigprevexpr___TOP__i_select_item__0 
-        = vlSelfRef.i_select_item;
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
 }
 
@@ -152,13 +148,7 @@ VL_ATTR_COLD void Vvending_machine___024root___dump_triggers__act(Vvending_machi
         VL_DBG_MSGF("         No triggers active\n");
     }
     if ((1ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 0 is active: @( i_input_coin)\n");
-    }
-    if ((2ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 1 is active: @( i_select_item)\n");
-    }
-    if ((4ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 2 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'act' region trigger index 0 is active: @(posedge clk)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -173,13 +163,7 @@ VL_ATTR_COLD void Vvending_machine___024root___dump_triggers__nba(Vvending_machi
         VL_DBG_MSGF("         No triggers active\n");
     }
     if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 0 is active: @( i_input_coin)\n");
-    }
-    if ((2ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @( i_select_item)\n");
-    }
-    if ((4ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 2 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 0 is active: @(posedge clk)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -218,10 +202,7 @@ VL_ATTR_COLD void Vvending_machine___024root___ctor_var_reset(Vvending_machine__
     vlSelf->vending_machine__DOT__return_total = VL_RAND_RESET_I(31);
     vlSelf->vending_machine__DOT__wait_time = VL_RAND_RESET_I(32);
     vlSelf->vending_machine__DOT__calculate_current_state_module__DOT__i = VL_RAND_RESET_I(32);
-    vlSelf->__Vtrigprevexpr___TOP__i_input_coin__0 = VL_RAND_RESET_I(3);
-    vlSelf->__Vtrigprevexpr___TOP__i_select_item__0 = VL_RAND_RESET_I(4);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
-    vlSelf->__VactDidInit = 0;
     for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }

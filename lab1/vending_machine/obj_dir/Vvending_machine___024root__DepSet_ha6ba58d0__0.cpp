@@ -148,18 +148,14 @@ void Vvending_machine___024root___eval_act(Vvending_machine___024root* vlSelf) {
 }
 
 void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_machine___024root* vlSelf);
-void Vvending_machine___024root___nba_sequent__TOP__1(Vvending_machine___024root* vlSelf);
 
 void Vvending_machine___024root___eval_nba(Vvending_machine___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root___eval_nba\n"); );
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    if ((3ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         Vvending_machine___024root___nba_sequent__TOP__0(vlSelf);
-    }
-    if ((4ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        Vvending_machine___024root___nba_sequent__TOP__1(vlSelf);
     }
 }
 
@@ -168,27 +164,12 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_mac
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.o_return_coin = ((IData)(vlSelfRef.o_return_coin) 
-                               | (IData)(vlSelfRef.i_input_coin));
-    vlSelfRef.vending_machine__DOT__wait_time = (((0U 
-                                                   != (IData)(vlSelfRef.i_input_coin)) 
-                                                  | (0U 
-                                                     != (IData)(vlSelfRef.i_select_item)))
-                                                  ? 0x64U
-                                                  : vlSelfRef.vending_machine__DOT__wait_time);
-}
-
-VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__1(Vvending_machine___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root___nba_sequent__TOP__1\n"); );
-    Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
     if ((1U & (~ (IData)(vlSelfRef.reset_n)))) {
         vlSelfRef.o_return_coin = 0U;
     }
     if (vlSelfRef.reset_n) {
         vlSelfRef.vending_machine__DOT__wait_time = 
-            ((0U < vlSelfRef.vending_machine__DOT__wait_time)
+            ((1U < vlSelfRef.vending_machine__DOT__wait_time)
               ? (vlSelfRef.vending_machine__DOT__wait_time 
                  - (IData)(1U)) : 0U);
         vlSelfRef.vending_machine__DOT__current_total 
@@ -196,6 +177,13 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__1(Vvending_mac
     } else {
         vlSelfRef.vending_machine__DOT__wait_time = 0U;
         vlSelfRef.vending_machine__DOT__current_total = 0U;
+    }
+    if ((0U != (IData)(vlSelfRef.i_input_coin))) {
+        vlSelfRef.o_return_coin = vlSelfRef.i_input_coin;
+        vlSelfRef.vending_machine__DOT__wait_time = 0x64U;
+    }
+    if ((0U != (IData)(vlSelfRef.o_output_item))) {
+        vlSelfRef.vending_machine__DOT__wait_time = 0x64U;
     }
     vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
                                                    & ((1U 
@@ -306,7 +294,7 @@ bool Vvending_machine___024root___eval_phase__act(Vvending_machine___024root* vl
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Init
-    VlTriggerVec<3> __VpreTriggered;
+    VlTriggerVec<1> __VpreTriggered;
     CData/*0:0*/ __VactExecute;
     // Body
     Vvending_machine___024root___eval_triggers__act(vlSelf);
