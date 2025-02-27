@@ -98,7 +98,7 @@ int main(int argc, char** argv, char** env) {
                 break;
             case 16: 
                 
-                dut->i_input_coin = 1; 
+                dut->i_input_coin = 1;
                 break;
 
             case 17: 

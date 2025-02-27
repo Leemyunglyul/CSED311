@@ -48,12 +48,11 @@ input_total, output_total, return_total,current_total_nxt,wait_time,o_return_coi
 		output_total = 0;
 		return_total = 0;
 
-		for(i=0; i < `kNumItems; i = i + 1) begin
-			o_available_item[i] = item_price[i] <= current_total_nxt ? 1 : 0;
-		end
+		for(i = 0; i < `kNumItems; i = i + 1) begin
 
-		for(i=0; i < `kNumItems; i = i + 1) begin
-			if(i_select_item[i]) begin
+			o_available_item[i] = item_price[i] <= current_total ? 1 : 0;
+
+			if(i_select_item[i] && o_available_item[i]) begin
 				if(item_price[i] <= current_total_nxt) begin
 					o_output_item[i] = 1;
 					output_total = output_total + item_price[i];
@@ -65,7 +64,7 @@ input_total, output_total, return_total,current_total_nxt,wait_time,o_return_coi
 			end
 		end 
 
-		return_total = current_total_nxt - output_total;
+		return_total = current_total >= output_total ? current_total - output_total : 0;
 
 	end
  
