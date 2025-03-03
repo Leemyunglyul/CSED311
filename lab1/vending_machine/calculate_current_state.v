@@ -2,8 +2,8 @@
 `include "vending_machine_def.v"
 	
 
-module calculate_current_state(i_input_coin,i_select_item,item_price,coin_value,current_total,
-input_total, output_total, return_total,current_total_nxt,o_return_coin,o_available_item,o_output_item);
+module calculate_current_state(i_input_coin,i_select_item,item_price,coin_value,current_total,input_total, output_total,
+current_total_nxt,o_return_coin,o_available_item,o_output_item);
 
 
 	
@@ -13,11 +13,11 @@ input_total, output_total, return_total,current_total_nxt,o_return_coin,o_availa
 	input [31:0] coin_value [`kNumCoins-1:0];	
 	input [`kTotalBits-1:0] current_total;
 	output reg [`kNumItems-1:0] o_available_item,o_output_item;
-	output reg  [`kTotalBits-1:0] input_total, output_total, return_total,current_total_nxt;
+	output reg  [`kTotalBits-1:0] current_total_nxt, input_total, output_total;
 	integer i;	
 
 
-
+	reg [`kTotalBits-1:0] current_input, current_output;
 	
 	// Combinational logic for the next states
 	always @(*) begin
@@ -25,14 +25,21 @@ input_total, output_total, return_total,current_total_nxt,o_return_coin,o_availa
 		// You don't have to worry about concurrent activations in each input vector (or array).
 		// Calculate the next current_total state.
 		
-		input_total = 0;
+		current_input = 0;
 
-		for(i=0; i < `kNumCoins; i = i + 1) begin
-			input_total = input_total + i_input_coin[i] * coin_value[i];
+		for(i = 0; i < `kNumCoins; i = i + 1) begin
+			current_input = current_input + i_input_coin[i] * coin_value[i];
+
 		end
 
-		current_total_nxt = current_total + input_total;
-
+		if(current_input > 0) begin
+			current_total_nxt = current_total + current_input;
+			input_total = input_total + current_input;
+		end else begin
+			current_total_nxt = current_total;
+			input_total = input_total;
+		end
+		
 	end
 
 	
@@ -44,31 +51,29 @@ input_total, output_total, return_total,current_total_nxt,o_return_coin,o_availa
 
 		o_available_item = 0;
 		o_output_item = 0;
-		output_total = 0;
-		return_total = 0;
+		current_output = 0;
 
 		for(i = 0; i < `kNumItems; i = i + 1) begin
 
 			o_available_item[i] = item_price[i] <= current_total ? 1 : 0;
 
 			if(i_select_item[i] && o_available_item[i]) begin
-				if(item_price[i] <= current_total_nxt) begin
-					o_output_item[i] = 1;
-					output_total = output_total + item_price[i];
-				end else begin
-					o_output_item[i] = 0;
-				end
+				o_output_item[i] = 1;
+				current_output = current_output + item_price[i];
 			end
-			/*else begin
-				o_output_item = o_output_item;
-			end*/
+			else begin
+				o_output_item[i] = 0;
+			end
 		end 
 
-		return_total = current_total >= output_total ? current_total - output_total : 0;
-
+		if(o_output_item > 0) begin
+			output_total = output_total + current_output;
+			current_total_nxt = current_total >= current_output ? current_total - current_output : 0;
+		end else begin
+			output_total = output_total;
+			current_total_nxt = current_total;
+		end
+		
 	end
- 
-	
 
-
-endmodule 
+endmodule

@@ -45,8 +45,9 @@ void Vvending_machine___024root__trace_chg_0_sub_0(Vvending_machine___024root* v
     bufp->chgIData(oldp+17,(vlSelfRef.vending_machine__DOT__current_total_nxt),31);
     bufp->chgIData(oldp+18,(vlSelfRef.vending_machine__DOT__input_total),31);
     bufp->chgIData(oldp+19,(vlSelfRef.vending_machine__DOT__output_total),31);
-    bufp->chgIData(oldp+20,(vlSelfRef.vending_machine__DOT__return_total),31);
-    bufp->chgIData(oldp+21,(vlSelfRef.vending_machine__DOT__wait_time),32);
+    bufp->chgIData(oldp+20,(vlSelfRef.vending_machine__DOT__wait_time),32);
+    bufp->chgIData(oldp+21,(vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__current_input),31);
+    bufp->chgIData(oldp+22,(vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__current_output),31);
 }
 
 void Vvending_machine___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

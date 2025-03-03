@@ -42,8 +42,8 @@ VL_ATTR_COLD void Vvending_machine___024root__trace_init_sub__TOP__0(Vvending_ma
     tracep->declBus(c+18,0,"current_total_nxt",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+19,0,"input_total",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+20,0,"output_total",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
-    tracep->declBus(c+21,0,"return_total",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
-    tracep->declBus(c+22,0,"wait_time",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
+    tracep->declBus(c+24,0,"return_total",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
+    tracep->declBus(c+21,0,"wait_time",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
     tracep->pushPrefix("calculate_current_state_module", VerilatedTracePrefixType::SCOPE_MODULE);
     tracep->declBus(c+11,0,"i_input_coin",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
     tracep->declBus(c+16,0,"o_return_coin",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
@@ -61,11 +61,12 @@ VL_ATTR_COLD void Vvending_machine___024root__trace_init_sub__TOP__0(Vvending_ma
     tracep->declBus(c+17,0,"current_total",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+14,0,"o_available_item",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+15,0,"o_output_item",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
+    tracep->declBus(c+18,0,"current_total_nxt",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+19,0,"input_total",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+20,0,"output_total",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
-    tracep->declBus(c+21,0,"return_total",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
-    tracep->declBus(c+18,0,"current_total_nxt",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+8,0,"i",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::INTEGER, false,-1, 31,0);
+    tracep->declBus(c+22,0,"current_input",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
+    tracep->declBus(c+23,0,"current_output",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->popPrefix();
     tracep->pushPrefix("change_state_module", VerilatedTracePrefixType::SCOPE_MODULE);
     tracep->declBit(c+9,0,"clk",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1);
@@ -79,8 +80,18 @@ VL_ATTR_COLD void Vvending_machine___024root__trace_init_sub__TOP__0(Vvending_ma
     tracep->declBus(c+11,0,"i_input_coin",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
     tracep->declBus(c+12,0,"i_select_item",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+15,0,"o_output_item",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
+    tracep->declBit(c+13,0,"i_trigger_return",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1);
+    tracep->declBus(c+17,0,"current_total",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
+    tracep->pushPrefix("coin_value", VerilatedTracePrefixType::ARRAY_UNPACKED);
+    for (int i = 0; i < 3; ++i) {
+        tracep->declBus(c+5+i*1,0,"",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, true,(i+0), 31,0);
+    }
+    tracep->popPrefix();
+    tracep->declBus(c+18,0,"current_total_nxt",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->declBus(c+16,0,"o_return_coin",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+22,0,"wait_time",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
+    tracep->declBus(c+21,0,"wait_time",-1, VerilatedTraceSigDirection::OUTPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
+    tracep->declBus(c+25,0,"i",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::INTEGER, false,-1, 31,0);
+    tracep->declBus(c+26,0,"left_coin",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 30,0);
     tracep->popPrefix();
     tracep->popPrefix();
 }
@@ -109,11 +120,27 @@ VL_ATTR_COLD void Vvending_machine___024root__trace_register(Vvending_machine___
     tracep->addCleanupCb(&Vvending_machine___024root__trace_cleanup, vlSelf);
 }
 
+VL_ATTR_COLD void Vvending_machine___024root__trace_const_0_sub_0(Vvending_machine___024root* vlSelf, VerilatedVcd::Buffer* bufp);
+
 VL_ATTR_COLD void Vvending_machine___024root__trace_const_0(void* voidSelf, VerilatedVcd::Buffer* bufp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root__trace_const_0\n"); );
     // Init
     Vvending_machine___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vvending_machine___024root*>(voidSelf);
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    // Body
+    Vvending_machine___024root__trace_const_0_sub_0((&vlSymsp->TOP), bufp);
+}
+
+VL_ATTR_COLD void Vvending_machine___024root__trace_const_0_sub_0(Vvending_machine___024root* vlSelf, VerilatedVcd::Buffer* bufp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root__trace_const_0_sub_0\n"); );
+    Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Init
+    uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode);
+    // Body
+    bufp->fullIData(oldp+24,(vlSelfRef.vending_machine__DOT__return_total),31);
+    bufp->fullIData(oldp+25,(vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__i),32);
+    bufp->fullIData(oldp+26,(vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin),31);
 }
 
 VL_ATTR_COLD void Vvending_machine___024root__trace_full_0_sub_0(Vvending_machine___024root* vlSelf, VerilatedVcd::Buffer* bufp);
@@ -154,6 +181,7 @@ VL_ATTR_COLD void Vvending_machine___024root__trace_full_0_sub_0(Vvending_machin
     bufp->fullIData(oldp+18,(vlSelfRef.vending_machine__DOT__current_total_nxt),31);
     bufp->fullIData(oldp+19,(vlSelfRef.vending_machine__DOT__input_total),31);
     bufp->fullIData(oldp+20,(vlSelfRef.vending_machine__DOT__output_total),31);
-    bufp->fullIData(oldp+21,(vlSelfRef.vending_machine__DOT__return_total),31);
-    bufp->fullIData(oldp+22,(vlSelfRef.vending_machine__DOT__wait_time),32);
+    bufp->fullIData(oldp+21,(vlSelfRef.vending_machine__DOT__wait_time),32);
+    bufp->fullIData(oldp+22,(vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__current_input),31);
+    bufp->fullIData(oldp+23,(vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__current_output),31);
 }

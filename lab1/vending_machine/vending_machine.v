@@ -33,8 +33,6 @@ module vending_machine (
 	output [`kNumCoins-1:0] o_return_coin;
 
 
-	
-
 	// Do not modify the values.
 	wire [31:0] item_price [`kNumItems-1:0];	// Price of each item
 	wire [31:0] coin_value [`kNumCoins-1:0];	// Value of each coin
@@ -52,20 +50,22 @@ module vending_machine (
 	// Next internal states. You may add your own net variables.
 	wire [`kTotalBits-1:0] current_total_nxt;
 
-	
 	// Variables. You may add more your own net variables.
 	wire [`kTotalBits-1:0] input_total, output_total, return_total;
 	wire [31:0] wait_time;
 
-
 	// This module interface, structure, and given a number of modules are not mandatory but recommended.
 	// However, Implementations that use modules are mandatory.
-		
+
   	check_time_and_coin check_time_and_coin_module(.i_input_coin(i_input_coin),
   									.i_select_item(i_select_item),
 									.clk(clk),
 									.reset_n(reset_n),
 									.o_output_item(o_output_item),
+									.i_trigger_return(i_trigger_return),
+									.current_total(current_total),
+									.coin_value(coin_value),
+									.current_total_nxt(current_total_nxt),
 									.wait_time(wait_time),
 									.o_return_coin(o_return_coin));
 
@@ -76,7 +76,6 @@ module vending_machine (
 										.current_total(current_total),
 										.input_total(input_total),
 										.output_total(output_total),
-										.return_total(return_total),
 										.current_total_nxt(current_total_nxt),
 										.o_return_coin(o_return_coin),
 										.o_available_item(o_available_item),

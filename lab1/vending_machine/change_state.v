@@ -19,4 +19,6 @@ module change_state(clk,reset_n,current_total_nxt,current_total);
 			current_total <= current_total_nxt;
 		end
 	end
+
+
 endmodule 

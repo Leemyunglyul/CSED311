@@ -16,6 +16,19 @@ void Vvending_machine___024root___eval_triggers__ico(Vvending_machine___024root*
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.__VicoTriggered.set(0U, (IData)(vlSelfRef.__VicoFirstIteration));
+    vlSelfRef.__VicoTriggered.set(1U, (vlSelfRef.vending_machine__DOT__input_total 
+                                       != vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__input_total__1));
+    vlSelfRef.__VicoTriggered.set(2U, (vlSelfRef.vending_machine__DOT__output_total 
+                                       != vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__output_total__1));
+    vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__input_total__1 
+        = vlSelfRef.vending_machine__DOT__input_total;
+    vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__output_total__1 
+        = vlSelfRef.vending_machine__DOT__output_total;
+    if (VL_UNLIKELY(((1U & (~ (IData)(vlSelfRef.__VicoDidInit)))))) {
+        vlSelfRef.__VicoDidInit = 1U;
+        vlSelfRef.__VicoTriggered.set(1U, 1U);
+        vlSelfRef.__VicoTriggered.set(2U, 1U);
+    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vvending_machine___024root___dump_triggers__ico(vlSelf);
@@ -32,9 +45,22 @@ void Vvending_machine___024root___eval_triggers__act(Vvending_machine___024root*
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.__VactTriggered.set(0U, ((IData)(vlSelfRef.clk) 
+    vlSelfRef.__VactTriggered.set(0U, (vlSelfRef.vending_machine__DOT__input_total 
+                                       != vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__input_total__2));
+    vlSelfRef.__VactTriggered.set(1U, (vlSelfRef.vending_machine__DOT__output_total 
+                                       != vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__output_total__2));
+    vlSelfRef.__VactTriggered.set(2U, ((IData)(vlSelfRef.clk) 
                                        & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__clk__0))));
+    vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__input_total__2 
+        = vlSelfRef.vending_machine__DOT__input_total;
+    vlSelfRef.__Vtrigprevexpr___TOP__vending_machine__DOT__output_total__2 
+        = vlSelfRef.vending_machine__DOT__output_total;
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
+    if (VL_UNLIKELY(((1U & (~ (IData)(vlSelfRef.__VactDidInit)))))) {
+        vlSelfRef.__VactDidInit = 1U;
+        vlSelfRef.__VactTriggered.set(0U, 1U);
+        vlSelfRef.__VactTriggered.set(1U, 1U);
+    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vvending_machine___024root___dump_triggers__act(vlSelf);
