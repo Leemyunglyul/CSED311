@@ -22,12 +22,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vvending_machine___024root final : public Ver
     VL_OUT8(o_available_item,3,0);
     VL_OUT8(o_output_item,3,0);
     VL_OUT8(o_return_coin,2,0);
-    CData/*0:0*/ __VstlDidInit;
     CData/*0:0*/ __VstlFirstIteration;
-    CData/*0:0*/ __VicoDidInit;
     CData/*0:0*/ __VicoFirstIteration;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
-    CData/*0:0*/ __VactDidInit;
     CData/*0:0*/ __VactContinue;
     IData/*30:0*/ vending_machine__DOT__current_total;
     IData/*30:0*/ vending_machine__DOT__current_total_nxt;
@@ -35,25 +32,15 @@ class alignas(VL_CACHE_LINE_BYTES) Vvending_machine___024root final : public Ver
     IData/*30:0*/ vending_machine__DOT__output_total;
     IData/*30:0*/ vending_machine__DOT__return_total;
     IData/*31:0*/ vending_machine__DOT__wait_time;
-    IData/*31:0*/ vending_machine__DOT__check_time_and_coin_module__DOT__i;
-    IData/*30:0*/ vending_machine__DOT__check_time_and_coin_module__DOT__left_coin;
     IData/*31:0*/ vending_machine__DOT__calculate_current_state_module__DOT__i;
-    IData/*30:0*/ vending_machine__DOT__calculate_current_state_module__DOT__current_input;
-    IData/*30:0*/ vending_machine__DOT__calculate_current_state_module__DOT__current_output;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__input_total__0;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__output_total__0;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__input_total__1;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__output_total__1;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__input_total__2;
-    IData/*30:0*/ __Vtrigprevexpr___TOP__vending_machine__DOT__output_total__2;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<IData/*31:0*/, 4> vending_machine__DOT__item_price;
     VlUnpacked<IData/*31:0*/, 3> vending_machine__DOT__coin_value;
     VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
-    VlTriggerVec<3> __VstlTriggered;
-    VlTriggerVec<3> __VicoTriggered;
-    VlTriggerVec<3> __VactTriggered;
-    VlTriggerVec<3> __VnbaTriggered;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vvending_machine__Syms* const vlSymsp;
