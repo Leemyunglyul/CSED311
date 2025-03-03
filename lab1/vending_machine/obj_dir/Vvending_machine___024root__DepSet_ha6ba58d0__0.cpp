@@ -14,6 +14,7 @@ void Vvending_machine___024root___eval_ico(Vvending_machine___024root* vlSelf) {
     // Body
     if ((1ULL & vlSelfRef.__VicoTriggered.word(0U))) {
         Vvending_machine___024root___ico_sequent__TOP__0(vlSelf);
+        vlSelfRef.__Vm_traceActivity[1U] = 1U;
     }
 }
 
@@ -22,6 +23,71 @@ VL_INLINE_OPT void Vvending_machine___024root___ico_sequent__TOP__0(Vvending_mac
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
+    vlSelfRef.o_return_coin = 0U;
+    vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin = 0U;
+    if (((0U == vlSelfRef.vending_machine__DOT__wait_time) 
+         | (IData)(vlSelfRef.i_trigger_return))) {
+        vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__i = 0xffffffffU;
+        vlSelfRef.vending_machine__DOT__return_total 
+            = vlSelfRef.vending_machine__DOT__current_total;
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [2U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [2U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [2U])));
+            vlSelfRef.o_return_coin = (4U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (3U & (IData)(vlSelfRef.o_return_coin));
+        }
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [1U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [1U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [1U])));
+            vlSelfRef.o_return_coin = (2U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (5U & (IData)(vlSelfRef.o_return_coin));
+        }
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [0U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [0U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [0U])));
+            vlSelfRef.o_return_coin = (1U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (6U & (IData)(vlSelfRef.o_return_coin));
+        }
+    } else {
+        vlSelfRef.vending_machine__DOT__return_total = 0U;
+        vlSelfRef.o_return_coin = 0U;
+    }
+    vlSelfRef.o_available_item = 0U;
+    vlSelfRef.o_output_item = 0U;
+    vlSelfRef.vending_machine__DOT__output_total = 0U;
     vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
                                                    & ((1U 
                                                        & (IData)(vlSelfRef.i_input_coin)) 
@@ -49,79 +115,63 @@ VL_INLINE_OPT void Vvending_machine___024root___ico_sequent__TOP__0(Vvending_mac
     vlSelfRef.vending_machine__DOT__current_total_nxt 
         = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
                           + vlSelfRef.vending_machine__DOT__input_total));
-    vlSelfRef.o_available_item = 0U;
-    vlSelfRef.o_output_item = 0U;
-    vlSelfRef.vending_machine__DOT__output_total = 0U;
     vlSelfRef.o_available_item = ((0xeU & (IData)(vlSelfRef.o_available_item)) 
                                   | ((vlSelfRef.vending_machine__DOT__item_price
                                       [0U] <= vlSelfRef.vending_machine__DOT__current_total)
                                       ? 1U : 0U));
     if ((1U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [0U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [0U]));
-            vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [0U]));
+        vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((0xdU & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [1U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 1U));
     if ((2U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [1U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [1U]));
-            vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [1U]));
+        vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((0xbU & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [2U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 2U));
     if ((4U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [2U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [2U]));
-            vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [2U]));
+        vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((7U & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [3U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 3U));
     if ((8U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [3U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [3U]));
-            vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [3U]));
+        vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
     }
-    vlSelfRef.vending_machine__DOT__return_total = 
-        ((vlSelfRef.vending_machine__DOT__current_total 
-          >= vlSelfRef.vending_machine__DOT__output_total)
-          ? (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                            - vlSelfRef.vending_machine__DOT__output_total))
-          : 0U);
+    if ((0U != (IData)(vlSelfRef.o_output_item))) {
+        vlSelfRef.vending_machine__DOT__current_total_nxt 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
+                              - (IData)(vlSelfRef.o_output_item)));
+    }
 }
 
 void Vvending_machine___024root___eval_triggers__ico(Vvending_machine___024root* vlSelf);
@@ -156,6 +206,7 @@ void Vvending_machine___024root___eval_nba(Vvending_machine___024root* vlSelf) {
     // Body
     if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         Vvending_machine___024root___nba_sequent__TOP__0(vlSelf);
+        vlSelfRef.__Vm_traceActivity[2U] = 1U;
     }
 }
 
@@ -178,13 +229,75 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_mac
         vlSelfRef.vending_machine__DOT__wait_time = 0U;
         vlSelfRef.vending_machine__DOT__current_total = 0U;
     }
-    if ((0U != (IData)(vlSelfRef.i_input_coin))) {
-        vlSelfRef.o_return_coin = vlSelfRef.i_input_coin;
+    if (((0U != (IData)(vlSelfRef.i_input_coin)) | 
+         (0U != (IData)(vlSelfRef.o_output_item)))) {
         vlSelfRef.vending_machine__DOT__wait_time = 0x64U;
     }
-    if ((0U != (IData)(vlSelfRef.o_output_item))) {
-        vlSelfRef.vending_machine__DOT__wait_time = 0x64U;
+    vlSelfRef.o_return_coin = 0U;
+    vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin = 0U;
+    if (((0U == vlSelfRef.vending_machine__DOT__wait_time) 
+         | (IData)(vlSelfRef.i_trigger_return))) {
+        vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__i = 0xffffffffU;
+        vlSelfRef.vending_machine__DOT__return_total 
+            = vlSelfRef.vending_machine__DOT__current_total;
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [2U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [2U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [2U])));
+            vlSelfRef.o_return_coin = (4U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (3U & (IData)(vlSelfRef.o_return_coin));
+        }
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [1U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [1U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [1U])));
+            vlSelfRef.o_return_coin = (2U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (5U & (IData)(vlSelfRef.o_return_coin));
+        }
+        if (((vlSelfRef.vending_machine__DOT__current_total 
+              - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin) 
+             >= vlSelfRef.vending_machine__DOT__coin_value
+             [0U])) {
+            vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin 
+                                  + (VL_DIV_III(32, 
+                                                (vlSelfRef.vending_machine__DOT__current_total 
+                                                 - vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin), 
+                                                vlSelfRef.vending_machine__DOT__coin_value
+                                                [0U]) 
+                                     * vlSelfRef.vending_machine__DOT__coin_value
+                                     [0U])));
+            vlSelfRef.o_return_coin = (1U | (IData)(vlSelfRef.o_return_coin));
+        } else {
+            vlSelfRef.o_return_coin = (6U & (IData)(vlSelfRef.o_return_coin));
+        }
+    } else {
+        vlSelfRef.vending_machine__DOT__return_total = 0U;
+        vlSelfRef.o_return_coin = 0U;
     }
+    vlSelfRef.o_available_item = 0U;
+    vlSelfRef.o_output_item = 0U;
+    vlSelfRef.vending_machine__DOT__output_total = 0U;
     vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
                                                    & ((1U 
                                                        & (IData)(vlSelfRef.i_input_coin)) 
@@ -212,79 +325,63 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_mac
     vlSelfRef.vending_machine__DOT__current_total_nxt 
         = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
                           + vlSelfRef.vending_machine__DOT__input_total));
-    vlSelfRef.o_available_item = 0U;
-    vlSelfRef.o_output_item = 0U;
-    vlSelfRef.vending_machine__DOT__output_total = 0U;
     vlSelfRef.o_available_item = ((0xeU & (IData)(vlSelfRef.o_available_item)) 
                                   | ((vlSelfRef.vending_machine__DOT__item_price
                                       [0U] <= vlSelfRef.vending_machine__DOT__current_total)
                                       ? 1U : 0U));
     if ((1U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [0U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [0U]));
-            vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [0U]));
+        vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((0xdU & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [1U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 1U));
     if ((2U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [1U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [1U]));
-            vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [1U]));
+        vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((0xbU & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [2U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 2U));
     if ((4U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [2U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [2U]));
-            vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [2U]));
+        vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
     }
     vlSelfRef.o_available_item = ((7U & (IData)(vlSelfRef.o_available_item)) 
                                   | (((vlSelfRef.vending_machine__DOT__item_price
                                        [3U] <= vlSelfRef.vending_machine__DOT__current_total)
                                        ? 1U : 0U) << 3U));
     if ((8U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        if ((vlSelfRef.vending_machine__DOT__item_price
-             [3U] <= vlSelfRef.vending_machine__DOT__current_total_nxt)) {
-            vlSelfRef.vending_machine__DOT__output_total 
-                = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                                  + vlSelfRef.vending_machine__DOT__item_price
-                                  [3U]));
-            vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
-        } else {
-            vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
-        }
+        vlSelfRef.vending_machine__DOT__output_total 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                              + vlSelfRef.vending_machine__DOT__item_price
+                              [3U]));
+        vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
+    } else {
+        vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
     }
-    vlSelfRef.vending_machine__DOT__return_total = 
-        ((vlSelfRef.vending_machine__DOT__current_total 
-          >= vlSelfRef.vending_machine__DOT__output_total)
-          ? (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                            - vlSelfRef.vending_machine__DOT__output_total))
-          : 0U);
+    if ((0U != (IData)(vlSelfRef.o_output_item))) {
+        vlSelfRef.vending_machine__DOT__current_total_nxt 
+            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
+                              - (IData)(vlSelfRef.o_output_item)));
+    }
 }
 
 void Vvending_machine___024root___eval_triggers__act(Vvending_machine___024root* vlSelf);

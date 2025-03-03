@@ -32,11 +32,12 @@ class alignas(VL_CACHE_LINE_BYTES) Vvending_machine___024root final : public Ver
     IData/*30:0*/ vending_machine__DOT__output_total;
     IData/*30:0*/ vending_machine__DOT__return_total;
     IData/*31:0*/ vending_machine__DOT__wait_time;
-    IData/*31:0*/ vending_machine__DOT__calculate_current_state_module__DOT__i;
+    IData/*30:0*/ vending_machine__DOT__check_time_and_coin_module__DOT__left_coin;
+    IData/*31:0*/ vending_machine__DOT__check_time_and_coin_module__DOT__i;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<IData/*31:0*/, 4> vending_machine__DOT__item_price;
     VlUnpacked<IData/*31:0*/, 3> vending_machine__DOT__coin_value;
-    VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
+    VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;
     VlTriggerVec<1> __VactTriggered;

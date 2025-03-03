@@ -29,7 +29,6 @@ VL_ATTR_COLD void Vvending_machine___024root___eval_initial__TOP(Vvending_machin
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__i = 4U;
     vlSelfRef.vending_machine__DOT__item_price[0U] = 0x190U;
     vlSelfRef.vending_machine__DOT__item_price[1U] = 0x1f4U;
     vlSelfRef.vending_machine__DOT__item_price[2U] = 0x3e8U;
@@ -103,6 +102,7 @@ VL_ATTR_COLD void Vvending_machine___024root___eval_stl(Vvending_machine___024ro
     // Body
     if ((1ULL & vlSelfRef.__VstlTriggered.word(0U))) {
         Vvending_machine___024root___ico_sequent__TOP__0(vlSelf);
+        Vvending_machine___024root____Vm_traceActivitySetAll(vlSelf);
     }
 }
 
@@ -174,6 +174,8 @@ VL_ATTR_COLD void Vvending_machine___024root____Vm_traceActivitySetAll(Vvending_
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.__Vm_traceActivity[0U] = 1U;
+    vlSelfRef.__Vm_traceActivity[1U] = 1U;
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
 }
 
 VL_ATTR_COLD void Vvending_machine___024root___ctor_var_reset(Vvending_machine___024root* vlSelf) {
@@ -201,9 +203,10 @@ VL_ATTR_COLD void Vvending_machine___024root___ctor_var_reset(Vvending_machine__
     vlSelf->vending_machine__DOT__output_total = VL_RAND_RESET_I(31);
     vlSelf->vending_machine__DOT__return_total = VL_RAND_RESET_I(31);
     vlSelf->vending_machine__DOT__wait_time = VL_RAND_RESET_I(32);
-    vlSelf->vending_machine__DOT__calculate_current_state_module__DOT__i = VL_RAND_RESET_I(32);
+    vlSelf->vending_machine__DOT__check_time_and_coin_module__DOT__left_coin = VL_RAND_RESET_I(31);
+    vlSelf->vending_machine__DOT__check_time_and_coin_module__DOT__i = VL_RAND_RESET_I(32);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 3; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }
