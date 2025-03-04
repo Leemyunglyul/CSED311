@@ -34,7 +34,20 @@ void Vvending_machine___024root___eval_triggers__act(Vvending_machine___024root*
     // Body
     vlSelfRef.__VactTriggered.set(0U, ((IData)(vlSelfRef.clk) 
                                        & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__clk__0))));
+    vlSelfRef.__VactTriggered.set(1U, ((IData)(vlSelfRef.i_select_item) 
+                                       != (IData)(vlSelfRef.__Vtrigprevexpr___TOP__i_select_item__0)));
+    vlSelfRef.__VactTriggered.set(2U, ((IData)(vlSelfRef.o_available_item) 
+                                       != (IData)(vlSelfRef.__Vtrigprevexpr___TOP__o_available_item__0)));
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
+    vlSelfRef.__Vtrigprevexpr___TOP__i_select_item__0 
+        = vlSelfRef.i_select_item;
+    vlSelfRef.__Vtrigprevexpr___TOP__o_available_item__0 
+        = vlSelfRef.o_available_item;
+    if (VL_UNLIKELY(((1U & (~ (IData)(vlSelfRef.__VactDidInit)))))) {
+        vlSelfRef.__VactDidInit = 1U;
+        vlSelfRef.__VactTriggered.set(1U, 1U);
+        vlSelfRef.__VactTriggered.set(2U, 1U);
+    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vvending_machine___024root___dump_triggers__act(vlSelf);

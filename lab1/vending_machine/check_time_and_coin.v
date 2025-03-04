@@ -1,9 +1,7 @@
 `include "vending_machine_def.v"
 
-	
-
 module check_time_and_coin(i_input_coin,i_select_item,clk,reset_n,o_output_item,i_trigger_return
-,coin_value,wait_time,o_return_coin,return_total,current_total);
+,coin_value,current_total,o_return_coin,return_total,wait_time);
 	input clk;
 	input reset_n;
 	input [`kNumCoins-1:0] i_input_coin;
@@ -27,7 +25,7 @@ module check_time_and_coin(i_input_coin,i_select_item,clk,reset_n,o_output_item,
 	end
 
 	always @(*) begin
-		// TODO: o_return_coin
+		// TODO: o_return_coin & return_total
 		o_return_coin = 0;
 		return_total = 0;
 		left_coin = 0;
@@ -61,7 +59,9 @@ module check_time_and_coin(i_input_coin,i_select_item,clk,reset_n,o_output_item,
 		// TODO: reset all states.
 			wait_time = 0;
 			o_return_coin = 0;
-		end
+		end else if(i_input_coin || o_output_item)
+			// initiate
+			wait_time = `kWaitTime;
 		else begin
 		// TODO: update all states.
 			if(wait_time > 1) 
@@ -69,10 +69,7 @@ module check_time_and_coin(i_input_coin,i_select_item,clk,reset_n,o_output_item,
 			else
 				wait_time = 0;
 		end
-
-		if(i_input_coin || o_output_item) begin
-			wait_time = `kWaitTime;
-		end
+		
 
 	end
 

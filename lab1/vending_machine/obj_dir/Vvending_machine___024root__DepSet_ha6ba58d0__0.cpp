@@ -14,7 +14,6 @@ void Vvending_machine___024root___eval_ico(Vvending_machine___024root* vlSelf) {
     // Body
     if ((1ULL & vlSelfRef.__VicoTriggered.word(0U))) {
         Vvending_machine___024root___ico_sequent__TOP__0(vlSelf);
-        vlSelfRef.__Vm_traceActivity[1U] = 1U;
     }
 }
 
@@ -85,9 +84,6 @@ VL_INLINE_OPT void Vvending_machine___024root___ico_sequent__TOP__0(Vvending_mac
         vlSelfRef.vending_machine__DOT__return_total = 0U;
         vlSelfRef.o_return_coin = 0U;
     }
-    vlSelfRef.o_available_item = 0U;
-    vlSelfRef.o_output_item = 0U;
-    vlSelfRef.vending_machine__DOT__output_total = 0U;
     vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
                                                    & ((1U 
                                                        & (IData)(vlSelfRef.i_input_coin)) 
@@ -113,65 +109,9 @@ VL_INLINE_OPT void Vvending_machine___024root___ico_sequent__TOP__0(Vvending_mac
                                                        vlSelfRef.vending_machine__DOT__coin_value
                                                        [2U])));
     vlSelfRef.vending_machine__DOT__current_total_nxt 
-        = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                          + vlSelfRef.vending_machine__DOT__input_total));
-    vlSelfRef.o_available_item = ((0xeU & (IData)(vlSelfRef.o_available_item)) 
-                                  | ((vlSelfRef.vending_machine__DOT__item_price
-                                      [0U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                      ? 1U : 0U));
-    if ((1U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [0U]));
-        vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((0xdU & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [1U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 1U));
-    if ((2U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [1U]));
-        vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((0xbU & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [2U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 2U));
-    if ((4U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [2U]));
-        vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((7U & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [3U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 3U));
-    if ((8U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [3U]));
-        vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
-    }
-    if ((0U != (IData)(vlSelfRef.o_output_item))) {
-        vlSelfRef.vending_machine__DOT__current_total_nxt 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                              - (IData)(vlSelfRef.o_output_item)));
-    }
+        = (0x7fffffffU & ((vlSelfRef.vending_machine__DOT__current_total 
+                           + vlSelfRef.vending_machine__DOT__input_total) 
+                          - vlSelfRef.vending_machine__DOT__output_total));
 }
 
 void Vvending_machine___024root___eval_triggers__ico(Vvending_machine___024root* vlSelf);
@@ -198,15 +138,22 @@ void Vvending_machine___024root___eval_act(Vvending_machine___024root* vlSelf) {
 }
 
 void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_machine___024root* vlSelf);
+void Vvending_machine___024root___nba_sequent__TOP__1(Vvending_machine___024root* vlSelf);
+void Vvending_machine___024root___nba_comb__TOP__0(Vvending_machine___024root* vlSelf);
 
 void Vvending_machine___024root___eval_nba(Vvending_machine___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root___eval_nba\n"); );
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((6ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         Vvending_machine___024root___nba_sequent__TOP__0(vlSelf);
-        vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    }
+    if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        Vvending_machine___024root___nba_sequent__TOP__1(vlSelf);
+    }
+    if ((7ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        Vvending_machine___024root___nba_comb__TOP__0(vlSelf);
     }
 }
 
@@ -215,24 +162,78 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_mac
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
+    vlSelfRef.vending_machine__DOT__calculate_current_state_module__DOT__i = 4U;
+    vlSelfRef.o_output_item = 0U;
+    vlSelfRef.o_output_item = ((0xeU & (IData)(vlSelfRef.o_output_item)) 
+                               | (1U & ((IData)(vlSelfRef.i_select_item) 
+                                        & (IData)(vlSelfRef.o_available_item))));
+    vlSelfRef.vending_machine__DOT__output_total = 
+        (0x7fffffffU & (vlSelfRef.vending_machine__DOT__item_price
+                        [0U] * (1U & (IData)(vlSelfRef.o_output_item))));
+    vlSelfRef.o_output_item = ((0xdU & (IData)(vlSelfRef.o_output_item)) 
+                               | (2U & ((IData)(vlSelfRef.i_select_item) 
+                                        & (IData)(vlSelfRef.o_available_item))));
+    vlSelfRef.vending_machine__DOT__output_total = 
+        (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                        + (vlSelfRef.vending_machine__DOT__item_price
+                           [1U] * (1U & ((IData)(vlSelfRef.o_output_item) 
+                                         >> 1U)))));
+    vlSelfRef.o_output_item = ((0xbU & (IData)(vlSelfRef.o_output_item)) 
+                               | (4U & ((IData)(vlSelfRef.i_select_item) 
+                                        & (IData)(vlSelfRef.o_available_item))));
+    vlSelfRef.vending_machine__DOT__output_total = 
+        (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                        + (vlSelfRef.vending_machine__DOT__item_price
+                           [2U] * (1U & ((IData)(vlSelfRef.o_output_item) 
+                                         >> 2U)))));
+    vlSelfRef.o_output_item = ((7U & (IData)(vlSelfRef.o_output_item)) 
+                               | (8U & ((IData)(vlSelfRef.i_select_item) 
+                                        & (IData)(vlSelfRef.o_available_item))));
+    vlSelfRef.vending_machine__DOT__output_total = 
+        (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
+                        + (vlSelfRef.vending_machine__DOT__item_price
+                           [3U] * (1U & ((IData)(vlSelfRef.o_output_item) 
+                                         >> 3U)))));
+}
+
+VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__1(Vvending_machine___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root___nba_sequent__TOP__1\n"); );
+    Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
     if ((1U & (~ (IData)(vlSelfRef.reset_n)))) {
         vlSelfRef.o_return_coin = 0U;
     }
     if (vlSelfRef.reset_n) {
         vlSelfRef.vending_machine__DOT__wait_time = 
-            ((1U < vlSelfRef.vending_machine__DOT__wait_time)
-              ? (vlSelfRef.vending_machine__DOT__wait_time 
-                 - (IData)(1U)) : 0U);
+            (((0U != (IData)(vlSelfRef.i_input_coin)) 
+              | (0U != (IData)(vlSelfRef.o_output_item)))
+              ? 0x64U : ((1U < vlSelfRef.vending_machine__DOT__wait_time)
+                          ? (vlSelfRef.vending_machine__DOT__wait_time 
+                             - (IData)(1U)) : 0U));
         vlSelfRef.vending_machine__DOT__current_total 
             = vlSelfRef.vending_machine__DOT__current_total_nxt;
     } else {
         vlSelfRef.vending_machine__DOT__wait_time = 0U;
         vlSelfRef.vending_machine__DOT__current_total = 0U;
     }
-    if (((0U != (IData)(vlSelfRef.i_input_coin)) | 
-         (0U != (IData)(vlSelfRef.o_output_item)))) {
-        vlSelfRef.vending_machine__DOT__wait_time = 0x64U;
-    }
+    vlSelfRef.o_available_item = 0U;
+    vlSelfRef.o_available_item = ((0xeU & (IData)(vlSelfRef.o_available_item)) 
+                                  | ((vlSelfRef.vending_machine__DOT__item_price
+                                      [0U] <= vlSelfRef.vending_machine__DOT__current_total)
+                                      ? 1U : 0U));
+    vlSelfRef.o_available_item = ((0xdU & (IData)(vlSelfRef.o_available_item)) 
+                                  | (((vlSelfRef.vending_machine__DOT__item_price
+                                       [1U] <= vlSelfRef.vending_machine__DOT__current_total)
+                                       ? 1U : 0U) << 1U));
+    vlSelfRef.o_available_item = ((0xbU & (IData)(vlSelfRef.o_available_item)) 
+                                  | (((vlSelfRef.vending_machine__DOT__item_price
+                                       [2U] <= vlSelfRef.vending_machine__DOT__current_total)
+                                       ? 1U : 0U) << 2U));
+    vlSelfRef.o_available_item = ((7U & (IData)(vlSelfRef.o_available_item)) 
+                                  | (((vlSelfRef.vending_machine__DOT__item_price
+                                       [3U] <= vlSelfRef.vending_machine__DOT__current_total)
+                                       ? 1U : 0U) << 3U));
     vlSelfRef.o_return_coin = 0U;
     vlSelfRef.vending_machine__DOT__check_time_and_coin_module__DOT__left_coin = 0U;
     if (((0U == vlSelfRef.vending_machine__DOT__wait_time) 
@@ -295,93 +296,17 @@ VL_INLINE_OPT void Vvending_machine___024root___nba_sequent__TOP__0(Vvending_mac
         vlSelfRef.vending_machine__DOT__return_total = 0U;
         vlSelfRef.o_return_coin = 0U;
     }
-    vlSelfRef.o_available_item = 0U;
-    vlSelfRef.o_output_item = 0U;
-    vlSelfRef.vending_machine__DOT__output_total = 0U;
-    vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
-                                                   & ((1U 
-                                                       & (IData)(vlSelfRef.i_input_coin)) 
-                                                      * 
-                                                      vlSelfRef.vending_machine__DOT__coin_value
-                                                      [0U]));
-    vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
-                                                   & (vlSelfRef.vending_machine__DOT__input_total 
-                                                      + 
-                                                      ((1U 
-                                                        & ((IData)(vlSelfRef.i_input_coin) 
-                                                           >> 1U)) 
-                                                       * 
-                                                       vlSelfRef.vending_machine__DOT__coin_value
-                                                       [1U])));
-    vlSelfRef.vending_machine__DOT__input_total = (0x7fffffffU 
-                                                   & (vlSelfRef.vending_machine__DOT__input_total 
-                                                      + 
-                                                      ((1U 
-                                                        & ((IData)(vlSelfRef.i_input_coin) 
-                                                           >> 2U)) 
-                                                       * 
-                                                       vlSelfRef.vending_machine__DOT__coin_value
-                                                       [2U])));
+}
+
+VL_INLINE_OPT void Vvending_machine___024root___nba_comb__TOP__0(Vvending_machine___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vvending_machine___024root___nba_comb__TOP__0\n"); );
+    Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
     vlSelfRef.vending_machine__DOT__current_total_nxt 
-        = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                          + vlSelfRef.vending_machine__DOT__input_total));
-    vlSelfRef.o_available_item = ((0xeU & (IData)(vlSelfRef.o_available_item)) 
-                                  | ((vlSelfRef.vending_machine__DOT__item_price
-                                      [0U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                      ? 1U : 0U));
-    if ((1U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [0U]));
-        vlSelfRef.o_output_item = (1U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xeU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((0xdU & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [1U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 1U));
-    if ((2U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [1U]));
-        vlSelfRef.o_output_item = (2U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xdU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((0xbU & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [2U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 2U));
-    if ((4U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [2U]));
-        vlSelfRef.o_output_item = (4U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (0xbU & (IData)(vlSelfRef.o_output_item));
-    }
-    vlSelfRef.o_available_item = ((7U & (IData)(vlSelfRef.o_available_item)) 
-                                  | (((vlSelfRef.vending_machine__DOT__item_price
-                                       [3U] <= vlSelfRef.vending_machine__DOT__current_total)
-                                       ? 1U : 0U) << 3U));
-    if ((8U & ((IData)(vlSelfRef.i_select_item) & (IData)(vlSelfRef.o_available_item)))) {
-        vlSelfRef.vending_machine__DOT__output_total 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__output_total 
-                              + vlSelfRef.vending_machine__DOT__item_price
-                              [3U]));
-        vlSelfRef.o_output_item = (8U | (IData)(vlSelfRef.o_output_item));
-    } else {
-        vlSelfRef.o_output_item = (7U & (IData)(vlSelfRef.o_output_item));
-    }
-    if ((0U != (IData)(vlSelfRef.o_output_item))) {
-        vlSelfRef.vending_machine__DOT__current_total_nxt 
-            = (0x7fffffffU & (vlSelfRef.vending_machine__DOT__current_total 
-                              - (IData)(vlSelfRef.o_output_item)));
-    }
+        = (0x7fffffffU & ((vlSelfRef.vending_machine__DOT__current_total 
+                           + vlSelfRef.vending_machine__DOT__input_total) 
+                          - vlSelfRef.vending_machine__DOT__output_total));
 }
 
 void Vvending_machine___024root___eval_triggers__act(Vvending_machine___024root* vlSelf);
@@ -391,7 +316,7 @@ bool Vvending_machine___024root___eval_phase__act(Vvending_machine___024root* vl
     Vvending_machine__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Init
-    VlTriggerVec<1> __VpreTriggered;
+    VlTriggerVec<3> __VpreTriggered;
     CData/*0:0*/ __VactExecute;
     // Body
     Vvending_machine___024root___eval_triggers__act(vlSelf);
