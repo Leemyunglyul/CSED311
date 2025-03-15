@@ -17,6 +17,8 @@ module register_file(input	reset,
   // TODO
   // Asynchronously read register file
   // Synchronously write data to the register file
+  assign rs1_dout = (rs1 == 5'b0) ? 32'b0 : rf[rs1];
+  assign rs2_dout = (rs2 == 5'b0) ? 32'b0 : rf[rs2];
 
   // Initialize register file (do not touch)
   always @(posedge clk) begin
@@ -34,6 +36,9 @@ module register_file(input	reset,
       rf[2] = 32'h2ffc; // stack pointer
       /* verilator lint_on BLKSEQ */
       // DO NOT TOUCH COMMENT ABOVE
+    end
+    else if (write_enable && rd != 5'b0) begin
+      rf[rd] <= rd_din;
     end
   end
 endmodule
