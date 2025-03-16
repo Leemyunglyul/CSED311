@@ -33,7 +33,7 @@ module alu_control_unit(
             end
 
             // I-type(LW), S-type, UJ-type
-            7'b0000011, 7'b0100011, 7'b1101111: alu_op = 4'b0001;
+            7'b0000011, 7'b0100011, 7'b1101111: alu_op = 4'b0001; // ADD
 
             // SB-type
             7'b1100011: begin

@@ -41,13 +41,8 @@ module cpu(input reset,                     // positive reset signal
   wire [31:0] wb_data = pc_to_reg ? pc_plus_4 :
                         mem_to_reg ? mem_dout : alu_result;
 
-  /*assign next_pc = (is_ecall) ? current_pc :
-                is_jalr ? jalr_target : 
-                (is_jal || branch_taken) ? branch_target : pc_plus_4;*/
   assign next_pc = is_jalr ? jalr_target : 
                (is_jal || branch_taken) ? branch_target : pc_plus_4;
-
-  //assign next_pc = is_jalr ? alu_result :               (is_jal || branch_taken) ? branch_target : pc_plus_4;
 
   assign is_halted = is_ecall && (print_reg[17] == 32'd10);
   
