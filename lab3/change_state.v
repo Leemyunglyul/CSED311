@@ -1,5 +1,11 @@
-module change_state(input [6:0] opcode,
+module change_state(input clk,
+                   input [6:0] opcode,
                    output reg [3:0] state);
+
+always @(posedge clk) begin
+  $display("STATE CHANGE: %b", state);
+end
+
 
 always @(posedge clk) begin
 
@@ -22,7 +28,7 @@ always @(posedge clk) begin
 
         // IF4 
         4'b0011: begin
-            if(opcode == JAL)
+            if(opcode == `JAL)
                 state <= 4'b0101;   // EX1
             else 
                 state <= 4'b0100;
@@ -40,9 +46,9 @@ always @(posedge clk) begin
 
         // EX2
         4'b0110: begin
-            if(opcode == LOAD || opcode == STORE) 
+            if(opcode == `LOAD || opcode == `STORE) 
                 state <= 4'b0111; // MEM1
-            else if(opcode == BRANCH)
+            else if(opcode == `BRANCH)
                 state <= 4'b0000; // IF1
             else // R,I-type, JALR, JAL
                 state <= 4'b1011; // WB
@@ -65,7 +71,7 @@ always @(posedge clk) begin
 
         // MEM4
         4'b1010: begin
-            if(opcode == LOAD) // LD
+            if(opcode == `LOAD) // LD
                 state <= 4'b1011; // WB
             else // SD
                 state <= 4'b0000; // IF1
@@ -75,6 +81,8 @@ always @(posedge clk) begin
         4'b1011: begin
             state <= 4'b0000;
         end
+
+        default: ;
 
     endcase
 

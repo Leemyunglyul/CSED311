@@ -8,6 +8,11 @@
 // 3. You might need to describe combinational logics to drive them into the module (e.g., mux, and, or, ...)
 // 4. `include files if required
 
+// The constants below are from riscv spec
+// Please do not change the values
+
+`include "opcodes.v"
+
 module cpu(input reset,       // positive reset signal
            input clk,         // clock signal
            output is_halted,
@@ -25,9 +30,13 @@ module cpu(input reset,       // positive reset signal
 
   wire [3:0] alu_control;
 
+  wire [6:0] opcode = IR[6:0];
+
   wire pc_src, pc_write_not_cond, pc_write, change_pc, reg_write, IorD;
-  wire mem_read, mem_write, ir_write, alu_srcA, alu_srcB, mem_to_reg;
+  wire mem_read, mem_write, ir_write, alu_srcA, mem_to_reg;
   wire is_ecall;
+  wire [1:0] alu_srcB;
+  wire [6:0] alu_op;
 
   wire [3:0] state;
 
@@ -35,7 +44,7 @@ module cpu(input reset,       // positive reset signal
   wire [31:0] imm_value;
 
   wire [31:0] alu_result;
-  wire bcond;
+  wire alu_bcond;
 
   /***** Register declarations *****/
   reg [31:0] IR; // instruction register
@@ -55,22 +64,22 @@ module cpu(input reset,       // positive reset signal
 
   assign alu_in_1 = alu_srcA ? A : current_pc;
   
-  always @(alu_srcB) begin
+  always @(*) begin
     case(alu_srcB)
         2'b00: alu_in_2 = B; 
-        2'b01: alu_in_2 = 32'h00000004; 
+        2'b01: alu_in_2 = 32'h4; 
         2'b10: alu_in_2 = imm_value; 
-        default: alu_in_2 = 32'h00000000;
+        default: alu_in_2 = 0;
     endcase
   end
 
-  always @(*) begin
-    if(ir_write)
-      IR = mem_data;
+  always @(posedge clk) begin
+    if (ir_write) IR <= mem_data;
   end
 
-  always @(*) begin
-    MDR = mem_data;
+
+  always @(posedge clk) begin
+    MDR <= mem_data;
   end
 
   // ---------- Update program counter ----------
@@ -110,19 +119,20 @@ module cpu(input reset,       // positive reset signal
 
   // ---------- Control Unit ----------
   ControlUnit ctrl_unit(
-    .opcode(IR[6:0]),  // input
+    .opcode(opcode),  // input
     .state(state),     // input
     .pc_write_not_cond(pc_write_not_cond),  // output
-    .pc_write(pc_write)       // output
-    .IorD(IorD)       // output
+    .pc_write(pc_write),      // output
+    .IorD(IorD),       // output
     .mem_read(mem_read),      // output
     .mem_write(mem_write),     // output
     .mem_to_reg(mem_to_reg),    // output
+    .ir_write(ir_write),
     .pc_src(pc_src),  // output
     .alu_op(alu_op),      // output
-    .alu_srcB(alu_scrB)     // output
-    .alu_srcA(alu_srcA)     // output
-    .reg_write(reg_write)   // output
+    .alu_srcB(alu_srcB),     // output
+    .alu_srcA(alu_srcA),     // output
+    .reg_write(reg_write),   // output
     .is_ecall(is_ecall)       // output (ecall inst)
   );
 
@@ -134,9 +144,9 @@ module cpu(input reset,       // positive reset signal
 
   // ---------- ALU Control Unit ----------
   alu_control_unit alu_ctrl_unit(
-    .opcode(IR[6:0]),    // input
-    .funct3(instruction[14:12]), // input
-    .funct7(instruction[31:25]), // input
+    .opcode(alu_op),    // input
+    .funct3(IR[14:12]), // input
+    .funct7(IR[30]), // input
     .alu_op(alu_control)         // output
   );
 
@@ -150,7 +160,8 @@ module cpu(input reset,       // positive reset signal
   );
 
   change_state state_counter(
-    .opcode(IR[6:0]),
+    .clk(clk),
+    .opcode(opcode),
     .state(state)
   );
 
