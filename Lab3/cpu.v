@@ -30,8 +30,8 @@ module cpu(input reset,       // positive reset signal
   wire [6:0] opcode = IR[6:0];
 
   wire pc_src, pc_write_cond, pc_write, reg_write, IorD;
-  wire mem_read, mem_write, ir_write, alu_srcA, mem_to_reg, is_ecall;
-  wire [1:0] alu_srcB;
+  wire mem_read, mem_write, ir_write, mem_to_reg, is_ecall;
+  wire [1:0] alu_srcB, alu_srcA;
   wire alu_control;
 
   wire [3:0] current_state, next_state;
@@ -56,7 +56,7 @@ module cpu(input reset,       // positive reset signal
   reg [31:0] ALUOut; // ALU output register
   // Do not modify and use registers declared above.
 
-  reg [31:0] alu_in_1, alu_in_2;
+  reg [31:0] alu_in_1, alu_in_2, PC_out;
 
   //assign change_pc = (alu_bcond & pc_write_cond) | pc_write;
 
@@ -66,11 +66,16 @@ module cpu(input reset,       // positive reset signal
   assign is_halted = is_ecall && (print_reg[17] == 32'd10);
 
   always @(*) begin
-    alu_in_1 = alu_srcA ? A : current_pc;
+    case(alu_srcA)
+      0: alu_in_1 = current_pc;
+      1: alu_in_1 = PC_out;
+      2: alu_in_1 = A;
+      default: ;
+    endcase
   end 
   
   always @(*) begin
-    case(select)
+    case(alu_srcB)
         2'b00: alu_in_2 = B; 
         2'b01: alu_in_2 = 4; 
         2'b10: alu_in_2 = imm_value; 
@@ -90,6 +95,7 @@ module cpu(input reset,       // positive reset signal
         A <= 0; 
         B <= 0;
         ALUOut <= 0; 
+        PC_out <= 0;
     end
     else begin
         if (ir_write) begin
@@ -99,6 +105,7 @@ module cpu(input reset,       // positive reset signal
         A <= rs1_out; 
         B <= rs2_out; 
         ALUOut <= alu_result;
+        PC_out <= current_pc;
     end
   end
 
@@ -108,7 +115,7 @@ module cpu(input reset,       // positive reset signal
     .reset(reset),       // input (Use reset to initialize PC. Initial value must be 0)
     .clk(clk),         // input
     .next_pc(pc_src ? ALUOut : alu_result),     // input
-    .change_pc(pc_write), // input
+    .change_pc(pc_write | (alu_bcond & pc_write_cond)), // input
     .current_pc(current_pc)   // output
   );
 
@@ -178,13 +185,6 @@ module cpu(input reset,       // positive reset signal
     .alu_in_2(alu_in_2),    // input
     .alu_result(alu_result),  // output
     .alu_bcond(alu_bcond)     // output
-  );
-
-  alu_src2 alu_src2(
-    .alu_srcB(alu_srcB),
-    .pc_write_cond(pc_write_cond),
-    .ALUOut(ALUOut),
-    .result(select)
   );
 
 endmodule

@@ -10,32 +10,32 @@ module address_select_logic(
     always @(*) begin
         case(opcode)
             `ARITHMETIC: begin
+                rom1_ID = 6;
+                rom2_EX = 7;
+            end
+            `ARITHMETIC_IMM: begin
+                rom1_ID = 8;
+                rom2_EX = 7;
+            end
+            `LOAD: begin
                 rom1_ID = 2;
                 rom2_EX = 3;
             end
-            `ARITHMETIC_IMM: begin
-                rom1_ID = 4;
-                rom2_EX = 3;
-            end
-            `LOAD: begin
-                rom1_ID = 9;
-                rom2_EX = 10;
-            end
             `STORE: begin
-                rom1_ID = 9;
-                rom2_EX = 12;
+                rom1_ID = 2;
+                rom2_EX = 5;
             end
             `BRANCH: begin
-                rom1_ID = 8;
+                rom1_ID = 10;
                 rom2_EX = 0;
             end
             `JAL: begin
-                rom1_ID = 5;
-                rom2_EX = 3;
+                rom1_ID = 9;
+                rom2_EX = 0;
             end
             `JALR: begin
-                rom1_ID = 6;
-                rom2_EX = 7;
+                rom1_ID = 11;
+                rom2_EX = 0;
             end
             default: begin
                 rom1_ID = 0;

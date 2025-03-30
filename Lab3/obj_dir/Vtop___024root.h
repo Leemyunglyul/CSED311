@@ -38,15 +38,16 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__mem_read;
         CData/*0:0*/ top__DOT__cpu__DOT__mem_write;
         CData/*0:0*/ top__DOT__cpu__DOT__ir_write;
-        CData/*0:0*/ top__DOT__cpu__DOT__alu_srcA;
         CData/*0:0*/ top__DOT__cpu__DOT__mem_to_reg;
         CData/*0:0*/ top__DOT__cpu__DOT__is_ecall;
         CData/*1:0*/ top__DOT__cpu__DOT__alu_srcB;
+        CData/*1:0*/ top__DOT__cpu__DOT__alu_srcA;
         CData/*0:0*/ top__DOT__cpu__DOT__alu_control;
         CData/*3:0*/ top__DOT__cpu__DOT__current_state;
         CData/*3:0*/ top__DOT__cpu__DOT__next_state;
         CData/*1:0*/ top__DOT__cpu__DOT__select;
         CData/*0:0*/ top__DOT__cpu__DOT__alu_bcond;
+        CData/*0:0*/ top__DOT__cpu__DOT____Vcellinp__pc__change_pc;
         CData/*0:0*/ top__DOT__cpu__DOT__pc__DOT__reset;
         CData/*0:0*/ top__DOT__cpu__DOT__pc__DOT__clk;
         CData/*0:0*/ top__DOT__cpu__DOT__pc__DOT__change_pc;
@@ -72,16 +73,16 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__ir_write;
         CData/*0:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__pc_src;
         CData/*0:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__alu_op;
+        CData/*1:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__alu_srcA;
         CData/*1:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__alu_srcB;
-        CData/*0:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__alu_srcA;
         CData/*0:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__reg_write;
         CData/*3:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__current_state;
         CData/*3:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__next_state;
         CData/*1:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__addrctrl;
         CData/*6:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__opcode;
-        CData/*1:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__addrctrl;
     };
     struct {
+        CData/*1:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__addrctrl;
         CData/*3:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__current_state;
         CData/*3:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__next_state;
         CData/*3:0*/ top__DOT__cpu__DOT__ctrl_unit__DOT__address_logic__DOT__rom1_ID;
@@ -104,11 +105,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*3:0*/ top__DOT__cpu__DOT__alu__DOT__alu_op;
         CData/*0:0*/ top__DOT__cpu__DOT__alu__DOT__alu_bcond;
         CData/*4:0*/ top__DOT__cpu__DOT__alu__DOT__shamt;
-        CData/*1:0*/ top__DOT__cpu__DOT__alu_src2__DOT__alu_srcB;
-        CData/*0:0*/ top__DOT__cpu__DOT__alu_src2__DOT__pc_write_cond;
-        CData/*1:0*/ top__DOT__cpu__DOT__alu_src2__DOT__result;
-        CData/*1:0*/ top__DOT__cpu__DOT__alu_src2__DOT__result_reg;
-        CData/*1:0*/ top__DOT__cpu__DOT__alu_src2__DOT__a;
         CData/*0:0*/ __VstlFirstIteration;
         CData/*0:0*/ __VicoFirstIteration;
         CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
@@ -129,6 +125,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         IData/*31:0*/ top__DOT__cpu__DOT__ALUOut;
         IData/*31:0*/ top__DOT__cpu__DOT__alu_in_1;
         IData/*31:0*/ top__DOT__cpu__DOT__alu_in_2;
+        IData/*31:0*/ top__DOT__cpu__DOT__PC_out;
         IData/*31:0*/ top__DOT__cpu__DOT____Vcellinp__pc__next_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__pc__DOT__next_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__pc__DOT__current_pc;
@@ -146,12 +143,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         IData/*31:0*/ top__DOT__cpu__DOT__alu__DOT__alu_in_1;
         IData/*31:0*/ top__DOT__cpu__DOT__alu__DOT__alu_in_2;
         IData/*31:0*/ top__DOT__cpu__DOT__alu__DOT__alu_result;
-    };
-    struct {
-        IData/*31:0*/ top__DOT__cpu__DOT__alu_src2__DOT__ALUOut;
         IData/*31:0*/ __VactIterCount;
         VL_OUT(print_reg[32],31,0);
         VlUnpacked<IData/*31:0*/, 32> top__DOT__print_reg;
+    };
+    struct {
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__print_reg;
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__reg_file__DOT__print_reg;
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__reg_file__DOT__rf;

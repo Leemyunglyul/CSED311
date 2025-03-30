@@ -11,8 +11,8 @@ module ControlUnit(
     output reg ir_write,
     output reg pc_src,
     output reg alu_op,
+    output reg [1:0] alu_srcA,
     output reg [1:0] alu_srcB,
-    output reg alu_srcA,
     output reg reg_write
 );
 
@@ -44,124 +44,133 @@ module ControlUnit(
         pc_src        = 0;
         alu_op        = 0;
         alu_srcB      = 2'b00;
-        alu_srcA      = 0;
+        alu_srcA      = 2'b00;
         reg_write     = 0;
         addrctrl      = 2'b00;
         case(current_state)
-            // IF: IR<-MEM[PC]
+            // IF: IR<-MEM[PC], PC<-PC+4
             0: begin
                 IorD = 0;
                 mem_read = 1;
                 ir_write = 1;
-                addrctrl = 3;
-            end
-            // ID: A<-RF[rs1[IR]], B<-RF[rs2[IR]], ALUOut<-PC+4 
-            1: begin
+                
                 alu_srcA = 0;
                 alu_srcB = 1;
                 alu_op = 1;
+                pc_src = 0;
+                pc_write = 1;
+
+                addrctrl = 3;
+            end
+            // ID: A<-RF[rs1[IR]], B<-RF[rs2[IR]], ALUOut<-PC+Imm
+            1: begin
+                alu_srcA = 1;
+                alu_srcB = 2;
+                alu_op = 1;
+
                 addrctrl = 1;
             end
-            // R-type EX: ALUOut<-A+B
+            // R-type EX: ALUOut<-A op B
             2: begin
-                alu_srcA = 1;
+                alu_srcA = 2;
                 alu_srcB = 0;
                 alu_op = 0;
+
                 addrctrl = 2;
             end
-            // R,I-type WB: RF[rd(IR)]<-ALUOut, PC<-PC+4
+            // R,I-type WB: RF[rd(IR)]<-ALUOut
             3: begin
                 mem_to_reg = 0;
                 reg_write = 1;
-                alu_srcA = 0;
-                alu_srcB = 1;
-                alu_op = 1;
-                pc_write = 1;
+
                 addrctrl = 0;
             end
-            // I-type EX: ALUOut<-A+imm(IR)
+            // I-type EX: ALUOut<-A op imm(IR)
             4: begin
-                alu_srcA = 1;
+                alu_srcA = 2;
                 alu_srcB = 2;
                 alu_op = 0;
+
                 addrctrl = 2;
             end
-            // Load, Store EX: ALUOut<-A+imm(IR)
+            // JAL EX: PC<-ALUOut, ALUOut<-PC+4
             5: begin
+                pc_write = 1;
+                pc_src = 1;
+
                 alu_srcA = 1;
+                alu_srcB = 3;
+                alu_op = 1;
+
+                addrctrl = 2;
+            end
+            // JALR EX: ALUOut<-PC(PC+4)
+            6: begin
+                alu_srcA = 1;
+                alu_srcB = 1;
+                alu_op = 1;
+
+                addrctrl = 2;
+            end
+            // JALR WB: rf<-ALUOut, PC<-A+imm
+            7: begin
+                mem_to_reg = 0;
+                reg_write = 1;
+
+                alu_srcA = 2;
                 alu_srcB = 2;
                 alu_op = 1;
+                pc_write = 1;
+                pc_src = 0;
+
+                addrctrl = 0;
+            end
+            // Bxx: cond?(A,B), if(cond) PC<-ALUOut
+            8: begin
+                alu_srcA = 2;
+                alu_srcB = 0;
+                alu_op = 0;
+
+                pc_write_cond = 1;
+                pc_write = 0;
+                pc_src = 1;
+
                 addrctrl = 2;
             end
-            // Load MEM: MDR<-MEM[ALUOut]
-            6: begin
-                ir_write = 0;
-                IorD = 1;
+            // Load, Store EX: ALUOut<-A+imm
+            9: begin
+                alu_srcA = 2;
+                alu_srcB = 2;
+                alu_op = 1;
+
+                addrctrl = 2;
+            end
+            // Load mem: MDR <- mem[ALUOut]
+            10: begin
                 mem_read = 1;
+                IorD = 1;
+                ir_write = 0;
+
                 addrctrl = 3;
             end
-            // LOAD WB: RF[rd(IR)]<-MDR, PC<-PC+4
-            7: begin
+            // Load WB: rf<-MDR
+            11: begin
                 mem_to_reg = 1;
                 reg_write = 1;
-                alu_srcA = 0;
-                alu_srcB = 1;
-                alu_op = 1;
-                pc_write = 1;
+
                 addrctrl = 0;
             end
-            // Store MEM: MEM[ALUOut]<-B, PC<-PC+4
-            8: begin
-                IorD = 1;
-                mem_write = 1;
-                alu_srcA = 0;
-                alu_srcB = 1;
-                alu_op = 1;
-                pc_src = 0;
-                pc_write = 1;
-                addrctrl = 0;
-            end
-            // Bxx EX: cond?(A,B)
-            9: begin
-                alu_op = 0;
-                alu_srcA = 1;
-                alu_srcB = 0;
-                addrctrl = 2;
-            end
-            // Bxx cond: if(!cond) PC<-PC+4, PC<-PC+imm(IR)
-            10: begin
-                alu_op = 1;
-                pc_write = 1;
-                pc_write_cond = 1;
-                pc_src = 0;
-            end
-            // JAL EX: RF[rd(IR)]<-ALUOut, PC<-PC+imm(IR)
-            11: begin
-                mem_to_reg = 0;
-                reg_write = 1;
-                alu_srcA = 0;
-                alu_srcB = 2;
-                alu_op = 1;
-                pc_write = 1;
-                pc_src = 0;
-                addrctrl = 0;
-            end
-            // JALR EX: RF[rd(IR)]<-ALUOut, PC<-A+imm(IR)
+            //Store mem: mem[ALUOut]<-B
             12: begin
-                mem_to_reg = 0;
-                reg_write = 1;
-                alu_srcA = 1;
-                alu_srcB = 2;
-                alu_op = 1;
-                pc_write = 1;
-                pc_src = 0;
+                mem_write = 1;
+                IorD = 1;
+
                 addrctrl = 0;
             end
+            
             default: ;
         endcase
 
     end
-
-
 
 endmodule
