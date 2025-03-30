@@ -1,7 +1,7 @@
 module ControlUnit(
     input [6:0] opcode,
     input [3:0] state,
-    output reg pc_write_not_cond,
+    output reg pc_write_cond,
     output reg pc_write,
     output reg IorD,
     output reg mem_read,
@@ -9,7 +9,7 @@ module ControlUnit(
     output reg mem_to_reg,
     output reg ir_write,
     output reg pc_src,
-    output reg [6:0] alu_op,
+    output reg alu_op,
     output reg [1:0] alu_srcB,
     output reg alu_srcA,
     output reg reg_write,
@@ -17,85 +17,126 @@ module ControlUnit(
 );
 
 always @(*) begin
-    if(opcode == `ECALL)
-        is_ecall = 1;
-    else
-        is_ecall = 0;
+    is_ecall = (opcode == `ECALL);
 end
 
 always @(*) begin
 
-    {pc_write_not_cond, pc_write, IorD, mem_read, 
-     mem_write, mem_to_reg, pc_src, alu_srcA, 
-     reg_write, ir_write} = 10'b0;
-    alu_op = 7'b0;
-    alu_srcB = 2'b00;
-
     case(state)
-        // IF1-IF3
-        4'b0000, 4'b0001, 4'b0010: ;
-
-        // IF4
-        4'b0011: begin
-            mem_read = 1;   
-        end
-
-        // ID: 레지스터 읽기 
-        4'b0100: begin
+        0: begin // IF: IR<-MEM[PC]
+            IorD = 0;
+            mem_read = 1;
             ir_write = 1;
+
+            pc_write = 0;
+            IorD = 0;
+            pc_write_cond = 0;
+            mem_write = 0;
+            reg_write = 0;
         end
+        1: begin // ID: A<-RF[rs1(IR)], B<-RF[rs2[IR]], ALUOut<-PC+4
+            alu_srcA = 0;
+            alu_srcB = 1;
+            alu_op = 1;
 
-        // EX1: ALU 연산
-        4'b0101: begin
+            pc_write  = 0;
+            mem_read = 0;
+            mem_write = 0;
+            ir_write = 0;
+            reg_write = 0;
+            pc_write_cond = 0;
         end
-
-        // EX2
-        4'b0110: begin
-            alu_op = opcode;
-            case(opcode)
-                `ARITHMETIC: begin
-                    alu_srcA = 1;
-                    alu_srcB = 2'b00;
-                end
-                `ARITHMETIC_IMM, `LOAD, `STORE, `JALR: begin
-                    alu_srcA = 1;
-                    alu_srcB = 2'b10;
-                end
-                `JAL: begin
-                    alu_srcA = 0;
-                    alu_srcB = 2'b10;
-                end
-                `BRANCH: begin
-                    alu_srcA = 1;
-                    alu_srcB = 2'b00;
-                    pc_write_not_cond = 1;
-                end
-                default: ;
-            endcase
-        end
-
-        // MEM1-MEM3
-        4'b0111,4'b1000,4'b1001: ;
-
-        // MEM4
-        4'b1010: begin
-            IorD = 1;
-            mem_read = (opcode == `LOAD);
-            mem_write = (opcode == `STORE);
-        end
-
-        // WB
-        4'b1011: begin
+        2: begin // R-type EX: ALUOut<-A+B
+            alu_srcA = 1;
+            alu_srcB = 0;
+            alu_op = 0;
+        end 
+        3: begin // R,I-type WB
             mem_to_reg = 0;
             reg_write = 1;
             alu_srcA = 0;
-            alu_srcB = 2'b01;
-            alu_op = opcode;
-            pc_src = 0;
+            alu_srcB = 1;
+            alu_op = 1;
             pc_write = 1;
         end
+        4: begin // I-type EX
+            alu_srcA = 1;
+            alu_srcB = 2;
+            alu_op = 0;
+        end
+        5: begin // Store, Load EX: ALUout<-A+imm(IR)
+            alu_srcA = 1;
+            alu_srcB = 2;
+            alu_op = 1;
 
+            mem_read = 0;
+            reg_write = 0;
+            mem_write = 0;
+            pc_write = 0;
+            ir_write = 0;
+            pc_write_cond = 0;
+        end
+        6: begin // Load MEM
+            ir_write = 0;
+            IorD = 1;
+            mem_read = 1;
+        end
+        7: begin // Load WB
+            mem_to_reg = 1;
+            reg_write = 1;
+            alu_srcA = 0;
+            alu_srcB = 1;
+            alu_op = 1;
+            pc_write = 1;
+        end 
+        8: begin // Store MEM: MEM[ALUout]<-B, PC<-PC+4
+            IorD = 1;
+            mem_write = 1;
+            alu_srcA = 0;
+            alu_srcB = 1;
+            alu_op = 1;
+            pc_src = 0;
+            pc_write = 1;
+            
+            mem_read = 0;
+            reg_write = 0;
+            ir_write = 0;
+        end
+        9: begin // Bxx EX
+            alu_srcA = 1;
+            alu_srcB = 0;
+            alu_op = 0;
+            pc_src = 1;
+            pc_write = 1;
+            pc_write_cond = 0;
+        end
+        10: begin // Bxx cond
+            pc_write_cond = 1;
+            alu_srcA = 0;
+            alu_srcB = 2;
+            alu_op = 1;
+            pc_src = 0;
+        end
+        11: begin // JAL EX
+            mem_to_reg = 0;
+            reg_write = 1;
+            alu_srcA = 0;
+            alu_srcB = 2;
+            alu_op = 1;
+            pc_write = 1;
+            pc_src = 0;
+        end
+        12: begin // JALR EX
+            mem_to_reg = 0;
+            reg_write = 1;
+            alu_srcA = 1;
+            alu_srcB = 2;
+            alu_op = 1;
+            pc_write = 1;
+            pc_src = 0;
+        end
         default: ;
+
     endcase
 end
 

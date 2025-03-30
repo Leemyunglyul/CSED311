@@ -34,7 +34,7 @@ module alu_control_unit(
                     endcase
                 end
 
-                `LOAD, `STORE, `JALR, `JAL: alu_op = 4'b0001; 
+                `LOAD, `STORE, `JALR, `JAL: alu_op = 4'b0001;
 
                 `BRANCH: begin
                     case(funct3)
