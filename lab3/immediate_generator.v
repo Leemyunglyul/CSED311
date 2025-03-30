@@ -7,7 +7,7 @@ module immediate_generator(
     always @(*) begin
         case(opcode)
             // I-type, JALR, LW
-            `ARITHMETIC, `ARITHMETIC_IMM, `LOAD:
+            `ARITHMETIC_IMM, `LOAD, `JALR:
                 imm_gen_out = {{20{part_of_inst[31]}}, part_of_inst[31:20]};
 
             // S-type(SW)

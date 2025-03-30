@@ -7,10 +7,12 @@ module PC(
 );
     always @(posedge clk) begin
         if (reset)
-            current_pc <= 32'h00000000;
+            current_pc <= 0;
         else begin
             if(change_pc)
                 current_pc <= next_pc;
+            else
+                current_pc <= current_pc;
         end
     end
 

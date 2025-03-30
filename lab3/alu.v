@@ -9,7 +9,7 @@ module alu(
 
     always @(*) begin
         alu_result = 32'b0;
-        alu_bcond = 1'b0;
+        alu_bcond = 0;
 
         case(alu_op)
             // Arithmetic
@@ -33,7 +33,7 @@ module alu(
             4'b1001: alu_bcond = (alu_in_1 != alu_in_2); // BNE
             4'b1010: alu_bcond = ($signed(alu_in_1) < $signed(alu_in_2)); // BLT
             4'b1011: alu_bcond = ($signed(alu_in_1) >= $signed(alu_in_2)); // BGE
-            default: alu_bcond = 1'b0;
+            default: alu_bcond = 0;
         endcase
     end
 endmodule

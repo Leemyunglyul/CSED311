@@ -5,12 +5,12 @@ module change_state(
     output reg [3:0] current_state
 );
 
-always @(posedge clk) begin
-    if(reset)
-        current_state <= 0;
-    else
-        current_state <= next_state;
+    always @(posedge clk) begin
+        if(reset)
+            current_state <= 0;
+        else
+            current_state <= next_state;
 
-end
+    end
 
 endmodule
