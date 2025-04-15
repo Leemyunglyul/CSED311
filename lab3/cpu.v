@@ -46,8 +46,6 @@ module cpu(input reset,       // positive reset signal
 
   wire [31:0] rs1_out, rs2_out;
 
-  //wire [31:0] IR_out, MDR_out, A_out, B_out, ALUOut_out;
-
   /***** Register declarations *****/
   reg [31:0] IR; // instruction register
   reg [31:0] MDR; // memory data register
@@ -57,8 +55,6 @@ module cpu(input reset,       // positive reset signal
   // Do not modify and use registers declared above.
 
   reg [31:0] alu_in_1, alu_in_2, PC_out;
-
-  //assign change_pc = (alu_bcond & pc_write_cond) | pc_write;
 
   assign wb_data = mem_to_reg ? MDR : ALUOut;
 
@@ -83,11 +79,6 @@ module cpu(input reset,       // positive reset signal
     endcase
   end
 
-  //assign IR_out = IR; 
-  //assign MDR_out = MDR; 
-  //assign A_out = A; 
-  //assign B_out = B; 
-  //assign ALUOut_out = ALUOut; 
   always @(posedge clk) begin
     if(reset)begin
         IR <= 0; 
