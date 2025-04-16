@@ -1,4 +1,4 @@
-module alu(
+module ALU(
     input [3:0] alu_op,        
     input [31:0] alu_in_1,
     input [31:0] alu_in_2,
@@ -8,7 +8,6 @@ module alu(
 
     always @(*) begin
         alu_result = 32'b0;
-        alu_bcond = 1'b0;
 
         case(alu_op)
             // Arithmetic
