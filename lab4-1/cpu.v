@@ -68,10 +68,11 @@ module cpu(input reset,       // positive reset signal
   reg mem_read, mem_to_reg, mem_write, reg_write, alu_src;
   reg [3:0] alu_op;
 
-  reg check_halt, ID_EX_halt, EX_MEM_halt, MEM_WB_halt;
+  reg ID_EX_halt, EX_MEM_halt, MEM_WB_halt;
 
-  assign check_halt = is_ecall && (print_reg[17] == 32'd10);
-  assign is_halted = MEM_WB_halt;
+  //assign check_halt = is_ecall && (print_reg[17] == 32'd10);
+  //assign is_halted = MEM_WB_halt;
+  assign is_halted = MEM_WB_halt && (print_reg[17] == 32'd10);
 
   always @(*) begin
     case(forwardA)
@@ -101,6 +102,7 @@ module cpu(input reset,       // positive reset signal
     else wb_data = MEM_WB_mem_to_reg_src_2;
   end
 
+
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
   PC pc(
@@ -127,8 +129,6 @@ module cpu(input reset,       // positive reset signal
     else begin
       if(IF_ID_write)
         IF_ID_inst <= inst;
-      else
-        IF_ID_inst <= 0;
     end
   end
 
@@ -217,7 +217,7 @@ module cpu(input reset,       // positive reset signal
       ID_EX_rd <= IF_ID_inst[11:7];
       ID_EX_rs1 <= IF_ID_inst[19:15];
       ID_EX_rs2 <= IF_ID_inst[24:20];
-      ID_EX_halt <= check_halt;
+      ID_EX_halt <= is_ecall;
     end
   end
 
