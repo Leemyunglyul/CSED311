@@ -15,7 +15,7 @@ module cpu(input reset,       // positive reset signal
            output is_halted, // Whehther to finish simulation
            output [31:0]print_reg[0:31]); // Whehther to finish simulation
   /***** Wire declarations *****/
-  wire pc_write, is_ecall;
+  wire pc_write,is_ecall;
   wire [1:0] forwardA, forwardB;
   wire [31:0] current_pc;
   wire [31:0] imm_gen_out, alu_out, mem_dout;
@@ -68,11 +68,17 @@ module cpu(input reset,       // positive reset signal
   reg mem_read, mem_to_reg, mem_write, reg_write, alu_src;
   reg [3:0] alu_op;
 
-  reg ID_EX_halt, EX_MEM_halt, MEM_WB_halt;
+  reg ID_EX_halt, EX_MEM_halt, MEM_WB_halt, final_halt;
 
   //assign check_halt = is_ecall && (print_reg[17] == 32'd10);
   //assign is_halted = MEM_WB_halt;
-  assign is_halted = MEM_WB_halt && (print_reg[17] == 32'd10);
+
+  assign is_halted = final_halt;
+
+  always @(posedge clk) begin
+    if(reset) final_halt <= 0;
+    else final_halt <= MEM_WB_halt;
+  end
 
   always @(*) begin
     case(forwardA)
@@ -101,7 +107,6 @@ module cpu(input reset,       // positive reset signal
     if(MEM_WB_mem_to_reg) wb_data = MEM_WB_mem_to_reg_src_1;
     else wb_data = MEM_WB_mem_to_reg_src_2;
   end
-
 
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
@@ -172,6 +177,7 @@ module cpu(input reset,       // positive reset signal
     .opcode(IF_ID_inst[6:0]),
     .ID_EX_rd(ID_EX_rd),
     .ID_EX_mem_read(ID_EX_mem_read),
+    .ID_EX_reg_write(ID_EX_reg_write),
     .pc_write(pc_write),
     .IF_ID_write(IF_ID_write),
     .ID_EX_sel(ID_EX_sel)
@@ -217,7 +223,7 @@ module cpu(input reset,       // positive reset signal
       ID_EX_rd <= IF_ID_inst[11:7];
       ID_EX_rs1 <= IF_ID_inst[19:15];
       ID_EX_rs2 <= IF_ID_inst[24:20];
-      ID_EX_halt <= is_ecall;
+      ID_EX_halt <= is_ecall && ((print_reg[17] == 32'd10) || (ID_EX_rd == 17 && alu_out == 10 && ID_EX_reg_write));
     end
   end
 

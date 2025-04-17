@@ -4,6 +4,7 @@ module HazardDetectionUnit (
     input [6:0] opcode,
     input [4:0] ID_EX_rd,
     input ID_EX_mem_read,
+    input ID_EX_reg_write,
     output reg pc_write,
     output reg IF_ID_write,
     output reg ID_EX_sel
@@ -26,6 +27,11 @@ module HazardDetectionUnit (
                 IF_ID_write = 0;
                 ID_EX_sel = 1;
             end
+        end
+        else if(opcode == `ECALL && ID_EX_rd == 17 && ID_EX_reg_write) begin
+            pc_write = 0;
+            IF_ID_write = 0;
+            ID_EX_sel = 1;
         end
         else begin
             pc_write = 1;
