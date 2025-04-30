@@ -20,7 +20,7 @@ module cpu(input reset,       // positive reset signal
   wire [31:0] current_pc;
   wire [31:0] imm_gen_out, alu_out, mem_dout;
   wire [31:0] rs1_dout, rs2_dout;
-  wire gshare_predict_taken, actual_taken, branch_mispredicted, jalr_mispredicted;
+  wire gshare_predict_taken, actual_taken, branch_mispredicted, gshare_enable;
   wire [31:0] gshare_next_pc, correct_pc;
   
   /***** Register declarations *****/
@@ -44,7 +44,9 @@ module cpu(input reset,       // positive reset signal
   reg ID_EX_pc_to_reg;
   reg [31:0] ID_EX_pc;
   reg ID_EX_is_jalr;
-  reg bcond;
+  reg ID_EX_is_jal;
+  reg ID_EX_is_branch;
+  reg alu_bcond;
   // From others
   reg [31:0] ID_EX_rs1_data;
   reg [31:0] ID_EX_rs2_data;
@@ -118,30 +120,15 @@ module cpu(input reset,       // positive reset signal
     else wb_data = MEM_WB_mem_to_reg_src_2;
   end
 
-  always @(*) begin
-    if(is_branch) begin
-      case(alu_op)
-        4'b1000: bcond = (rs1_dout == rs2_dout); // BEQ
-        4'b1001: bcond = (rs1_dout != rs2_dout); // BNE
-        4'b1010: bcond = ($signed(rs1_dout) < $signed(rs2_dout)); // BLT
-        4'b1011: bcond = ($signed(rs1_dout) >= $signed(rs2_dout)); // BGE
-        default: bcond = 1'b0;
-      endcase
-    end
-    else bcond = 0;
-  end
+  assign actual_taken = ID_EX_is_jalr || ID_EX_is_jal || (ID_EX_is_branch && alu_bcond);
 
-  assign actual_taken = ID_EX_is_jalr || is_jal || (is_branch && bcond);
-
-  assign branch_mispredicted = 
-      (is_branch || is_jal || ID_EX_is_jalr) && 
-      ( (gshare_predict_taken != actual_taken) || 
-        (gshare_predict_taken && (gshare_next_pc != correct_pc)) );
-
-  assign jalr_mispredicted = ID_EX_is_jalr && (gshare_predict_taken != actual_taken);
+  assign branch_mispredicted = (ID_EX_is_branch || ID_EX_is_jal || ID_EX_is_jalr) &&
+                            (gshare_predict_taken != actual_taken || gshare_next_pc != correct_pc);
   
   assign correct_pc = ID_EX_is_jalr ? alu_out :
                       actual_taken ? ID_EX_pc + ID_EX_imm : ID_EX_pc + 4;
+
+  assign gshare_enable = is_jal || is_jalr || is_branch;
 
   always @(*) begin
     if(branch_mispredicted)
@@ -155,10 +142,10 @@ module cpu(input reset,       // positive reset signal
   Gshare gshare(
     .clk(clk),
     .reset(reset),
-    .pc(current_pc),
-    .update_valid(is_branch || is_jal || ID_EX_is_jalr),
-    .update_pc(ID_EX_pc),
-    .update_target(actual_taken ? (ID_EX_pc + ID_EX_imm) : ID_EX_pc + 4),
+    .pc(gshare_enable ? current_pc : 32'hFFFF_FFFF),
+    .update_valid(ID_EX_is_branch || ID_EX_is_jal || ID_EX_is_jalr),
+    .update_pc(IF_ID_pc),
+    .update_target(correct_pc),
     .update_taken(actual_taken),
     .next_pc(gshare_next_pc),
     .predict_taken(gshare_predict_taken)
@@ -265,6 +252,8 @@ module cpu(input reset,       // positive reset signal
       ID_EX_pc_to_reg <= 0;
       ID_EX_pc <= 0;
       ID_EX_is_jalr <= 0;
+      ID_EX_is_jal <= 0;
+      ID_EX_is_branch <= 0;
     end 
     else begin
       if(ID_EX_sel) begin
@@ -277,6 +266,8 @@ module cpu(input reset,       // positive reset signal
         ID_EX_pc_to_reg <= 0;
         ID_EX_pc <= 0;
         ID_EX_is_jalr <= 0;
+        ID_EX_is_jal <= 0;
+        ID_EX_is_branch <= 0;
       end
       else begin
         ID_EX_mem_read <= mem_read;
@@ -288,6 +279,8 @@ module cpu(input reset,       // positive reset signal
         ID_EX_pc_to_reg <= pc_to_reg;
         ID_EX_pc <= IF_ID_pc;
         ID_EX_is_jalr <= is_jalr;
+        ID_EX_is_jal <= is_jal;
+        ID_EX_is_branch <= is_branch;
       end
       ID_EX_imm <= imm_gen_out;
       ID_EX_rs1_data <= rs1_dout;
@@ -304,7 +297,8 @@ module cpu(input reset,       // positive reset signal
     .alu_op(ID_EX_alu_op),      // input
     .alu_in_1(alu_in_1),    // input  
     .alu_in_2(alu_in_2),    // input
-    .alu_result(alu_out)  // output
+    .alu_result(alu_out),  // output
+    .alu_bcond(alu_bcond)
   );
 
   ForwardingUnit forwarding(
@@ -320,7 +314,7 @@ module cpu(input reset,       // positive reset signal
 
   // Update EX/MEM pipeline registers here
   always @(posedge clk) begin
-    if (reset || jalr_mispredicted) begin
+    if (reset) begin
       EX_MEM_mem_read <= 0;
       EX_MEM_mem_to_reg <= 0;
       EX_MEM_mem_write <= 0;

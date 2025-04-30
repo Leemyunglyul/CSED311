@@ -22,7 +22,7 @@ module InstMemory #(parameter MEM_DEPTH = 1024) (input reset,
           /* verilator lint_on BLKSEQ */
           // DO NOT TOUCH COMMENT ABOVE
       // Provide path of the file including instructions with binary format
-      $readmemh("/root/verilator/lab/lab4-2/student_tb/ifelse_mem.txt", mem);
+      $readmemh("/root/verilator/lab/lab4-2/student_tb/non-controlflow_mem.txt", mem);
     end
   end
 

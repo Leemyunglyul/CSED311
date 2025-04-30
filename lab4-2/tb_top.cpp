@@ -28,7 +28,7 @@ void next_cycle(Vtop* dut, VerilatedVcdC* m_trace) {
 
 int main(int argc, char** argv, char** env) {
     // TO DO : CHANGE "filename" TO PROVIDED "answer_*.txt" PATH
-    string filename = "/root/verilator/lab/lab4-2/student_tb/answer_ifelse.txt";
+    string filename = "/root/verilator/lab/lab4-2/student_tb/answer_non-controlflow_with_data_forwarding.txt";
     ifstream file(filename);
     stringstream ss;
     string reg_hex;

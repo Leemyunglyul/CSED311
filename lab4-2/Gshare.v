@@ -1,8 +1,8 @@
 module Gshare #(
-    parameter GHR_BITS = 10,           // BHSR 비트 수
+    parameter GHR_BITS = 7,           // BHSR 비트 수
     parameter PC_TAG_BITS = 25,     // PC 태그 비트 수 (32-5-2=25)
     parameter PC_INDEX_BITS = 5,      // BTB 인덱스 비트 수 (32엔트리 = 2^5)
-    parameter PHT_SIZE = 1024          // PHT 크기 (2^7)
+    parameter PHT_SIZE = 128          // PHT 크기 (2^7)
 )(
     input clk,
     input reset,

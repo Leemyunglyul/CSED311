@@ -79,6 +79,13 @@ module ControlUnit(
             end
             `BRANCH: begin
                 is_branch = 1;
+                case(funct3)
+                    3'b000: alu_op = 4'b1000; // BEQ
+                    3'b001: alu_op = 4'b1001; // BNE
+                    3'b100: alu_op = 4'b1010; // BLT
+                    3'b101: alu_op = 4'b1011; // BGE
+                    default: alu_op = 4'b0000;
+                endcase
             end
             `ECALL: is_ecall = 1;
             default: ; 

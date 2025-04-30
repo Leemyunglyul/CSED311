@@ -121,7 +121,7 @@ $timescale 1ps $end
     $var wire 1 8! gshare_predict_taken $end
     $var wire 1 9! actual_taken $end
     $var wire 1 :! branch_mispredicted $end
-    $var wire 1 ;! jalr_mispredicted $end
+    $var wire 1 ;! gshare_enable $end
     $var wire 32 <! gshare_next_pc [31:0] $end
     $var wire 32 =! correct_pc [31:0] $end
     $var wire 32 >! IF_ID_inst [31:0] $end
@@ -137,292 +137,295 @@ $timescale 1ps $end
     $var wire 1 H! ID_EX_pc_to_reg $end
     $var wire 32 I! ID_EX_pc [31:0] $end
     $var wire 1 J! ID_EX_is_jalr $end
-    $var wire 1 K! bcond $end
-    $var wire 32 L! ID_EX_rs1_data [31:0] $end
-    $var wire 32 M! ID_EX_rs2_data [31:0] $end
-    $var wire 32 N! ID_EX_imm [31:0] $end
-    $var wire 5 O! ID_EX_rd [4:0] $end
-    $var wire 5 P! ID_EX_rs1 [4:0] $end
-    $var wire 5 Q! ID_EX_rs2 [4:0] $end
-    $var wire 1 R! EX_MEM_mem_write $end
-    $var wire 1 S! EX_MEM_mem_read $end
-    $var wire 1 T! EX_MEM_mem_to_reg $end
-    $var wire 1 U! EX_MEM_reg_write $end
-    $var wire 1 V! EX_MEM_pc_to_reg $end
-    $var wire 32 W! EX_MEM_pc [31:0] $end
-    $var wire 32 X! EX_MEM_alu_out [31:0] $end
-    $var wire 32 Y! EX_MEM_dmem_data [31:0] $end
-    $var wire 5 Z! EX_MEM_rd [4:0] $end
-    $var wire 1 [! MEM_WB_mem_to_reg $end
-    $var wire 1 \! MEM_WB_reg_write $end
-    $var wire 1 ]! MEM_WB_pc_to_reg $end
-    $var wire 32 ^! MEM_WB_pc [31:0] $end
-    $var wire 5 _! MEM_WB_rd [4:0] $end
-    $var wire 32 `! MEM_WB_mem_to_reg_src_1 [31:0] $end
-    $var wire 32 a! MEM_WB_mem_to_reg_src_2 [31:0] $end
-    $var wire 32 b! alu_in_1 [31:0] $end
-    $var wire 32 c! alu_in_2_pre [31:0] $end
-    $var wire 32 d! alu_in_2 [31:0] $end
-    $var wire 32 e! wb_data [31:0] $end
-    $var wire 32 f! inst [31:0] $end
-    $var wire 1 g! mem_read $end
-    $var wire 1 h! mem_to_reg $end
-    $var wire 1 i! mem_write $end
-    $var wire 1 j! reg_write $end
-    $var wire 1 k! alu_src $end
-    $var wire 1 l! pc_to_reg $end
-    $var wire 4 m! alu_op [3:0] $end
-    $var wire 1 n! ID_EX_halt $end
-    $var wire 1 o! EX_MEM_halt $end
-    $var wire 1 p! MEM_WB_halt $end
-    $var wire 1 q! final_halt $end
-    $var wire 32 r! jalr_pc [31:0] $end
-    $var wire 32 s! jal_pc [31:0] $end
-    $var wire 32 t! next_pc [31:0] $end
-    $var wire 1 u! is_jal $end
-    $var wire 1 v! is_jalr $end
-    $var wire 1 w! is_branch $end
+    $var wire 1 K! ID_EX_is_jal $end
+    $var wire 1 L! ID_EX_is_branch $end
+    $var wire 1 M! alu_bcond $end
+    $var wire 32 N! ID_EX_rs1_data [31:0] $end
+    $var wire 32 O! ID_EX_rs2_data [31:0] $end
+    $var wire 32 P! ID_EX_imm [31:0] $end
+    $var wire 5 Q! ID_EX_rd [4:0] $end
+    $var wire 5 R! ID_EX_rs1 [4:0] $end
+    $var wire 5 S! ID_EX_rs2 [4:0] $end
+    $var wire 1 T! EX_MEM_mem_write $end
+    $var wire 1 U! EX_MEM_mem_read $end
+    $var wire 1 V! EX_MEM_mem_to_reg $end
+    $var wire 1 W! EX_MEM_reg_write $end
+    $var wire 1 X! EX_MEM_pc_to_reg $end
+    $var wire 32 Y! EX_MEM_pc [31:0] $end
+    $var wire 32 Z! EX_MEM_alu_out [31:0] $end
+    $var wire 32 [! EX_MEM_dmem_data [31:0] $end
+    $var wire 5 \! EX_MEM_rd [4:0] $end
+    $var wire 1 ]! MEM_WB_mem_to_reg $end
+    $var wire 1 ^! MEM_WB_reg_write $end
+    $var wire 1 _! MEM_WB_pc_to_reg $end
+    $var wire 32 `! MEM_WB_pc [31:0] $end
+    $var wire 5 a! MEM_WB_rd [4:0] $end
+    $var wire 32 b! MEM_WB_mem_to_reg_src_1 [31:0] $end
+    $var wire 32 c! MEM_WB_mem_to_reg_src_2 [31:0] $end
+    $var wire 32 d! alu_in_1 [31:0] $end
+    $var wire 32 e! alu_in_2_pre [31:0] $end
+    $var wire 32 f! alu_in_2 [31:0] $end
+    $var wire 32 g! wb_data [31:0] $end
+    $var wire 32 h! inst [31:0] $end
+    $var wire 1 i! mem_read $end
+    $var wire 1 j! mem_to_reg $end
+    $var wire 1 k! mem_write $end
+    $var wire 1 l! reg_write $end
+    $var wire 1 m! alu_src $end
+    $var wire 1 n! pc_to_reg $end
+    $var wire 4 o! alu_op [3:0] $end
+    $var wire 1 p! ID_EX_halt $end
+    $var wire 1 q! EX_MEM_halt $end
+    $var wire 1 r! MEM_WB_halt $end
+    $var wire 1 s! final_halt $end
+    $var wire 32 t! jalr_pc [31:0] $end
+    $var wire 32 u! jal_pc [31:0] $end
+    $var wire 32 v! next_pc [31:0] $end
+    $var wire 1 w! is_jal $end
+    $var wire 1 x! is_jalr $end
+    $var wire 1 y! is_branch $end
     $scope module alu $end
-     $var wire 4 x! alu_op [3:0] $end
-     $var wire 32 y! alu_in_1 [31:0] $end
-     $var wire 32 z! alu_in_2 [31:0] $end
-     $var wire 32 {! alu_result [31:0] $end
-     $var wire 5 |! shamt [4:0] $end
+     $var wire 4 z! alu_op [3:0] $end
+     $var wire 32 {! alu_in_1 [31:0] $end
+     $var wire 32 |! alu_in_2 [31:0] $end
+     $var wire 32 }! alu_result [31:0] $end
+     $var wire 1 ~! alu_bcond $end
+     $var wire 5 !" shamt [4:0] $end
     $upscope $end
     $scope module ctrl_unit $end
-     $var wire 7 }! opcode [6:0] $end
-     $var wire 3 ~! funct3 [2:0] $end
-     $var wire 7 !" funct7 [6:0] $end
-     $var wire 1 "" mem_read $end
-     $var wire 1 #" mem_to_reg $end
-     $var wire 1 $" mem_write $end
-     $var wire 1 %" reg_write $end
-     $var wire 4 &" alu_op [3:0] $end
-     $var wire 1 '" alu_src $end
-     $var wire 1 (" is_jal $end
-     $var wire 1 )" is_jalr $end
-     $var wire 1 *" is_branch $end
-     $var wire 1 +" pc_to_reg $end
-     $var wire 1 ," is_ecall $end
+     $var wire 7 "" opcode [6:0] $end
+     $var wire 3 #" funct3 [2:0] $end
+     $var wire 7 $" funct7 [6:0] $end
+     $var wire 1 %" mem_read $end
+     $var wire 1 &" mem_to_reg $end
+     $var wire 1 '" mem_write $end
+     $var wire 1 (" reg_write $end
+     $var wire 4 )" alu_op [3:0] $end
+     $var wire 1 *" alu_src $end
+     $var wire 1 +" is_jal $end
+     $var wire 1 ," is_jalr $end
+     $var wire 1 -" is_branch $end
+     $var wire 1 ." pc_to_reg $end
+     $var wire 1 /" is_ecall $end
     $upscope $end
     $scope module dmem $end
-     $var wire 32 6$ MEM_DEPTH [31:0] $end
-     $var wire 1 -" reset $end
-     $var wire 1 ." clk $end
-     $var wire 32 /" addr [31:0] $end
-     $var wire 32 0" din [31:0] $end
-     $var wire 1 1" mem_read $end
-     $var wire 1 2" mem_write $end
-     $var wire 32 3" dout [31:0] $end
-     $var wire 32 4" i [31:0] $end
-     $var wire 32 5" dmem_addr [31:0] $end
+     $var wire 32 9$ MEM_DEPTH [31:0] $end
+     $var wire 1 0" reset $end
+     $var wire 1 1" clk $end
+     $var wire 32 2" addr [31:0] $end
+     $var wire 32 3" din [31:0] $end
+     $var wire 1 4" mem_read $end
+     $var wire 1 5" mem_write $end
+     $var wire 32 6" dout [31:0] $end
+     $var wire 32 7" i [31:0] $end
+     $var wire 32 8" dmem_addr [31:0] $end
     $upscope $end
     $scope module forwarding $end
-     $var wire 5 6" rs1 [4:0] $end
-     $var wire 5 7" rs2 [4:0] $end
-     $var wire 5 8" EX_MEM_rd [4:0] $end
-     $var wire 5 9" MEM_WB_rd [4:0] $end
-     $var wire 1 :" EX_MEM_reg_write $end
-     $var wire 1 ;" MEM_WB_reg_write $end
-     $var wire 2 <" forwardA [1:0] $end
-     $var wire 2 =" forwardB [1:0] $end
+     $var wire 5 9" rs1 [4:0] $end
+     $var wire 5 :" rs2 [4:0] $end
+     $var wire 5 ;" EX_MEM_rd [4:0] $end
+     $var wire 5 <" MEM_WB_rd [4:0] $end
+     $var wire 1 =" EX_MEM_reg_write $end
+     $var wire 1 >" MEM_WB_reg_write $end
+     $var wire 2 ?" forwardA [1:0] $end
+     $var wire 2 @" forwardB [1:0] $end
     $upscope $end
     $scope module gshare $end
-     $var wire 32 7$ GHR_BITS [31:0] $end
-     $var wire 32 8$ PC_TAG_BITS [31:0] $end
-     $var wire 32 9$ PC_INDEX_BITS [31:0] $end
-     $var wire 32 :$ PHT_SIZE [31:0] $end
-     $var wire 1 >" clk $end
-     $var wire 1 ?" reset $end
-     $var wire 32 @" pc [31:0] $end
-     $var wire 1 A" update_valid $end
-     $var wire 32 B" update_pc [31:0] $end
-     $var wire 32 C" update_target [31:0] $end
-     $var wire 1 D" update_taken $end
-     $var wire 32 E" next_pc [31:0] $end
-     $var wire 1 F" predict_taken $end
-     $var wire 10 G" bhsr [9:0] $end
-     $var wire 32 H" btb[0] [31:0] $end
-     $var wire 32 I" btb[1] [31:0] $end
-     $var wire 32 J" btb[2] [31:0] $end
-     $var wire 32 K" btb[3] [31:0] $end
-     $var wire 32 L" btb[4] [31:0] $end
-     $var wire 32 M" btb[5] [31:0] $end
-     $var wire 32 N" btb[6] [31:0] $end
-     $var wire 32 O" btb[7] [31:0] $end
-     $var wire 32 P" btb[8] [31:0] $end
-     $var wire 32 Q" btb[9] [31:0] $end
-     $var wire 32 R" btb[10] [31:0] $end
-     $var wire 32 S" btb[11] [31:0] $end
-     $var wire 32 T" btb[12] [31:0] $end
-     $var wire 32 U" btb[13] [31:0] $end
-     $var wire 32 V" btb[14] [31:0] $end
-     $var wire 32 W" btb[15] [31:0] $end
-     $var wire 32 X" btb[16] [31:0] $end
-     $var wire 32 Y" btb[17] [31:0] $end
-     $var wire 32 Z" btb[18] [31:0] $end
-     $var wire 32 [" btb[19] [31:0] $end
-     $var wire 32 \" btb[20] [31:0] $end
-     $var wire 32 ]" btb[21] [31:0] $end
-     $var wire 32 ^" btb[22] [31:0] $end
-     $var wire 32 _" btb[23] [31:0] $end
-     $var wire 32 `" btb[24] [31:0] $end
-     $var wire 32 a" btb[25] [31:0] $end
-     $var wire 32 b" btb[26] [31:0] $end
-     $var wire 32 c" btb[27] [31:0] $end
-     $var wire 32 d" btb[28] [31:0] $end
-     $var wire 32 e" btb[29] [31:0] $end
-     $var wire 32 f" btb[30] [31:0] $end
-     $var wire 32 g" btb[31] [31:0] $end
-     $var wire 25 h" tag_table[0] [24:0] $end
-     $var wire 25 i" tag_table[1] [24:0] $end
-     $var wire 25 j" tag_table[2] [24:0] $end
-     $var wire 25 k" tag_table[3] [24:0] $end
-     $var wire 25 l" tag_table[4] [24:0] $end
-     $var wire 25 m" tag_table[5] [24:0] $end
-     $var wire 25 n" tag_table[6] [24:0] $end
-     $var wire 25 o" tag_table[7] [24:0] $end
-     $var wire 25 p" tag_table[8] [24:0] $end
-     $var wire 25 q" tag_table[9] [24:0] $end
-     $var wire 25 r" tag_table[10] [24:0] $end
-     $var wire 25 s" tag_table[11] [24:0] $end
-     $var wire 25 t" tag_table[12] [24:0] $end
-     $var wire 25 u" tag_table[13] [24:0] $end
-     $var wire 25 v" tag_table[14] [24:0] $end
-     $var wire 25 w" tag_table[15] [24:0] $end
-     $var wire 25 x" tag_table[16] [24:0] $end
-     $var wire 25 y" tag_table[17] [24:0] $end
-     $var wire 25 z" tag_table[18] [24:0] $end
-     $var wire 25 {" tag_table[19] [24:0] $end
-     $var wire 25 |" tag_table[20] [24:0] $end
-     $var wire 25 }" tag_table[21] [24:0] $end
-     $var wire 25 ~" tag_table[22] [24:0] $end
-     $var wire 25 !# tag_table[23] [24:0] $end
-     $var wire 25 "# tag_table[24] [24:0] $end
-     $var wire 25 ## tag_table[25] [24:0] $end
-     $var wire 25 $# tag_table[26] [24:0] $end
-     $var wire 25 %# tag_table[27] [24:0] $end
-     $var wire 25 &# tag_table[28] [24:0] $end
-     $var wire 25 '# tag_table[29] [24:0] $end
-     $var wire 25 (# tag_table[30] [24:0] $end
-     $var wire 25 )# tag_table[31] [24:0] $end
-     $var wire 5 *# pc_idx [4:0] $end
-     $var wire 25 +# pc_tag [24:0] $end
-     $var wire 5 ,# update_idx [4:0] $end
-     $var wire 25 -# update_tag [24:0] $end
-     $var wire 10 .# pht_idx [9:0] $end
-     $var wire 10 /# update_pht_idx [9:0] $end
-     $var wire 1 0# tag_match $end
-     $var wire 1 1# pht_taken $end
-     $var wire 32 2# i [31:0] $end
+     $var wire 32 :$ GHR_BITS [31:0] $end
+     $var wire 32 ;$ PC_TAG_BITS [31:0] $end
+     $var wire 32 <$ PC_INDEX_BITS [31:0] $end
+     $var wire 32 =$ PHT_SIZE [31:0] $end
+     $var wire 1 A" clk $end
+     $var wire 1 B" reset $end
+     $var wire 32 C" pc [31:0] $end
+     $var wire 1 D" update_valid $end
+     $var wire 32 E" update_pc [31:0] $end
+     $var wire 32 F" update_target [31:0] $end
+     $var wire 1 G" update_taken $end
+     $var wire 32 H" next_pc [31:0] $end
+     $var wire 1 I" predict_taken $end
+     $var wire 7 J" bhsr [6:0] $end
+     $var wire 32 K" btb[0] [31:0] $end
+     $var wire 32 L" btb[1] [31:0] $end
+     $var wire 32 M" btb[2] [31:0] $end
+     $var wire 32 N" btb[3] [31:0] $end
+     $var wire 32 O" btb[4] [31:0] $end
+     $var wire 32 P" btb[5] [31:0] $end
+     $var wire 32 Q" btb[6] [31:0] $end
+     $var wire 32 R" btb[7] [31:0] $end
+     $var wire 32 S" btb[8] [31:0] $end
+     $var wire 32 T" btb[9] [31:0] $end
+     $var wire 32 U" btb[10] [31:0] $end
+     $var wire 32 V" btb[11] [31:0] $end
+     $var wire 32 W" btb[12] [31:0] $end
+     $var wire 32 X" btb[13] [31:0] $end
+     $var wire 32 Y" btb[14] [31:0] $end
+     $var wire 32 Z" btb[15] [31:0] $end
+     $var wire 32 [" btb[16] [31:0] $end
+     $var wire 32 \" btb[17] [31:0] $end
+     $var wire 32 ]" btb[18] [31:0] $end
+     $var wire 32 ^" btb[19] [31:0] $end
+     $var wire 32 _" btb[20] [31:0] $end
+     $var wire 32 `" btb[21] [31:0] $end
+     $var wire 32 a" btb[22] [31:0] $end
+     $var wire 32 b" btb[23] [31:0] $end
+     $var wire 32 c" btb[24] [31:0] $end
+     $var wire 32 d" btb[25] [31:0] $end
+     $var wire 32 e" btb[26] [31:0] $end
+     $var wire 32 f" btb[27] [31:0] $end
+     $var wire 32 g" btb[28] [31:0] $end
+     $var wire 32 h" btb[29] [31:0] $end
+     $var wire 32 i" btb[30] [31:0] $end
+     $var wire 32 j" btb[31] [31:0] $end
+     $var wire 25 k" tag_table[0] [24:0] $end
+     $var wire 25 l" tag_table[1] [24:0] $end
+     $var wire 25 m" tag_table[2] [24:0] $end
+     $var wire 25 n" tag_table[3] [24:0] $end
+     $var wire 25 o" tag_table[4] [24:0] $end
+     $var wire 25 p" tag_table[5] [24:0] $end
+     $var wire 25 q" tag_table[6] [24:0] $end
+     $var wire 25 r" tag_table[7] [24:0] $end
+     $var wire 25 s" tag_table[8] [24:0] $end
+     $var wire 25 t" tag_table[9] [24:0] $end
+     $var wire 25 u" tag_table[10] [24:0] $end
+     $var wire 25 v" tag_table[11] [24:0] $end
+     $var wire 25 w" tag_table[12] [24:0] $end
+     $var wire 25 x" tag_table[13] [24:0] $end
+     $var wire 25 y" tag_table[14] [24:0] $end
+     $var wire 25 z" tag_table[15] [24:0] $end
+     $var wire 25 {" tag_table[16] [24:0] $end
+     $var wire 25 |" tag_table[17] [24:0] $end
+     $var wire 25 }" tag_table[18] [24:0] $end
+     $var wire 25 ~" tag_table[19] [24:0] $end
+     $var wire 25 !# tag_table[20] [24:0] $end
+     $var wire 25 "# tag_table[21] [24:0] $end
+     $var wire 25 ## tag_table[22] [24:0] $end
+     $var wire 25 $# tag_table[23] [24:0] $end
+     $var wire 25 %# tag_table[24] [24:0] $end
+     $var wire 25 &# tag_table[25] [24:0] $end
+     $var wire 25 '# tag_table[26] [24:0] $end
+     $var wire 25 (# tag_table[27] [24:0] $end
+     $var wire 25 )# tag_table[28] [24:0] $end
+     $var wire 25 *# tag_table[29] [24:0] $end
+     $var wire 25 +# tag_table[30] [24:0] $end
+     $var wire 25 ,# tag_table[31] [24:0] $end
+     $var wire 5 -# pc_idx [4:0] $end
+     $var wire 25 .# pc_tag [24:0] $end
+     $var wire 5 /# update_idx [4:0] $end
+     $var wire 25 0# update_tag [24:0] $end
+     $var wire 7 1# pht_idx [6:0] $end
+     $var wire 7 2# update_pht_idx [6:0] $end
+     $var wire 1 3# tag_match $end
+     $var wire 1 4# pht_taken $end
+     $var wire 32 5# i [31:0] $end
     $upscope $end
     $scope module hazard_detector $end
-     $var wire 5 3# rs1 [4:0] $end
-     $var wire 5 4# rs2 [4:0] $end
-     $var wire 7 5# opcode [6:0] $end
-     $var wire 5 6# ID_EX_rd [4:0] $end
-     $var wire 1 7# ID_EX_mem_read $end
-     $var wire 1 8# ID_EX_reg_write $end
-     $var wire 1 9# pc_write $end
-     $var wire 1 :# IF_ID_write $end
-     $var wire 1 ;# ID_EX_sel $end
+     $var wire 5 6# rs1 [4:0] $end
+     $var wire 5 7# rs2 [4:0] $end
+     $var wire 7 8# opcode [6:0] $end
+     $var wire 5 9# ID_EX_rd [4:0] $end
+     $var wire 1 :# ID_EX_mem_read $end
+     $var wire 1 ;# ID_EX_reg_write $end
+     $var wire 1 <# pc_write $end
+     $var wire 1 =# IF_ID_write $end
+     $var wire 1 ># ID_EX_sel $end
     $upscope $end
     $scope module imem $end
-     $var wire 32 :$ MEM_DEPTH [31:0] $end
-     $var wire 1 <# reset $end
-     $var wire 1 =# clk $end
-     $var wire 32 ># addr [31:0] $end
-     $var wire 32 ?# dout [31:0] $end
-     $var wire 32 @# i [31:0] $end
-     $var wire 32 A# imem_addr [31:0] $end
+     $var wire 32 >$ MEM_DEPTH [31:0] $end
+     $var wire 1 ?# reset $end
+     $var wire 1 @# clk $end
+     $var wire 32 A# addr [31:0] $end
+     $var wire 32 B# dout [31:0] $end
+     $var wire 32 C# i [31:0] $end
+     $var wire 32 D# imem_addr [31:0] $end
     $upscope $end
     $scope module imm_gen $end
-     $var wire 32 B# part_of_inst [31:0] $end
-     $var wire 32 C# imm_gen_out [31:0] $end
-     $var wire 7 D# opcode [6:0] $end
+     $var wire 32 E# part_of_inst [31:0] $end
+     $var wire 32 F# imm_gen_out [31:0] $end
+     $var wire 7 G# opcode [6:0] $end
     $upscope $end
     $scope module pc $end
-     $var wire 1 E# reset $end
-     $var wire 1 F# clk $end
-     $var wire 32 G# next_pc [31:0] $end
-     $var wire 1 H# pc_write $end
-     $var wire 32 I# current_pc [31:0] $end
+     $var wire 1 H# reset $end
+     $var wire 1 I# clk $end
+     $var wire 32 J# next_pc [31:0] $end
+     $var wire 1 K# pc_write $end
+     $var wire 32 L# current_pc [31:0] $end
     $upscope $end
     $scope module reg_file $end
-     $var wire 1 J# reset $end
-     $var wire 1 K# clk $end
-     $var wire 5 L# rs1 [4:0] $end
-     $var wire 5 M# rs2 [4:0] $end
-     $var wire 5 N# rd [4:0] $end
-     $var wire 32 O# rd_din [31:0] $end
-     $var wire 1 P# write_enable $end
-     $var wire 32 Q# rs1_dout [31:0] $end
-     $var wire 32 R# rs2_dout [31:0] $end
-     $var wire 32 S# print_reg[0] [31:0] $end
-     $var wire 32 T# print_reg[1] [31:0] $end
-     $var wire 32 U# print_reg[2] [31:0] $end
-     $var wire 32 V# print_reg[3] [31:0] $end
-     $var wire 32 W# print_reg[4] [31:0] $end
-     $var wire 32 X# print_reg[5] [31:0] $end
-     $var wire 32 Y# print_reg[6] [31:0] $end
-     $var wire 32 Z# print_reg[7] [31:0] $end
-     $var wire 32 [# print_reg[8] [31:0] $end
-     $var wire 32 \# print_reg[9] [31:0] $end
-     $var wire 32 ]# print_reg[10] [31:0] $end
-     $var wire 32 ^# print_reg[11] [31:0] $end
-     $var wire 32 _# print_reg[12] [31:0] $end
-     $var wire 32 `# print_reg[13] [31:0] $end
-     $var wire 32 a# print_reg[14] [31:0] $end
-     $var wire 32 b# print_reg[15] [31:0] $end
-     $var wire 32 c# print_reg[16] [31:0] $end
-     $var wire 32 d# print_reg[17] [31:0] $end
-     $var wire 32 e# print_reg[18] [31:0] $end
-     $var wire 32 f# print_reg[19] [31:0] $end
-     $var wire 32 g# print_reg[20] [31:0] $end
-     $var wire 32 h# print_reg[21] [31:0] $end
-     $var wire 32 i# print_reg[22] [31:0] $end
-     $var wire 32 j# print_reg[23] [31:0] $end
-     $var wire 32 k# print_reg[24] [31:0] $end
-     $var wire 32 l# print_reg[25] [31:0] $end
-     $var wire 32 m# print_reg[26] [31:0] $end
-     $var wire 32 n# print_reg[27] [31:0] $end
-     $var wire 32 o# print_reg[28] [31:0] $end
-     $var wire 32 p# print_reg[29] [31:0] $end
-     $var wire 32 q# print_reg[30] [31:0] $end
-     $var wire 32 r# print_reg[31] [31:0] $end
-     $var wire 32 s# i [31:0] $end
-     $var wire 32 t# rf[0] [31:0] $end
-     $var wire 32 u# rf[1] [31:0] $end
-     $var wire 32 v# rf[2] [31:0] $end
-     $var wire 32 w# rf[3] [31:0] $end
-     $var wire 32 x# rf[4] [31:0] $end
-     $var wire 32 y# rf[5] [31:0] $end
-     $var wire 32 z# rf[6] [31:0] $end
-     $var wire 32 {# rf[7] [31:0] $end
-     $var wire 32 |# rf[8] [31:0] $end
-     $var wire 32 }# rf[9] [31:0] $end
-     $var wire 32 ~# rf[10] [31:0] $end
-     $var wire 32 !$ rf[11] [31:0] $end
-     $var wire 32 "$ rf[12] [31:0] $end
-     $var wire 32 #$ rf[13] [31:0] $end
-     $var wire 32 $$ rf[14] [31:0] $end
-     $var wire 32 %$ rf[15] [31:0] $end
-     $var wire 32 &$ rf[16] [31:0] $end
-     $var wire 32 '$ rf[17] [31:0] $end
-     $var wire 32 ($ rf[18] [31:0] $end
-     $var wire 32 )$ rf[19] [31:0] $end
-     $var wire 32 *$ rf[20] [31:0] $end
-     $var wire 32 +$ rf[21] [31:0] $end
-     $var wire 32 ,$ rf[22] [31:0] $end
-     $var wire 32 -$ rf[23] [31:0] $end
-     $var wire 32 .$ rf[24] [31:0] $end
-     $var wire 32 /$ rf[25] [31:0] $end
-     $var wire 32 0$ rf[26] [31:0] $end
-     $var wire 32 1$ rf[27] [31:0] $end
-     $var wire 32 2$ rf[28] [31:0] $end
-     $var wire 32 3$ rf[29] [31:0] $end
-     $var wire 32 4$ rf[30] [31:0] $end
-     $var wire 32 5$ rf[31] [31:0] $end
+     $var wire 1 M# reset $end
+     $var wire 1 N# clk $end
+     $var wire 5 O# rs1 [4:0] $end
+     $var wire 5 P# rs2 [4:0] $end
+     $var wire 5 Q# rd [4:0] $end
+     $var wire 32 R# rd_din [31:0] $end
+     $var wire 1 S# write_enable $end
+     $var wire 32 T# rs1_dout [31:0] $end
+     $var wire 32 U# rs2_dout [31:0] $end
+     $var wire 32 V# print_reg[0] [31:0] $end
+     $var wire 32 W# print_reg[1] [31:0] $end
+     $var wire 32 X# print_reg[2] [31:0] $end
+     $var wire 32 Y# print_reg[3] [31:0] $end
+     $var wire 32 Z# print_reg[4] [31:0] $end
+     $var wire 32 [# print_reg[5] [31:0] $end
+     $var wire 32 \# print_reg[6] [31:0] $end
+     $var wire 32 ]# print_reg[7] [31:0] $end
+     $var wire 32 ^# print_reg[8] [31:0] $end
+     $var wire 32 _# print_reg[9] [31:0] $end
+     $var wire 32 `# print_reg[10] [31:0] $end
+     $var wire 32 a# print_reg[11] [31:0] $end
+     $var wire 32 b# print_reg[12] [31:0] $end
+     $var wire 32 c# print_reg[13] [31:0] $end
+     $var wire 32 d# print_reg[14] [31:0] $end
+     $var wire 32 e# print_reg[15] [31:0] $end
+     $var wire 32 f# print_reg[16] [31:0] $end
+     $var wire 32 g# print_reg[17] [31:0] $end
+     $var wire 32 h# print_reg[18] [31:0] $end
+     $var wire 32 i# print_reg[19] [31:0] $end
+     $var wire 32 j# print_reg[20] [31:0] $end
+     $var wire 32 k# print_reg[21] [31:0] $end
+     $var wire 32 l# print_reg[22] [31:0] $end
+     $var wire 32 m# print_reg[23] [31:0] $end
+     $var wire 32 n# print_reg[24] [31:0] $end
+     $var wire 32 o# print_reg[25] [31:0] $end
+     $var wire 32 p# print_reg[26] [31:0] $end
+     $var wire 32 q# print_reg[27] [31:0] $end
+     $var wire 32 r# print_reg[28] [31:0] $end
+     $var wire 32 s# print_reg[29] [31:0] $end
+     $var wire 32 t# print_reg[30] [31:0] $end
+     $var wire 32 u# print_reg[31] [31:0] $end
+     $var wire 32 v# i [31:0] $end
+     $var wire 32 w# rf[0] [31:0] $end
+     $var wire 32 x# rf[1] [31:0] $end
+     $var wire 32 y# rf[2] [31:0] $end
+     $var wire 32 z# rf[3] [31:0] $end
+     $var wire 32 {# rf[4] [31:0] $end
+     $var wire 32 |# rf[5] [31:0] $end
+     $var wire 32 }# rf[6] [31:0] $end
+     $var wire 32 ~# rf[7] [31:0] $end
+     $var wire 32 !$ rf[8] [31:0] $end
+     $var wire 32 "$ rf[9] [31:0] $end
+     $var wire 32 #$ rf[10] [31:0] $end
+     $var wire 32 $$ rf[11] [31:0] $end
+     $var wire 32 %$ rf[12] [31:0] $end
+     $var wire 32 &$ rf[13] [31:0] $end
+     $var wire 32 '$ rf[14] [31:0] $end
+     $var wire 32 ($ rf[15] [31:0] $end
+     $var wire 32 )$ rf[16] [31:0] $end
+     $var wire 32 *$ rf[17] [31:0] $end
+     $var wire 32 +$ rf[18] [31:0] $end
+     $var wire 32 ,$ rf[19] [31:0] $end
+     $var wire 32 -$ rf[20] [31:0] $end
+     $var wire 32 .$ rf[21] [31:0] $end
+     $var wire 32 /$ rf[22] [31:0] $end
+     $var wire 32 0$ rf[23] [31:0] $end
+     $var wire 32 1$ rf[24] [31:0] $end
+     $var wire 32 2$ rf[25] [31:0] $end
+     $var wire 32 3$ rf[26] [31:0] $end
+     $var wire 32 4$ rf[27] [31:0] $end
+     $var wire 32 5$ rf[28] [31:0] $end
+     $var wire 32 6$ rf[29] [31:0] $end
+     $var wire 32 7$ rf[30] [31:0] $end
+     $var wire 32 8$ rf[31] [31:0] $end
     $upscope $end
    $upscope $end
   $upscope $end
@@ -433,109 +436,109 @@ $enddefinitions $end
 #0
 0#
 0$
-1%
-b01101100010101000011000111100001 &
-b00001101101111010000011011110001 '
-b10100110000011111100001111000100 (
-b00011011110010110000000001010010 )
-b10000101101111011001101100111011 *
-b00010000100110011100100000111000 +
-b11101000110010001010110110011111 ,
-b11010010110111011000010100010100 -
-b11011101101110101010010100101111 .
-b11110100001111000011100000000111 /
-b01010100101010011111111100010110 0
-b01011111101110100011111010110011 1
-b10100011010011110100100000101011 2
-b10000110010111011111111110111101 3
-b10101111111000101101100110000001 4
-b00111011101010011111000010011011 5
-b11100111000100001001011001011011 6
-b01011001100011000110010000110010 7
-b11011110001110110011110001000100 8
-b10001001101111110000111100010111 9
-b11110111100110001100000101111111 :
-b11011100001100001100110111100101 ;
-b10011011000011000110110000000000 <
-b11011101000011100110101100000011 =
-b10111111000100010001111100011011 >
-b00101111110110100101001111001010 ?
-b00100011110101100010110101111111 @
-b10011111000010000100010111111111 A
-b11111001011010001111010100010100 B
-b00011011011000001010110110101101 C
-b11011010100111110110011010110001 D
-b00010010001001001010101100110010 E
+0%
+b10100001101011001011111001101100 &
+b11111011000110101111011101001001 '
+b11101010000101101010001011110111 (
+b01111010000011000011010010100100 )
+b11100010101110010111011101110001 *
+b10010101010010010110010110100101 +
+b10010111001111111100000001110000 ,
+b10110011110000100101111101000101 -
+b11100100001000110010000011111111 .
+b01100101100011001011111110011011 /
+b01011000101000001000011100011110 0
+b10010011111000001110101110011000 1
+b10100010100000100010000110010110 2
+b01011000000111100100000001101010 3
+b01100010000011001110101101010011 4
+b11001001000000110011100111011000 5
+b10110111000000100001101000011011 6
+b11101011011111110101101100011000 7
+b01110011000010101111101000100011 8
+b11100100001111001000001000011100 9
+b01110110001011000000010000011010 :
+b10010010101000110000010010111100 ;
+b01010100010100000100010011111001 <
+b11111001011111111001101110000110 =
+b01011000100010001100100001011010 >
+b00000110110010101111001100000101 ?
+b10000101111000110101001011100010 @
+b00000100011010100011111000101000 A
+b11000110011100001001111100100110 B
+b11001101101111000001110001110100 C
+b10111111000100111010110011001011 D
+b10010000010111001100100000100010 E
 0F
 0G
-1H
-b01101100010101000011000111100001 I
-b00001101101111010000011011110001 J
-b10100110000011111100001111000100 K
-b00011011110010110000000001010010 L
-b10000101101111011001101100111011 M
-b00010000100110011100100000111000 N
-b11101000110010001010110110011111 O
-b11010010110111011000010100010100 P
-b11011101101110101010010100101111 Q
-b11110100001111000011100000000111 R
-b01010100101010011111111100010110 S
-b01011111101110100011111010110011 T
-b10100011010011110100100000101011 U
-b10000110010111011111111110111101 V
-b10101111111000101101100110000001 W
-b00111011101010011111000010011011 X
-b11100111000100001001011001011011 Y
-b01011001100011000110010000110010 Z
-b11011110001110110011110001000100 [
-b10001001101111110000111100010111 \
-b11110111100110001100000101111111 ]
-b11011100001100001100110111100101 ^
-b10011011000011000110110000000000 _
-b11011101000011100110101100000011 `
-b10111111000100010001111100011011 a
-b00101111110110100101001111001010 b
-b00100011110101100010110101111111 c
-b10011111000010000100010111111111 d
-b11111001011010001111010100010100 e
-b00011011011000001010110110101101 f
-b11011010100111110110011010110001 g
-b00010010001001001010101100110010 h
+0H
+b10100001101011001011111001101100 I
+b11111011000110101111011101001001 J
+b11101010000101101010001011110111 K
+b01111010000011000011010010100100 L
+b11100010101110010111011101110001 M
+b10010101010010010110010110100101 N
+b10010111001111111100000001110000 O
+b10110011110000100101111101000101 P
+b11100100001000110010000011111111 Q
+b01100101100011001011111110011011 R
+b01011000101000001000011100011110 S
+b10010011111000001110101110011000 T
+b10100010100000100010000110010110 U
+b01011000000111100100000001101010 V
+b01100010000011001110101101010011 W
+b11001001000000110011100111011000 X
+b10110111000000100001101000011011 Y
+b11101011011111110101101100011000 Z
+b01110011000010101111101000100011 [
+b11100100001111001000001000011100 \
+b01110110001011000000010000011010 ]
+b10010010101000110000010010111100 ^
+b01010100010100000100010011111001 _
+b11111001011111111001101110000110 `
+b01011000100010001100100001011010 a
+b00000110110010101111001100000101 b
+b10000101111000110101001011100010 c
+b00000100011010100011111000101000 d
+b11000110011100001001111100100110 e
+b11001101101111000001110001110100 f
+b10111111000100111010110011001011 g
+b10010000010111001100100000100010 h
 0i
 0j
-1k
-b01101100010101000011000111100001 l
-b00001101101111010000011011110001 m
-b10100110000011111100001111000100 n
-b00011011110010110000000001010010 o
-b10000101101111011001101100111011 p
-b00010000100110011100100000111000 q
-b11101000110010001010110110011111 r
-b11010010110111011000010100010100 s
-b11011101101110101010010100101111 t
-b11110100001111000011100000000111 u
-b01010100101010011111111100010110 v
-b01011111101110100011111010110011 w
-b10100011010011110100100000101011 x
-b10000110010111011111111110111101 y
-b10101111111000101101100110000001 z
-b00111011101010011111000010011011 {
-b11100111000100001001011001011011 |
-b01011001100011000110010000110010 }
-b11011110001110110011110001000100 ~
-b10001001101111110000111100010111 !!
-b11110111100110001100000101111111 "!
-b11011100001100001100110111100101 #!
-b10011011000011000110110000000000 $!
-b11011101000011100110101100000011 %!
-b10111111000100010001111100011011 &!
-b00101111110110100101001111001010 '!
-b00100011110101100010110101111111 (!
-b10011111000010000100010111111111 )!
-b11111001011010001111010100010100 *!
-b00011011011000001010110110101101 +!
-b11011010100111110110011010110001 ,!
-b00010010001001001010101100110010 -!
+0k
+b10100001101011001011111001101100 l
+b11111011000110101111011101001001 m
+b11101010000101101010001011110111 n
+b01111010000011000011010010100100 o
+b11100010101110010111011101110001 p
+b10010101010010010110010110100101 q
+b10010111001111111100000001110000 r
+b10110011110000100101111101000101 s
+b11100100001000110010000011111111 t
+b01100101100011001011111110011011 u
+b01011000101000001000011100011110 v
+b10010011111000001110101110011000 w
+b10100010100000100010000110010110 x
+b01011000000111100100000001101010 y
+b01100010000011001110101101010011 z
+b11001001000000110011100111011000 {
+b10110111000000100001101000011011 |
+b11101011011111110101101100011000 }
+b01110011000010101111101000100011 ~
+b11100100001111001000001000011100 !!
+b01110110001011000000010000011010 "!
+b10010010101000110000010010111100 #!
+b01010100010100000100010011111001 $!
+b11111001011111111001101110000110 %!
+b01011000100010001100100001011010 &!
+b00000110110010101111001100000101 '!
+b10000101111000110101001011100010 (!
+b00000100011010100011111000101000 )!
+b11000110011100001001111100100110 *!
+b11001101101111000001110001110100 +!
+b10111111000100111010110011001011 ,!
+b10010000010111001100100000100010 -!
 1.!
 1/!
 b00 0!
@@ -543,14 +546,14 @@ b00 1!
 b10010000110000000010011111110011 2!
 b00000000000000000000000000000000 3!
 b00000000000000000000000000000000 4!
-b00110110101000111010100100101100 5!
-b11100111000100001001011001011011 6!
-b10011111000010000100010111111111 7!
+b00000000000000000000000000000000 5!
+b10110111000000100001101000011011 6!
+b00000100011010100011111000101000 7!
 08!
 19!
 1:!
-1;!
-b10010000110000000010011111110111 <!
+0;!
+b00000000000000000000000000000011 <!
 b00000000000000000000000000000000 =!
 b10001101101110000000001101110011 >!
 1?!
@@ -566,283 +569,286 @@ b1110 B!
 b11011010110001110001101010110110 I!
 1J!
 0K!
-b10101100000000110100101001100111 L!
-b01001101010001011111011001010011 M!
+1L!
+0M!
 b11000001000011111011111010000100 N!
-b10100 O!
-b00100 P!
+b00111000011011011110100011110100 O!
+b01011110111011101000011011100100 P!
 b01000 Q!
-1R!
-1S!
+b00111 R!
+b10101 S!
 0T!
 0U!
 1V!
-b00010101100110101001011110001010 W!
-b10010001101011110100011100111101 X!
+0W!
+1X!
 b00000100110001100111000001111111 Y!
-b11011 Z!
-0[!
-0\!
+b10011011100110000011100101011011 Z!
+b00110000111010101010100011011100 [!
+b01100 \!
 0]!
-b00001001000111110000000001000110 ^!
-b11001 _!
+0^!
+1_!
 b11101011111001111101100100000100 `!
-b11110011100000000100100011010100 a!
-b10101100000000110100101001100111 b!
-b01001101010001011111011001010011 c!
+b10100 a!
+b01111101000000101100100100110100 b!
+b00100000110011010111011010111101 c!
 b11000001000011111011111010000100 d!
-b11110011100000000100100011010100 e!
-b11000111101101000111011011010111 f!
-0g!
-0h!
+b00111000011011011110100011110100 e!
+b01011110111011101000011011100100 f!
+b00100000110011010111011010111101 g!
+b10011000101101000000010100001011 h!
 0i!
 0j!
 0k!
 0l!
-b0000 m!
-1n!
-0o!
+0m!
+0n!
+b0000 o!
 1p!
 1q!
-b11100010111001001100001001010111 r!
-b01110111010011001001000011010010 s!
-b00000000000000000000000000000000 t!
-0u!
-0v!
+1r!
+0s!
+b01100111111100000110101011111100 t!
+b00010110000010110111011010111100 u!
+b00000000000000000000000000000000 v!
 0w!
-b1110 x!
-b10101100000000110100101001100111 y!
-b11000001000011111011111010000100 z!
-b00000000000000000000000000000000 {!
-b00100 |!
-b1110011 }!
-b000 ~!
-b1000110 !"
-0""
-0#"
-0$"
+0x!
+0y!
+b1110 z!
+b11000001000011111011111010000100 {!
+b01011110111011101000011011100100 |!
+b00000000000000000000000000000000 }!
+0~!
+b00100 !"
+b1110011 ""
+b000 #"
+b1000110 $"
 0%"
-b0000 &"
+0&"
 0'"
 0("
-0)"
+b0000 )"
 0*"
 0+"
-1,"
+0,"
 0-"
 0."
-b10010001101011110100011100111101 /"
-b00000100110001100111000001111111 0"
-11"
-12"
-b00110110101000111010100100101100 3"
-b00101000011010010111011001110110 4"
-b00100100011010111101000111001111 5"
-b00100 6"
-b01000 7"
-b11011 8"
-b11001 9"
-0:"
-0;"
-b00 <"
-b00 ="
+1/"
+00"
+01"
+b10011011100110000011100101011011 2"
+b00110000111010101010100011011100 3"
+04"
+05"
+b00000000000000000000000000000000 6"
+b11010010001100101110101101110111 7"
+b00100110111001100000111001010110 8"
+b00111 9"
+b10101 :"
+b01100 ;"
+b10100 <"
+0="
 0>"
-0?"
-b10010000110000000010011111110011 @"
-1A"
-b11011010110001110001101010110110 B"
-b10011011110101101101100100111010 C"
+b00 ?"
+b00 @"
+0A"
+0B"
+b11111111111111111111111111111111 C"
 1D"
-b10010000110000000010011111110111 E"
-0F"
-b0000000111 G"
-b11001000101000100010111010100101 H"
-b01100011101010010001000100000101 I"
-b01100000111111000011011101010110 J"
-b00010000111011110001101110110110 K"
-b10110000010001100110101011111011 L"
-b01010000001001110110011101100111 M"
-b00000001100010110110001110001101 N"
-b00111001101111111000100111010001 O"
-b11000111011010100100110010000100 P"
-b11010111100101000010001111010101 Q"
-b00111011111000001111000000111010 R"
-b00010101001110010010001101001001 S"
-b10100110011110001101100000010111 T"
-b10001011011100110011110011011111 U"
-b00011110010101011001110110111111 V"
-b10011111001101101101101111010000 W"
-b10100011000010110001011110001111 X"
-b01010101100111011000100110101011 Y"
-b11011010111101000010010101100011 Z"
-b00000111110010001101001100001010 ["
-b01110011101000100000011011001001 \"
-b10111011010001000010110110100101 ]"
-b01100100001010111001100101000111 ^"
-b10001011101101000010111101101111 _"
-b01000001111011001001010100000000 `"
-b00100010101001011110100011111100 a"
-b10111010110001010000110001100111 b"
-b11010100011001110100011100000010 c"
-b01000110110101011101100000101101 d"
-b11000100100011110111101101111101 e"
-b11110100110110000001011001110111 f"
-b00000000111110111111010110110100 g"
-b1100010110001110010010100 h"
-b0011011110100100110010000 i"
-b1100110001000000001001001 j"
-b1101011111101010000100111 k"
-b1100101011010110011011000 l"
-b1100010000010001100000010 m"
-b0100111000111100001000101 n"
-b0111010001101110110001001 o"
-b0001110100010110001001110 p"
-b0111100101010000110101110 q"
-b1111111001011010000001011 r"
-b0110101010011011000110010 s"
-b1011110111111010100010101 t"
-b1100011101010011010010001 u"
-b0100000000000101011011100 v"
-b1111011001100100111101001 w"
-b0101111111100001111011001 x"
-b0000101110111010010010001 y"
-b0111111110110100001100000 z"
-b0001110000100101100100111 {"
-b1011111010011110100111000 |"
-b1001010100111100001010000 }"
-b0111101001111001110110000 ~"
-b0100010001100001000001010 !#
-b0001000000010111001111011 "#
-b0111000010100001111001000 ##
-b1100000110000111101000011 $#
-b0100010010111010010101000 %#
-b1000101001111111111011111 &#
-b1000000000110110100011110 '#
-b1011110110110010110011011 (#
-b0001100001010100101001011 )#
-b11100 *#
-b1001000011000000001001111 +#
-b01101 ,#
-b1101101011000111000110101 -#
-b0111111011 .#
-b1010101010 /#
-00#
-11#
-b11000010010100001011111100000111 2#
-b10000 3#
-b11011 4#
-b1110011 5#
-b10100 6#
-17#
-18#
-19#
+b00010011010100011100000100111101 E"
+b00000000000000000000000000000000 F"
+1G"
+b00000000000000000000000000000011 H"
+0I"
+b0000111 J"
+b01001010001000000101000010101001 K"
+b10100110110011010110001101101010 L"
+b01000111000001100000011101111001 M"
+b01011010110001111101000010011010 N"
+b01011101000010001011101001001110 O"
+b01100101110101011110001111110011 P"
+b00000110101010010001111000101111 Q"
+b00000010011111010010100100101001 R"
+b00111101010100100011110111110001 S"
+b10101011101011010010111010000000 T"
+b11011101101000111111101001100110 U"
+b01000001001100110000111010101001 V"
+b10001101111101001011001110010001 W"
+b11101110100110000100100001100001 X"
+b10011111100000111101001101010101 Y"
+b10100101000100011110000111100010 Z"
+b00010010011101001000110000000100 ["
+b10010001000101111111011010000110 \"
+b11010001000000110111010011001110 ]"
+b10100010000000001100000011100111 ^"
+b00001011101101011010100011010001 _"
+b11011101011110000111000010011011 `"
+b10101010000100011000001001001100 a"
+b01001100110011011111110101111110 b"
+b11011101101010001101101010011000 c"
+b11011011010000001111010001101101 d"
+b00111101001001010000101000110001 e"
+b10001100100101111110010110000100 f"
+b10010110100110001010111000100000 g"
+b11100100100000001011010100110111 h"
+b00110110110000001001100111010001 i"
+b01101010111011001011100100001011 j"
+b1101110001110101111001111 k"
+b1111101110011110011010111 l"
+b1111001001111011010101100 m"
+b0111111101010111100100000 n"
+b1010010111101001101001101 o"
+b1100011100111101011001000 p"
+b0011101100011111011000010 q"
+b0011100101100100011011100 r"
+b1011110110111011010101011 s"
+b1000010010100001010111010 t"
+b0100111100011001110110100 u"
+b0010110001000110111000110 v"
+b1111000011010000100000011 w"
+b0101011001111010100010100 x"
+b1001000100100001011011110 y"
+b0000000011110100101001110 z"
+b1011000101111001010101011 {"
+b0000000001001010001001001 |"
+b0110100010010010000010110 }"
+b1011001110111001000101100 ~"
+b0000110100110100110010001 !#
+b0101110010100111111000101 "#
+b1000001100110111100000111 ##
+b0111110001000111010011000 $#
+b0000000100011000100010110 %#
+b0111000101010011010010110 &#
+b1011001000100001100100100 '#
+b1010100010011111010000000 (#
+b0110100111100011111101100 )#
+b0010111010001011111111100 *#
+b1101000100111010001001001 +#
+b1001111100011111101110010 ,#
+b11111 -#
+b1111111111111111111111111 .#
+b01111 /#
+b0001001101010001110000010 0#
+b1111000 1#
+b1001000 2#
+03#
+04#
+b11101110010011111010100001000100 5#
+b10000 6#
+b11011 7#
+b1110011 8#
+b01000 9#
 1:#
-0;#
-0<#
-0=#
-b10010000110000000010011111110011 >#
-b11000111101101000111011011010111 ?#
-b00110100011010001101000100110111 @#
-b00100100001100000000100111111100 A#
-b10001101101110000000001101110011 B#
-b00000000000000000000000000000000 C#
-b1110011 D#
-0E#
-0F#
-b00000000000000000000000000000000 G#
-1H#
-b10010000110000000010011111110011 I#
-0J#
-0K#
-b10000 L#
-b11011 M#
-b11001 N#
-b11110011100000000100100011010100 O#
-0P#
-b11100111000100001001011001011011 Q#
-b10011111000010000100010111111111 R#
-b01101100010101000011000111100001 S#
-b00001101101111010000011011110001 T#
-b10100110000011111100001111000100 U#
-b00011011110010110000000001010010 V#
-b10000101101111011001101100111011 W#
-b00010000100110011100100000111000 X#
-b11101000110010001010110110011111 Y#
-b11010010110111011000010100010100 Z#
-b11011101101110101010010100101111 [#
-b11110100001111000011100000000111 \#
-b01010100101010011111111100010110 ]#
-b01011111101110100011111010110011 ^#
-b10100011010011110100100000101011 _#
-b10000110010111011111111110111101 `#
-b10101111111000101101100110000001 a#
-b00111011101010011111000010011011 b#
-b11100111000100001001011001011011 c#
-b01011001100011000110010000110010 d#
-b11011110001110110011110001000100 e#
-b10001001101111110000111100010111 f#
-b11110111100110001100000101111111 g#
-b11011100001100001100110111100101 h#
-b10011011000011000110110000000000 i#
-b11011101000011100110101100000011 j#
-b10111111000100010001111100011011 k#
-b00101111110110100101001111001010 l#
-b00100011110101100010110101111111 m#
-b10011111000010000100010111111111 n#
-b11111001011010001111010100010100 o#
-b00011011011000001010110110101101 p#
-b11011010100111110110011010110001 q#
-b00010010001001001010101100110010 r#
-b11111001001100001101101101111010 s#
-b01101100010101000011000111100001 t#
-b00001101101111010000011011110001 u#
-b10100110000011111100001111000100 v#
-b00011011110010110000000001010010 w#
-b10000101101111011001101100111011 x#
-b00010000100110011100100000111000 y#
-b11101000110010001010110110011111 z#
-b11010010110111011000010100010100 {#
-b11011101101110101010010100101111 |#
-b11110100001111000011100000000111 }#
-b01010100101010011111111100010110 ~#
-b01011111101110100011111010110011 !$
-b10100011010011110100100000101011 "$
-b10000110010111011111111110111101 #$
-b10101111111000101101100110000001 $$
-b00111011101010011111000010011011 %$
-b11100111000100001001011001011011 &$
-b01011001100011000110010000110010 '$
-b11011110001110110011110001000100 ($
-b10001001101111110000111100010111 )$
-b11110111100110001100000101111111 *$
-b11011100001100001100110111100101 +$
-b10011011000011000110110000000000 ,$
-b11011101000011100110101100000011 -$
-b10111111000100010001111100011011 .$
-b00101111110110100101001111001010 /$
-b00100011110101100010110101111111 0$
-b10011111000010000100010111111111 1$
-b11111001011010001111010100010100 2$
-b00011011011000001010110110101101 3$
-b11011010100111110110011010110001 4$
-b00010010001001001010101100110010 5$
-b00000000000000000100000000000000 6$
-b00000000000000000000000000001010 7$
-b00000000000000000000000000011001 8$
-b00000000000000000000000000000101 9$
-b00000000000000000000010000000000 :$
+1;#
+1<#
+1=#
+0>#
+0?#
+0@#
+b10010000110000000010011111110011 A#
+b10011000101101000000010100001011 B#
+b00001010100010110100110001000001 C#
+b00100100001100000000100111111100 D#
+b10001101101110000000001101110011 E#
+b00000000000000000000000000000000 F#
+b1110011 G#
+0H#
+0I#
+b00000000000000000000000000000000 J#
+1K#
+b10010000110000000010011111110011 L#
+0M#
+0N#
+b10000 O#
+b11011 P#
+b10100 Q#
+b11101011111001111101100100001000 R#
+0S#
+b10110111000000100001101000011011 T#
+b00000100011010100011111000101000 U#
+b10100001101011001011111001101100 V#
+b11111011000110101111011101001001 W#
+b11101010000101101010001011110111 X#
+b01111010000011000011010010100100 Y#
+b11100010101110010111011101110001 Z#
+b10010101010010010110010110100101 [#
+b10010111001111111100000001110000 \#
+b10110011110000100101111101000101 ]#
+b11100100001000110010000011111111 ^#
+b01100101100011001011111110011011 _#
+b01011000101000001000011100011110 `#
+b10010011111000001110101110011000 a#
+b10100010100000100010000110010110 b#
+b01011000000111100100000001101010 c#
+b01100010000011001110101101010011 d#
+b11001001000000110011100111011000 e#
+b10110111000000100001101000011011 f#
+b11101011011111110101101100011000 g#
+b01110011000010101111101000100011 h#
+b11100100001111001000001000011100 i#
+b01110110001011000000010000011010 j#
+b10010010101000110000010010111100 k#
+b01010100010100000100010011111001 l#
+b11111001011111111001101110000110 m#
+b01011000100010001100100001011010 n#
+b00000110110010101111001100000101 o#
+b10000101111000110101001011100010 p#
+b00000100011010100011111000101000 q#
+b11000110011100001001111100100110 r#
+b11001101101111000001110001110100 s#
+b10111111000100111010110011001011 t#
+b10010000010111001100100000100010 u#
+b10010001101101100100111111111110 v#
+b10100001101011001011111001101100 w#
+b11111011000110101111011101001001 x#
+b11101010000101101010001011110111 y#
+b01111010000011000011010010100100 z#
+b11100010101110010111011101110001 {#
+b10010101010010010110010110100101 |#
+b10010111001111111100000001110000 }#
+b10110011110000100101111101000101 ~#
+b11100100001000110010000011111111 !$
+b01100101100011001011111110011011 "$
+b01011000101000001000011100011110 #$
+b10010011111000001110101110011000 $$
+b10100010100000100010000110010110 %$
+b01011000000111100100000001101010 &$
+b01100010000011001110101101010011 '$
+b11001001000000110011100111011000 ($
+b10110111000000100001101000011011 )$
+b11101011011111110101101100011000 *$
+b01110011000010101111101000100011 +$
+b11100100001111001000001000011100 ,$
+b01110110001011000000010000011010 -$
+b10010010101000110000010010111100 .$
+b01010100010100000100010011111001 /$
+b11111001011111111001101110000110 0$
+b01011000100010001100100001011010 1$
+b00000110110010101111001100000101 2$
+b10000101111000110101001011100010 3$
+b00000100011010100011111000101000 4$
+b11000110011100001001111100100110 5$
+b11001101101111000001110001110100 6$
+b10111111000100111010110011001011 7$
+b10010000010111001100100000100010 8$
+b00000000000000000100000000000000 9$
+b00000000000000000000000000000111 :$
+b00000000000000000000000000011001 ;$
+b00000000000000000000000000000101 <$
+b00000000000000000000000010000000 =$
+b00000000000000000000010000000000 >$
 #1
 1#
 1F
 1i
-1-"
-1?"
-1<#
-1E#
-1J#
+10"
+1B"
+1?#
+1H#
+1M#
 #2
 1$
-0%
 b00000000000000000000000000000000 &
 b00000000000000000000000000000000 '
 b00000000000000000010111111111100 (
@@ -876,7 +882,6 @@ b00000000000000000000000000000000 C
 b00000000000000000000000000000000 D
 b00000000000000000000000000000000 E
 1G
-0H
 b00000000000000000000000000000000 I
 b00000000000000000000000000000000 J
 b00000000000000000010111111111100 K
@@ -910,7 +915,6 @@ b00000000000000000000000000000000 f
 b00000000000000000000000000000000 g
 b00000000000000000000000000000000 h
 1j
-0k
 b00000000000000000000000000000000 l
 b00000000000000000000000000000000 m
 b00000000000000000010111111111100 n
@@ -945,13 +949,10 @@ b00000000000000000000000000000000 ,!
 b00000000000000000000000000000000 -!
 0/!
 b00000000000000000000000000000000 2!
-b00000000000000000000000000000000 5!
 b00000000000000000000000000000000 6!
 b00000000000000000000000000000000 7!
 09!
 0:!
-0;!
-b00000000000000000000000000000100 <!
 b00000000000000000000000000000100 =!
 b00000000000000000000000000000000 >!
 b00000000000000000000000000000000 @!
@@ -962,62 +963,55 @@ b0000 B!
 0G!
 b00000000000000000000000000000000 I!
 0J!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000000000 M!
+0L!
 b00000000000000000000000000000000 N!
-b00000 O!
-b00000 P!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000000000 P!
 b00000 Q!
-0R!
-0S!
+b00000 R!
+b00000 S!
 0V!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
+0X!
 b00000000000000000000000000000000 Y!
-b00000 Z!
-b00000000000000000000000000000000 ^!
-b00000 _!
+b00000000000000000000000000000000 Z!
+b00000000000000000000000000000000 [!
+b00000 \!
+0_!
 b00000000000000000000000000000000 `!
-b00000000000000000000000000000000 a!
+b00000 a!
 b00000000000000000000000000000000 b!
 b00000000000000000000000000000000 c!
 b00000000000000000000000000000000 d!
 b00000000000000000000000000000000 e!
-b11111110000000010000000100010011 f!
-0n!
+b00000000000000000000000000000000 f!
+b00000000000000000000000000000000 g!
+b11111110000000010000000100010011 h!
 0p!
 0q!
-b00000000000000000000000000000100 t!
-b0000 x!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000000000 z!
-b00000 |!
-b0000000 }!
-b0000000 !"
-0,"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000000 0"
-01"
-02"
+0r!
+b00000000000000000000000000000100 v!
+b0000 z!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000000000 |!
+b00000 !"
+b0000000 ""
+b0000000 $"
+0/"
+11"
+b00000000000000000000000000000000 2"
 b00000000000000000000000000000000 3"
-b00000000000000000100000000000000 4"
-b00000000000000000000000000000000 5"
-b00000 6"
-b00000 7"
-b00000 8"
+b00000000000000000100000000000000 7"
+b00000000000000000000000000000000 8"
 b00000 9"
-1>"
-b00000000000000000000000000000000 @"
-0A"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
+b00000 :"
+b00000 ;"
+b00000 <"
+1A"
 0D"
-b00000000000000000000000000000100 E"
-b0000000000 G"
-b00000000000000000000000000000000 H"
-b00000000000000000000000000000000 I"
-b00000000000000000000000000000000 J"
+b00000000000000000000000000000000 E"
+b00000000000000000000000000000100 F"
+0G"
+b0000000 J"
 b00000000000000000000000000000000 K"
 b00000000000000000000000000000000 L"
 b00000000000000000000000000000000 M"
@@ -1047,9 +1041,9 @@ b00000000000000000000000000000000 d"
 b00000000000000000000000000000000 e"
 b00000000000000000000000000000000 f"
 b00000000000000000000000000000000 g"
-b0000000000000000000000000 h"
-b0000000000000000000000000 i"
-b0000000000000000000000000 j"
+b00000000000000000000000000000000 h"
+b00000000000000000000000000000000 i"
+b00000000000000000000000000000000 j"
 b0000000000000000000000000 k"
 b0000000000000000000000000 l"
 b0000000000000000000000000 m"
@@ -1079,44 +1073,40 @@ b0000000000000000000000000 &#
 b0000000000000000000000000 '#
 b0000000000000000000000000 (#
 b0000000000000000000000000 )#
-b00000 *#
+b0000000000000000000000000 *#
 b0000000000000000000000000 +#
-b00000 ,#
-b0000000000000000000000000 -#
-b0000000000 .#
-b0000000000 /#
-10#
-01#
-b00000000000000000000000000100000 2#
-b00000 3#
-b00000 4#
-b0000000 5#
+b0000000000000000000000000 ,#
+b00000 /#
+b0000000000000000000000000 0#
+b1111111 1#
+b0000000 2#
+b00000000000000000000000000100000 5#
 b00000 6#
-07#
-08#
-1=#
-b00000000000000000000000000000000 >#
-b11111110000000010000000100010011 ?#
-b00000000000000000000010000000000 @#
+b00000 7#
+b0000000 8#
+b00000 9#
+0:#
+0;#
+1@#
 b00000000000000000000000000000000 A#
-b00000000000000000000000000000000 B#
-b0000000 D#
-1F#
-b00000000000000000000000000000100 G#
-b00000000000000000000000000000000 I#
-1K#
-b00000 L#
-b00000 M#
-b00000 N#
-b00000000000000000000000000000000 O#
-b00000000000000000000000000000000 Q#
+b11111110000000010000000100010011 B#
+b00000000000000000000010000000000 C#
+b00000000000000000000000000000000 D#
+b00000000000000000000000000000000 E#
+b0000000 G#
+1I#
+b00000000000000000000000000000100 J#
+b00000000000000000000000000000000 L#
+1N#
+b00000 O#
+b00000 P#
+b00000 Q#
 b00000000000000000000000000000000 R#
-b00000000000000000000000000000000 S#
 b00000000000000000000000000000000 T#
-b00000000000000000010111111111100 U#
+b00000000000000000000000000000000 U#
 b00000000000000000000000000000000 V#
 b00000000000000000000000000000000 W#
-b00000000000000000000000000000000 X#
+b00000000000000000010111111111100 X#
 b00000000000000000000000000000000 Y#
 b00000000000000000000000000000000 Z#
 b00000000000000000000000000000000 [#
@@ -1143,13 +1133,13 @@ b00000000000000000000000000000000 o#
 b00000000000000000000000000000000 p#
 b00000000000000000000000000000000 q#
 b00000000000000000000000000000000 r#
-b00000000000000000000000000100000 s#
+b00000000000000000000000000000000 s#
 b00000000000000000000000000000000 t#
 b00000000000000000000000000000000 u#
-b00000000000000000010111111111100 v#
+b00000000000000000000000000100000 v#
 b00000000000000000000000000000000 w#
 b00000000000000000000000000000000 x#
-b00000000000000000000000000000000 y#
+b00000000000000000010111111111100 y#
 b00000000000000000000000000000000 z#
 b00000000000000000000000000000000 {#
 b00000000000000000000000000000000 |#
@@ -1176,24 +1166,27 @@ b00000000000000000000000000000000 2$
 b00000000000000000000000000000000 3$
 b00000000000000000000000000000000 4$
 b00000000000000000000000000000000 5$
+b00000000000000000000000000000000 6$
+b00000000000000000000000000000000 7$
+b00000000000000000000000000000000 8$
 #3
 0#
 0F
 0i
-0-"
-0?"
-0<#
-0E#
-0J#
+00"
+0B"
+0?#
+0H#
+0M#
 #4
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #5
 1$
 1G
@@ -1201,48 +1194,43 @@ b00000000000000000000000000000000 5$
 b00000000000000000000000000000100 2!
 b11111111111111111111111111100000 3!
 b00000000000000000010111111111100 6!
-b00000000000000000000000000001000 <!
 b11111110000000010000000100010011 >!
-b00000000100000010010111000100011 f!
-1j!
-1k!
-b0001 m!
-b00000000000000000000000000001000 t!
-b0010011 }!
-b1111111 !"
-1%"
-b0001 &"
-1'"
-1."
-1>"
-b00000000000000000000000000000100 @"
-b00000000000000000000000000001000 E"
-b00001 *#
-b0000000001 .#
-b00010 3#
-b0010011 5#
-1=#
-b00000000000000000000000000000100 >#
-b00000000100000010010111000100011 ?#
-b00000000000000000000000000000001 A#
-b11111110000000010000000100010011 B#
-b11111111111111111111111111100000 C#
-b0010011 D#
-1F#
-b00000000000000000000000000001000 G#
-b00000000000000000000000000000100 I#
-1K#
-b00010 L#
-b00000000000000000010111111111100 Q#
+b00000000000100010010111000100011 h!
+1l!
+1m!
+b0001 o!
+b00000000000000000000000000001000 v!
+b0010011 ""
+b1111111 $"
+1("
+b0001 )"
+1*"
+11"
+1A"
+b00010 6#
+b0010011 8#
+1@#
+b00000000000000000000000000000100 A#
+b00000000000100010010111000100011 B#
+b00000000000000000000000000000001 D#
+b11111110000000010000000100010011 E#
+b11111111111111111111111111100000 F#
+b0010011 G#
+1I#
+b00000000000000000000000000001000 J#
+b00000000000000000000000000000100 L#
+1N#
+b00010 O#
+b00000000000000000010111111111100 T#
 #6
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #7
 1$
 1G
@@ -1250,214 +1238,194 @@ b00000000000000000010111111111100 Q#
 b00000000000000000000000000001000 2!
 b00000000000000000000000000011100 3!
 b00000000000000000010111111011100 4!
-b00000000000000000000000000001100 <!
-b00000000100000010010111000100011 >!
+b00000000000100010010111000100011 >!
 b00000000000000000000000000000100 @!
 b0001 B!
 1C!
 1G!
-b00000000000000000010111111111100 L!
-b11111111111111111111111111100000 N!
-b00010 O!
-b00010 P!
-b00000000000000000010111111111100 b!
-b11111111111111111111111111100000 d!
-b00000010000000010000010000010011 f!
-1i!
-0j!
-b00000000000000000000000000001100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111100000 z!
-b00000000000000000010111111011100 {!
-b0100011 }!
-b010 ~!
-b0000000 !"
-1$"
-0%"
-1."
-b00010 6"
-1>"
-b00000000000000000000000000001000 @"
-b00000000000000000000000000001100 E"
-b00010 *#
-b0000000010 .#
-b01000 4#
-b0100011 5#
-b00010 6#
-18#
-1=#
-b00000000000000000000000000001000 >#
-b00000010000000010000010000010011 ?#
-b00000000000000000000000000000010 A#
-b00000000100000010010111000100011 B#
-b00000000000000000000000000011100 C#
-b0100011 D#
-1F#
-b00000000000000000000000000001100 G#
-b00000000000000000000000000001000 I#
-1K#
-b01000 M#
+b00000000000000000010111111111100 N!
+b11111111111111111111111111100000 P!
+b00010 Q!
+b00010 R!
+b00000000000000000010111111111100 d!
+b11111111111111111111111111100000 f!
+b00000000100000010010110000100011 h!
+1k!
+0l!
+b00000000000000000000000000001100 v!
+b0001 z!
+b00000000000000000010111111111100 {!
+b11111111111111111111111111100000 |!
+b00000000000000000010111111011100 }!
+b0100011 ""
+b010 #"
+b0000000 $"
+1'"
+0("
+11"
+b00010 9"
+1A"
+b00000000000000000000000000000100 E"
+b00001 /#
+b0000001 2#
+b00001 7#
+b0100011 8#
+b00010 9#
+1;#
+1@#
+b00000000000000000000000000001000 A#
+b00000000100000010010110000100011 B#
+b00000000000000000000000000000010 D#
+b00000000000100010010111000100011 E#
+b00000000000000000000000000011100 F#
+b0100011 G#
+1I#
+b00000000000000000000000000001100 J#
+b00000000000000000000000000001000 L#
+1N#
+b00001 P#
 #8
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #9
 1$
 1G
 1j
 b10 0!
 b00000000000000000000000000001100 2!
-b00000000000000000000000000100000 3!
+b00000000000000000000000000011000 3!
 b00000000000000000010111111111000 4!
-b00000000000000000000000000010000 <!
 b00000000000000000000000000001000 =!
-b00000010000000010000010000010011 >!
+b00000000100000010010110000100011 >!
 b00000000000000000000000000001000 @!
 1D!
 0G!
 b00000000000000000000000000000100 I!
-b00000000000000000000000000011100 N!
-b11100 O!
-b01000 Q!
-1U!
-b00000000000000000010111111011100 X!
-b00010 Z!
-b00000000000000000010111111011100 b!
-b00000000000000000000000000011100 d!
-b00000000000100000000011110010011 f!
-0i!
-1j!
-b00000000000000000000000000010000 t!
-b00000000000000000010111111011100 y!
-b00000000000000000000000000011100 z!
-b00000000000000000010111111111000 {!
-b11100 |!
-b0010011 }!
-b000 ~!
-b0000001 !"
-0$"
-1%"
-1."
-b00000000000000000010111111011100 /"
-b00000000000000000000101111110111 5"
-b01000 7"
-b00010 8"
-1:"
-b10 <"
-1>"
-b00000000000000000000000000001100 @"
-b00000000000000000000000000000100 B"
-b00000000000000000000000000001000 C"
-b00000000000000000000000000010000 E"
-b00011 *#
-b00001 ,#
-b0000000011 .#
-b0000000001 /#
-b00000 4#
-b0010011 5#
-b11100 6#
-08#
-1=#
-b00000000000000000000000000001100 >#
-b00000000000100000000011110010011 ?#
-b00000000000000000000000000000011 A#
+b00000000000000000000000000011100 P!
+b11100 Q!
+b00001 S!
+1W!
+b00000000000000000010111111011100 Z!
+b00010 \!
+b00000000000000000010111111011100 d!
+b00000000000000000000000000011100 f!
+b00000010000000010000010000010011 h!
+b00000000000000000000000000010000 v!
+b00000000000000000010111111011100 {!
+b00000000000000000000000000011100 |!
+b00000000000000000010111111111000 }!
+b11100 !"
+11"
+b00000000000000000010111111011100 2"
+b00000000000000000000101111110111 8"
+b00001 :"
+b00010 ;"
+1="
+b10 ?"
+1A"
+b00000000000000000000000000001000 E"
+b00000000000000000000000000001000 F"
+b00010 /#
+b0000010 2#
+b01000 7#
+b11100 9#
+0;#
+1@#
+b00000000000000000000000000001100 A#
 b00000010000000010000010000010011 B#
-b00000000000000000000000000100000 C#
-b0010011 D#
-1F#
-b00000000000000000000000000010000 G#
-b00000000000000000000000000001100 I#
-1K#
-b00000 M#
+b00000000000000000000000000000011 D#
+b00000000100000010010110000100011 E#
+b00000000000000000000000000011000 F#
+1I#
+b00000000000000000000000000010000 J#
+b00000000000000000000000000001100 L#
+1N#
+b01000 P#
 #10
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #11
 1$
 1G
 1j
 b01 0!
 b00000000000000000000000000010000 2!
-b00000000000000000000000000000001 3!
-b00000000000000000010111111111100 4!
-b00000000000000000000000000000000 6!
-b00000000000000000000000000010100 <!
+b00000000000000000000000000100000 3!
+b00000000000000000010111111110100 4!
 b00000000000000000000000000001100 =!
-b00000000000100000000011110010011 >!
+b00000010000000010000010000010011 >!
 b00000000000000000000000000001100 @!
-0D!
-1G!
 b00000000000000000000000000001000 I!
-b00000000000000000000000000100000 N!
-b01000 O!
-b00000 Q!
-1R!
-0U!
-b00000000000000000000000000000100 W!
-b00000000000000000010111111111000 X!
-b11100 Z!
-1\!
-b00010 _!
-b00000000000000000010111111011100 a!
-b00000000000000000000000000100000 d!
-b00000000000000000010111111011100 e!
-b11111110111101000010011000100011 f!
-b00000000000000000000000000010100 t!
-b00000000000000000000000000100000 z!
-b00000000000000000010111111111100 {!
-b00000 |!
-b0000000 !"
-1."
-b00000000000000000010111111111000 /"
-12"
-b00000000000000000000101111111110 5"
-b00000 7"
-b11100 8"
-b00010 9"
-0:"
-1;"
-b01 <"
+b00000000000000000000000000011000 P!
+b11000 Q!
+b01000 S!
+1T!
+0W!
+b00000000000000000000000000000100 Y!
+b00000000000000000010111111111000 Z!
+b11100 \!
+1^!
+b00010 a!
+b00000000000000000010111111011100 c!
+b00000000000000000000000000011000 f!
+b00000000000000000010111111011100 g!
+b00000001001100000000011110010011 h!
+0k!
+1l!
+b00000000000000000000000000010100 v!
+b00000000000000000000000000011000 |!
+b00000000000000000010111111110100 }!
+b11000 !"
+b0010011 ""
+b000 #"
+b0000001 $"
+0'"
+1("
+11"
+b00000000000000000010111111111000 2"
+15"
+b00000000000000000000101111111110 8"
+b01000 :"
+b11100 ;"
+b00010 <"
+0="
 1>"
-b00000000000000000000000000010000 @"
-b00000000000000000000000000001000 B"
-b00000000000000000000000000001100 C"
-b00000000000000000000000000010100 E"
-b00100 *#
-b00010 ,#
-b0000000100 .#
-b0000000010 /#
-b00000 3#
-b00001 4#
-b01000 6#
-18#
-1=#
-b00000000000000000000000000010000 >#
-b11111110111101000010011000100011 ?#
-b00000000000000000000000000000100 A#
-b00000000000100000000011110010011 B#
-b00000000000000000000000000000001 C#
-1F#
-b00000000000000000000000000010100 G#
-b00000000000000000000000000010000 I#
-1K#
-b00000 L#
-b00001 M#
-b00010 N#
-b00000000000000000010111111011100 O#
-1P#
-b00000000000000000000000000000000 Q#
+b01 ?"
+1A"
+b00000000000000000000000000001100 E"
+b00000000000000000000000000001100 F"
+b00011 /#
+b0000011 2#
+b00000 7#
+b0010011 8#
+b11000 9#
+1@#
+b00000000000000000000000000010000 A#
+b00000001001100000000011110010011 B#
+b00000000000000000000000000000100 D#
+b00000010000000010000010000010011 E#
+b00000000000000000000000000100000 F#
+b0010011 G#
+1I#
+b00000000000000000000000000010100 J#
+b00000000000000000000000000010000 L#
+1N#
+b00000 P#
+b00010 Q#
+b00000000000000000010111111011100 R#
+1S#
 #12
 0$
 b00000000000000000010111111011100 (
@@ -1465,639 +1433,650 @@ b00000000000000000010111111011100 (
 b00000000000000000010111111011100 K
 0j
 b00000000000000000010111111011100 n
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000010111111011100 U#
-b00000000000000000010111111011100 v#
+b00000000000000000010111111011100 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000010111111011100 T#
+b00000000000000000010111111011100 X#
+b00000000000000000010111111011100 y#
 #13
 1$
 1G
 1j
 b00 0!
 b00000000000000000000000000010100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000001 4!
-b00000000000000000000000000011000 <!
+b00000000000000000000000000010011 3!
+b00000000000000000010111111111100 4!
+b00000000000000000000000000000000 6!
 b00000000000000000000000000010000 =!
-b11111110111101000010011000100011 >!
+b00000001001100000000011110010011 >!
 b00000000000000000000000000010000 @!
+0D!
+1G!
 b00000000000000000000000000001100 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000000001 N!
-b01111 O!
-b00000 P!
-b00001 Q!
-0R!
-1U!
-b00000000000000000000000000001000 W!
-b00000000000000000010111111111100 X!
-b01000 Z!
-0\!
-b00000000000000000000000000000100 ^!
-b11100 _!
-b00000000000000000010111111111000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000000001 d!
-b00000000000000000010111111111000 e!
-b11111110110001000010011100000011 f!
-1i!
-0j!
-b00000000000000000000000000011000 t!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000000001 z!
-b00000000000000000000000000000001 {!
-b00001 |!
-b0100011 }!
-b010 ~!
-b1111111 !"
-1$"
-0%"
-1."
-b00000000000000000010111111111100 /"
-02"
-b00000000000000000000101111111111 5"
-b00000 6"
-b00001 7"
-b01000 8"
-b11100 9"
-1:"
-0;"
-b00 <"
-1>"
-b00000000000000000000000000010100 @"
-b00000000000000000000000000001100 B"
-b00000000000000000000000000010000 C"
-b00000000000000000000000000011000 E"
-b00101 *#
-b00011 ,#
-b0000000101 .#
-b0000000011 /#
-b01000 3#
-b01111 4#
-b0100011 5#
-b01111 6#
-1=#
-b00000000000000000000000000010100 >#
-b11111110110001000010011100000011 ?#
-b00000000000000000000000000000101 A#
+b00000000000000000010111111011100 N!
+b00000000000000000000000000100000 P!
+b01000 Q!
+b00000 S!
+b00000000000000000000000000001000 Y!
+b00000000000000000010111111110100 Z!
+b11000 \!
+0^!
+b00000000000000000000000000000100 `!
+b11100 a!
+b00000000000000000010111111111000 c!
+b00000000000000000000000000100000 f!
+b00000000000000000010111111111000 g!
+b11111110111101000010011000100011 h!
+b00000000000000000000000000011000 v!
+b00000000000000000000000000100000 |!
+b00000000000000000010111111111100 }!
+b00000 !"
+b0000000 $"
+11"
+b00000000000000000010111111110100 2"
+b00000000000000000000101111111101 8"
+b00000 :"
+b11000 ;"
+b11100 <"
+0>"
+b00 ?"
+1A"
+b00000000000000000000000000010000 E"
+b00000000000000000000000000010000 F"
+b00100 /#
+b0000100 2#
+b00000 6#
+b10011 7#
+b01000 9#
+1;#
+1@#
+b00000000000000000000000000010100 A#
 b11111110111101000010011000100011 B#
-b11111111111111111111111111101100 C#
-b0100011 D#
-1F#
-b00000000000000000000000000011000 G#
-b00000000000000000000000000010100 I#
-1K#
-b01000 L#
-b01111 M#
-b11100 N#
-b00000000000000000010111111111000 O#
-0P#
+b00000000000000000000000000000101 D#
+b00000001001100000000011110010011 E#
+b00000000000000000000000000010011 F#
+1I#
+b00000000000000000000000000011000 J#
+b00000000000000000000000000010100 L#
+1N#
+b00000 O#
+b10011 P#
+b11100 Q#
+b00000000000000000010111111111000 R#
+0S#
+b00000000000000000000000000000000 T#
 #14
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #15
+1$
+1G
+1j
+b00000000000000000000000000011000 2!
+b11111111111111111111111111101100 3!
+b00000000000000000000000000010011 4!
+b00000000000000000000000000010100 =!
+b11111110111101000010011000100011 >!
+b00000000000000000000000000010100 @!
+b00000000000000000000000000010000 I!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000010011 P!
+b01111 Q!
+b00000 R!
+b10011 S!
+0T!
+1W!
+b00000000000000000000000000001100 Y!
+b00000000000000000010111111111100 Z!
+b01000 \!
+b00000000000000000000000000001000 `!
+b11000 a!
+b00000000000000000010111111110100 c!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000010011 f!
+b00000000000000000010111111110100 g!
+b00000000111000000000011110010011 h!
+1k!
+0l!
+b00000000000000000000000000011100 v!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000010011 |!
+b00000000000000000000000000010011 }!
+b10011 !"
+b0100011 ""
+b010 #"
+b1111111 $"
+1'"
+0("
+11"
+b00000000000000000010111111111100 2"
+05"
+b00000000000000000000101111111111 8"
+b00000 9"
+b10011 :"
+b01000 ;"
+b11000 <"
+1="
+1A"
+b00000000000000000000000000010100 E"
+b00000000000000000000000000010100 F"
+b00101 /#
+b0000101 2#
+b01000 6#
+b01111 7#
+b0100011 8#
+b01111 9#
+1@#
+b00000000000000000000000000011000 A#
+b00000000111000000000011110010011 B#
+b00000000000000000000000000000110 D#
+b11111110111101000010011000100011 E#
+b11111111111111111111111111101100 F#
+b0100011 G#
+1I#
+b00000000000000000000000000011100 J#
+b00000000000000000000000000011000 L#
+1N#
+b01000 O#
+b01111 P#
+b11000 Q#
+b00000000000000000010111111110100 R#
+#16
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#17
 1$
 1G
 1j
 b01 0!
 b10 1!
-b00000000000000000000000000011000 2!
+b00000000000000000000000000011100 2!
+b00000000000000000000000000001110 3!
 b00000000000000000010111111101000 4!
-b00000000000000000000000000011100 <!
-b00000000000000000000000000010100 =!
-b11111110110001000010011100000011 >!
-b00000000000000000000000000010100 @!
+b00000000000000000000000000011000 =!
+b00000000111000000000011110010011 >!
+b00000000000000000000000000011000 @!
 1D!
 0G!
-b00000000000000000000000000010000 I!
-b11111111111111111111111111101100 N!
-b01100 O!
-b01000 P!
-b01111 Q!
-b00000000000000000000000000001100 W!
-b00000000000000000000000000000001 X!
-b01111 Z!
-1\!
-b00000000000000000000000000001000 ^!
-b01000 _!
-b00000000000000000010111111111100 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000001 c!
-b11111111111111111111111111101100 d!
-b00000000000000000010111111111100 e!
-b00000000000100000000011110010011 f!
-1g!
-1h!
-0i!
-1j!
-b00000000000000000000000000011100 t!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0000011 }!
-1""
-1#"
-0$"
-1%"
-1."
-b00000000000000000000000000000001 /"
-b00000000000000000000000000000000 5"
-b01000 6"
-b01111 7"
-b01111 8"
+b00000000000000000000000000010100 I!
+b11111111111111111111111111101100 P!
+b01100 Q!
+b01000 R!
+b01111 S!
+b00000000000000000000000000010000 Y!
+b00000000000000000000000000010011 Z!
+b01111 \!
+1^!
+b00000000000000000000000000001100 `!
+b01000 a!
+b00000000000000000010111111111100 c!
+b00000000000000000010111111111100 d!
+b00000000000000000000000000010011 e!
+b11111111111111111111111111101100 f!
+b00000000000000000010111111111100 g!
+b11111110111101000010010000100011 h!
+0k!
+1l!
+b00000000000000000000000000100000 v!
+b00000000000000000010111111111100 {!
+b11111111111111111111111111101100 |!
+b00000000000000000010111111101000 }!
+b01100 !"
+b0010011 ""
+b000 #"
+b0000000 $"
+0'"
+1("
+11"
+b00000000000000000000000000010011 2"
+b00000000000000000000000000000100 8"
 b01000 9"
-1;"
-b01 <"
-b10 ="
+b01111 :"
+b01111 ;"
+b01000 <"
 1>"
-b00000000000000000000000000011000 @"
-b00000000000000000000000000010000 B"
-b00000000000000000000000000010100 C"
-b00000000000000000000000000011100 E"
-b00110 *#
-b00100 ,#
-b0000000110 .#
-b0000000100 /#
-b01100 4#
-b0000011 5#
-b01100 6#
-08#
-1=#
-b00000000000000000000000000011000 >#
-b00000000000100000000011110010011 ?#
-b00000000000000000000000000000110 A#
-b11111110110001000010011100000011 B#
-b0000011 D#
-1F#
-b00000000000000000000000000011100 G#
-b00000000000000000000000000011000 I#
-1K#
-b01100 M#
-b01000 N#
-b00000000000000000010111111111100 O#
-1P#
-#16
+b01 ?"
+b10 @"
+1A"
+b00000000000000000000000000011000 E"
+b00000000000000000000000000011000 F"
+b00110 /#
+b0000110 2#
+b00000 6#
+b01110 7#
+b0010011 8#
+b01100 9#
+0;#
+1@#
+b00000000000000000000000000011100 A#
+b11111110111101000010010000100011 B#
+b00000000000000000000000000000111 D#
+b00000000111000000000011110010011 E#
+b00000000000000000000000000001110 F#
+b0010011 G#
+1I#
+b00000000000000000000000000100000 J#
+b00000000000000000000000000011100 L#
+1N#
+b00000 O#
+b01110 P#
+b01000 Q#
+b00000000000000000010111111111100 R#
+1S#
+#18
 0$
 b00000000000000000010111111111100 .
 0G
 b00000000000000000010111111111100 Q
 0j
 b00000000000000000010111111111100 t
-b00000000000000000010111111111100 6!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000010111111111100 Q#
-b00000000000000000010111111111100 [#
-b00000000000000000010111111111100 |#
-#17
-1$
-1G
-1j
-b00 0!
-b00 1!
-b00000000000000000000000000011100 2!
-b00000000000000000000000000000001 3!
-b00000000000000000000000000000000 6!
-b00000000000000000000000000100000 <!
-b00000000000000000000000000011000 =!
-b00000000000100000000011110010011 >!
-b00000000000000000000000000011000 @!
-0D!
-1E!
-1F!
-1G!
-b00000000000000000000000000010100 I!
-b00000000000000000010111111111100 L!
-b01110 O!
-b01100 Q!
-1R!
-0U!
-b00000000000000000000000000010000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000001 Y!
-b01100 Z!
-b00000000000000000000000000001100 ^!
-b01111 _!
-b00000000000000000000000000000001 a!
-b00000000000000000000000000000000 c!
-b00000000000000000000000000000001 e!
-b00000000111101110001100001100011 f!
-0g!
-0h!
-b00000000000000000000000000100000 t!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000001 0"
-12"
-b00000000000000000000101111111010 5"
-b01100 7"
-b01100 8"
-b01111 9"
-0:"
-b00 <"
-b00 ="
-1>"
-b00000000000000000000000000011100 @"
-b00000000000000000000000000010100 B"
-b00000000000000000000000000011000 C"
-b00000000000000000000000000100000 E"
-b00111 *#
-b00101 ,#
-b0000000111 .#
-b0000000101 /#
-b00000 3#
-b00001 4#
-b0010011 5#
-b01110 6#
-17#
-18#
-1=#
-b00000000000000000000000000011100 >#
-b00000000111101110001100001100011 ?#
-b00000000000000000000000000000111 A#
-b00000000000100000000011110010011 B#
-b00000000000000000000000000000001 C#
-b0010011 D#
-1F#
-b00000000000000000000000000100000 G#
-b00000000000000000000000000011100 I#
-1K#
-b00000 L#
-b00001 M#
-b01111 N#
-b00000000000000000000000000000001 O#
-b00000000000000000000000000000000 Q#
-#18
-0$
-b00000000000000000000000000000001 5
-0G
-b00000000000000000000000000000001 X
-0j
-b00000000000000000000000000000001 {
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000001 b#
-b00000000000000000000000000000001 %$
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000010111111111100 ^#
+b00000000000000000010111111111100 !$
 #19
 1$
 1G
 1j
+b00 0!
+b00 1!
 b00000000000000000000000000100000 2!
-b00000000000000000000000000010000 3!
-b00000000000000000000000000000001 4!
-b00000000000000000000000000000001 5!
-b00000000000000000000000000000001 7!
-b00000000000000000000000000100100 <!
+b11111111111111111111111111101000 3!
+b00000000000000000000000000001110 4!
+b00000000000000000010111111111100 6!
 b00000000000000000000000000011100 =!
-b00000000111101110001100001100011 >!
+b11111110111101000010010000100011 >!
 b00000000000000000000000000011100 @!
-0E!
-0F!
+0D!
+1G!
 b00000000000000000000000000011000 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000000001 N!
-b01111 O!
-b00000 P!
-b00001 Q!
-0R!
-1S!
+b00000000000000000000000000001110 P!
+b01111 Q!
+b00000 R!
+b01110 S!
 1T!
-1U!
-b00000000000000000000000000010100 W!
-b00000000000000000000000000000000 Y!
-b01110 Z!
-0\!
-b00000000000000000000000000010000 ^!
-b01100 _!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000000001 d!
-b00000000000000000010111111101000 e!
-b11111110110001000010011110000011 f!
-0j!
-0k!
-b0000 m!
-b00000000000000000000000000100100 t!
-1w!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000000001 z!
-b00000000000000000000000000000001 {!
-b00001 |!
-b1100011 }!
-b001 ~!
-0%"
-b0000 &"
-0'"
-1*"
-1."
-b00000000000000000000000000000000 0"
+0W!
+b00000000000000000000000000010100 Y!
+b00000000000000000010111111101000 Z!
+b00000000000000000000000000010011 [!
+b01100 \!
+b00000000000000000000000000010000 `!
+b01111 a!
+b00000000000000000000000000010011 c!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000001110 f!
+b00000000000000000000000000010011 g!
+b11111110100001000010011100000011 h!
+1k!
+0l!
+b00000000000000000000000000100100 v!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000001110 |!
+b00000000000000000000000000001110 }!
+b01110 !"
+b0100011 ""
+b010 #"
+b1111111 $"
+1'"
+0("
 11"
-02"
-b00000000000000000000000000000001 3"
-b00000 6"
-b00001 7"
-b01110 8"
-b01100 9"
-1:"
-0;"
-1>"
-b00000000000000000000000000100000 @"
+b00000000000000000010111111101000 2"
+b00000000000000000000000000010011 3"
+15"
+b00000000000000000000101111111010 8"
+b00000 9"
+b01110 :"
+b01100 ;"
+b01111 <"
+0="
+b00 ?"
+b00 @"
 1A"
-b00000000000000000000000000011000 B"
-b00000000000000000000000000011100 C"
-b00000000000000000000000000100100 E"
-b01000 *#
-b00110 ,#
-b0000001000 .#
-b0000000110 /#
-b01110 3#
-b01111 4#
-b1100011 5#
-b01111 6#
-07#
-1=#
-b00000000000000000000000000100000 >#
-b11111110110001000010011110000011 ?#
-b00000000000000000000000000001000 A#
-b00000000111101110001100001100011 B#
-b00000000000000000000000000010000 C#
-b1100011 D#
-1F#
-b00000000000000000000000000100100 G#
-b00000000000000000000000000100000 I#
-1K#
-b01110 L#
-b01111 M#
-b01100 N#
-b00000000000000000010111111101000 O#
-0P#
-b00000000000000000000000000000001 R#
+b00000000000000000000000000011100 E"
+b00000000000000000000000000011100 F"
+b00111 /#
+b0000111 2#
+b01000 6#
+b01111 7#
+b0100011 8#
+b01111 9#
+1;#
+1@#
+b00000000000000000000000000100000 A#
+b11111110100001000010011100000011 B#
+b00000000000000000000000000001000 D#
+b11111110111101000010010000100011 E#
+b11111111111111111111111111101000 F#
+b0100011 G#
+1I#
+b00000000000000000000000000100100 J#
+b00000000000000000000000000100000 L#
+1N#
+b01000 O#
+b01111 P#
+b01111 Q#
+b00000000000000000000000000010011 R#
+b00000000000000000010111111111100 T#
 #20
 0$
+b00000000000000000000000000010011 5
 0G
+b00000000000000000000000000010011 X
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000010011 {
+b00000000000000000000000000010011 7!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000010011 U#
+b00000000000000000000000000010011 e#
+b00000000000000000000000000010011 ($
 #21
 1$
 1G
 1j
-b01 0!
 b10 1!
 b00000000000000000000000000100100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000000 7!
-b00000000000000000000000000101000 <!
+b00000000000000000010111111100100 4!
+b00000000000000000010111111111100 7!
 b00000000000000000000000000100000 =!
-b11111110110001000010011110000011 >!
+b11111110100001000010011100000011 >!
 b00000000000000000000000000100000 @!
-b0000 B!
-0C!
+1D!
 0G!
 b00000000000000000000000000011100 I!
-b00000000000000000000000000000001 M!
-b00000000000000000000000000010000 N!
-b10000 O!
-b01110 P!
-b01111 Q!
-0S!
+b00000000000000000010111111111100 N!
+b00000000000000000000000000010011 O!
+b11111111111111111111111111101000 P!
+b01000 Q!
+b01000 R!
+b01111 S!
 0T!
-b00000000000000000000000000011000 W!
-b00000000000000000000000000000001 X!
-b01111 Z!
-1[!
-1\!
-b00000000000000000000000000010100 ^!
-b01110 _!
-b00000000000000000000000000000001 `!
-b00000000000000000000000000000001 b!
-b00000000000000000000000000000001 c!
-b00000000000000000000000000000001 e!
-b00000000001001111000011110010011 f!
-1g!
-1h!
+1W!
+b00000000000000000000000000011000 Y!
+b00000000000000000000000000001110 Z!
+b00000000000000000000000000000000 [!
+b01111 \!
+0^!
+b00000000000000000000000000010100 `!
+b01100 a!
+b00000000000000000010111111101000 c!
+b00000000000000000010111111111100 d!
+b00000000000000000000000000001110 e!
+b11111111111111111111111111101000 f!
+b00000000000000000010111111101000 g!
+b11111110110001000010011110000011 h!
+1i!
 1j!
-1k!
-b0001 m!
-b00000000000000000000000000101000 t!
-0w!
-b0000 x!
-b00000000000000000000000000000001 y!
-b00000000000000000000000000000000 {!
-b0000011 }!
-b010 ~!
-b1111111 !"
-1""
-1#"
+0k!
+1l!
+b00000000000000000000000000101000 v!
+b00000000000000000010111111111100 {!
+b11111111111111111111111111101000 |!
+b00000000000000000010111111100100 }!
+b01000 !"
+b0000011 ""
 1%"
-b0001 &"
-1'"
-0*"
-1."
-b00000000000000000000000000000001 /"
-01"
+1&"
+0'"
+1("
+11"
+b00000000000000000000000000001110 2"
 b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01110 6"
-b01111 7"
-b01111 8"
-b01110 9"
-1;"
-b01 <"
-b10 ="
-1>"
-b00000000000000000000000000100100 @"
-0A"
-b00000000000000000000000000011100 B"
-b00000000000000000000000000100000 C"
-b00000000000000000000000000101000 E"
-b01001 *#
-b00111 ,#
-b0000001001 .#
-b0000000111 /#
-b01000 3#
-b01100 4#
-b0000011 5#
-b10000 6#
-08#
-1=#
-b00000000000000000000000000100100 >#
-b00000000001001111000011110010011 ?#
-b00000000000000000000000000001001 A#
+05"
+b00000000000000000000000000000011 8"
+b01000 9"
+b01111 :"
+b01111 ;"
+b01100 <"
+1="
+0>"
+b10 @"
+1A"
+b00000000000000000000000000100000 E"
+b00000000000000000000000000100000 F"
+b01000 /#
+b0001000 2#
+b01000 7#
+b0000011 8#
+b01000 9#
+0;#
+1@#
+b00000000000000000000000000100100 A#
 b11111110110001000010011110000011 B#
-b11111111111111111111111111101100 C#
-b0000011 D#
-1F#
-b00000000000000000000000000101000 G#
-b00000000000000000000000000100100 I#
-1K#
-b01000 L#
-b01100 M#
-b01110 N#
-b00000000000000000000000000000001 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000000000 R#
+b00000000000000000000000000001001 D#
+b11111110100001000010011100000011 E#
+b0000011 G#
+1I#
+b00000000000000000000000000101000 J#
+b00000000000000000000000000100100 L#
+1N#
+b01000 P#
+b01100 Q#
+b00000000000000000010111111101000 R#
+0S#
+b00000000000000000010111111111100 U#
 #22
 0$
-b00000000000000000000000000000001 4
 0G
-b00000000000000000000000000000001 W
 0j
-b00000000000000000000000000000001 z
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000001 a#
-b00000000000000000000000000000001 $$
+01"
+0A"
+0@#
+0I#
+0N#
 #23
 1$
 1G
 1j
-0.!
-b00 0!
 b00 1!
 b00000000000000000000000000101000 2!
-b00000000000000000000000000000010 3!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000001 6!
-b00000000000000000010111111011100 7!
-b00000000000000000000000000101100 <!
+b11111111111111111111111111101100 3!
+b00000000000000000000000000000000 7!
 b00000000000000000000000000100100 =!
-b00000000001001111000011110010011 >!
-0?!
+b11111110110001000010011110000011 >!
 b00000000000000000000000000100100 @!
-1A!
-b0001 B!
-1C!
+0D!
 1E!
 1F!
 1G!
 b00000000000000000000000000100000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000000 M!
-b11111111111111111111111111101100 N!
-b01111 O!
-b01000 P!
-b01100 Q!
-0U!
-b00000000000000000000000000011100 W!
-b00000000000000000000000000000000 X!
-b00000000000000000000000000000001 Y!
-b10000 Z!
-0[!
-b00000000000000000000000000011000 ^!
-b01111 _!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000001 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000000 c!
-b11111111111111111111111111101100 d!
-b11111110111101000010011000100011 f!
-0g!
-0h!
-b00000000000000000000000000101100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000001 0"
-b01000 6"
-b01100 7"
-b10000 8"
-b01111 9"
-0:"
-b00 <"
-b00 ="
+b00000000000000000010111111111100 O!
+b01110 Q!
+b01000 S!
+1T!
+0W!
+b00000000000000000000000000011100 Y!
+b00000000000000000010111111100100 Z!
+b00000000000000000000000000001110 [!
+b01000 \!
+1^!
+b00000000000000000000000000011000 `!
+b01111 a!
+b00000000000000000000000000001110 c!
+b00000000000000000010111111111100 e!
+b00000000000000000000000000001110 g!
+b00000000111101110000011110110011 h!
+b00000000000000000000000000101100 v!
+11"
+b00000000000000000010111111100100 2"
+b00000000000000000000000000001110 3"
+15"
+b00000000000000000000101111111001 8"
+b01000 :"
+b01000 ;"
+b01111 <"
+0="
 1>"
-b00000000000000000000000000101000 @"
-b00000000000000000000000000100000 B"
-b00000000000000000000000000100100 C"
-b00000000000000000000000000101100 E"
-b01010 *#
-b01000 ,#
-b0000001010 .#
-b0000001000 /#
-b01111 3#
-b00010 4#
-b0010011 5#
-b01111 6#
-17#
-18#
-09#
-0:#
+b00 @"
+1A"
+b00000000000000000000000000100100 E"
+b00000000000000000000000000100100 F"
+b01001 /#
+b0001001 2#
+b01100 7#
+b01110 9#
+1:#
 1;#
-1=#
-b00000000000000000000000000101000 >#
-b11111110111101000010011000100011 ?#
-b00000000000000000000000000001010 A#
-b00000000001001111000011110010011 B#
-b00000000000000000000000000000010 C#
-b0010011 D#
-1F#
-b00000000000000000000000000101100 G#
-0H#
-b00000000000000000000000000101000 I#
-1K#
-b01111 L#
-b00010 M#
-b01111 N#
-b00000000000000000000000000000001 Q#
-b00000000000000000010111111011100 R#
+1@#
+b00000000000000000000000000101000 A#
+b00000000111101110000011110110011 B#
+b00000000000000000000000000001010 D#
+b11111110110001000010011110000011 E#
+b11111111111111111111111111101100 F#
+1I#
+b00000000000000000000000000101100 J#
+b00000000000000000000000000101000 L#
+1N#
+b01100 P#
+b01111 Q#
+b00000000000000000000000000001110 R#
+1S#
+b00000000000000000000000000000000 U#
 #24
 0$
+b00000000000000000000000000001110 5
 0G
+b00000000000000000000000000001110 X
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000001110 {
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001110 e#
+b00000000000000000000000000001110 ($
 #25
 1$
 1G
 1j
+0.!
+b00000000000000000000000000101100 2!
+b00000000000000000000000000000000 3!
+b00000000000000000010111111101000 4!
+b00000000000000000000000000001110 5!
+b00000000000000000000000000000000 6!
+b00000000000000000000000000001110 7!
+b00000000000000000000000000101000 =!
+b00000000111101110000011110110011 >!
+0?!
+b00000000000000000000000000101000 @!
+1A!
+b00000000000000000000000000100100 I!
+b00000000000000000000000000000000 O!
+b11111111111111111111111111101100 P!
+b01111 Q!
+b01100 S!
+0T!
+1U!
+1V!
+1W!
+b00000000000000000000000000100000 Y!
+b00000000000000000010111111111100 [!
+b01110 \!
+0^!
+b00000000000000000000000000011100 `!
+b01000 a!
+b00000000000000000010111111100100 c!
+b00000000000000000000000000000000 e!
+b11111111111111111111111111101100 f!
+b00000000000000000010111111100100 g!
+b00000000000000000000010100010011 h!
+0i!
+0j!
+0m!
+b00000000000000000000000000110000 v!
+b11111111111111111111111111101100 |!
+b00000000000000000010111111101000 }!
+b01100 !"
+b0110011 ""
+b000 #"
+b0000000 $"
+0%"
+0&"
+0*"
+11"
+b00000000000000000010111111111100 3"
+14"
+05"
+b00000000000000000000000000001110 6"
+b01100 :"
+b01110 ;"
+b01000 <"
+1="
+0>"
+1A"
+b00000000000000000000000000101000 E"
+b00000000000000000000000000101000 F"
+b01010 /#
+b0001010 2#
+b01110 6#
+b01111 7#
+b0110011 8#
+b01111 9#
+0<#
+0=#
+1>#
+1@#
+b00000000000000000000000000101100 A#
+b00000000000000000000010100010011 B#
+b00000000000000000000000000001011 D#
+b00000000111101110000011110110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000000110000 J#
+0K#
+b00000000000000000000000000101100 L#
+1N#
+b01110 O#
+b01111 P#
+b01000 Q#
+b00000000000000000010111111100100 R#
+0S#
+b00000000000000000000000000000000 T#
+b00000000000000000000000000001110 U#
+#26
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#27
+1$
+1G
+1j
 1.!
-b10 0!
+b01 0!
+b10 1!
 b00000000000000000000000000000000 4!
-b00000000000000000000000000000001 5!
+b00000000000000000000000000010011 5!
 b00000000000000000000000000000100 =!
 1?!
 0A!
@@ -2107,2797 +2086,2418 @@ b0000 B!
 0F!
 0G!
 b00000000000000000000000000000000 I!
-b00000000000000000000000000000001 L!
-b00000000000000000010111111011100 M!
-b00000000000000000000000000000010 N!
-b01111 P!
-b00010 Q!
-1S!
-1T!
-1U!
-b00000000000000000000000000100000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000000 Y!
-b01111 Z!
-0\!
-b00000000000000000000000000011100 ^!
-b10000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111101000 b!
-b00000000000000000010111111011100 c!
-b00000000000000000010111111011100 d!
-b00000000000000000000000000000000 e!
-b0000 x!
-b00000000000000000010111111101000 y!
-b00000000000000000010111111011100 z!
-b00000000000000000000000000000000 {!
-b11100 |!
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000000 0"
+b00000000000000000000000000000000 N!
+b00000000000000000000000000001110 O!
+b00000000000000000000000000000000 P!
+b01110 R!
+b01111 S!
+b00000000000000000000000000100100 Y!
+b00000000000000000010111111101000 Z!
+b00000000000000000000000000000000 [!
+b01111 \!
+1]!
+1^!
+b00000000000000000000000000100000 `!
+b01110 a!
+b00000000000000000000000000001110 b!
+b00000000000000000000000000001110 d!
+b00000000000000000010111111101000 e!
+b00000000000000000010111111101000 f!
+b00000000000000000000000000001110 g!
+b0000 z!
+b00000000000000000000000000001110 {!
+b00000000000000000010111111101000 |!
+b00000000000000000000000000000000 }!
+b01000 !"
 11"
-b00000000000000000000000000000001 3"
-b00000000000000000000101111111010 5"
-b01111 6"
-b00010 7"
-b01111 8"
-b10000 9"
-1:"
-0;"
-b10 <"
-1>"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
-b00000 ,#
-b0000000000 /#
-07#
-08#
-19#
-1:#
-0;#
-1=#
-1F#
-1H#
-1K#
-b10000 N#
-b00000000000000000000000000000000 O#
-0P#
-#26
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#27
-1$
-1G
-1j
-b01 0!
-b00000000000000000000000000101100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000011 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000001 7!
-b00000000000000000000000000110000 <!
-b00000000000000000000000000101000 =!
-b11111110111101000010011000100011 >!
-b00000000000000000000000000101000 @!
-b0001 B!
-1C!
-1G!
-b00000000000000000000000000100100 I!
-0S!
-0T!
-0U!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
-b00000000000000000010111111011100 Y!
-1[!
-1\!
-b00000000000000000000000000100000 ^!
-b01111 _!
-b00000000000000000000000000000001 `!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000001 b!
-b00000000000000000000000000000010 d!
-b00000000000000000000000000000001 e!
-b11111110110001000010011100000011 f!
-1i!
-0j!
-b00000000000000000000000000110000 t!
-b0001 x!
-b00000000000000000000000000000001 y!
-b00000000000000000000000000000010 z!
-b00000000000000000000000000000011 {!
-b00010 |!
-b0100011 }!
-b010 ~!
-b1111111 !"
-1$"
-0%"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000010111111011100 0"
-01"
+b00000000000000000010111111101000 2"
 b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01111 9"
-0:"
-1;"
-b01 <"
+b00000000000000000000000000010011 6"
+b00000000000000000000101111111010 8"
+b01110 9"
+b01111 :"
+b01111 ;"
+b01110 <"
 1>"
-b00000000000000000000000000101100 @"
-b00000000000000000000000000100100 B"
-b00000000000000000000000000101000 C"
-b00000000000000000000000000110000 E"
-b01011 *#
-b01001 ,#
-b0000001011 .#
-b0000001001 /#
-b01000 3#
-b01111 4#
-b0100011 5#
-18#
+b01 ?"
+b10 @"
+1A"
+b00000000000000000000000000000100 F"
+0:#
+0;#
+1<#
 1=#
-b00000000000000000000000000101100 >#
-b11111110110001000010011100000011 ?#
-b00000000000000000000000000001011 A#
-b11111110111101000010011000100011 B#
-b11111111111111111111111111101100 C#
-b0100011 D#
-1F#
-b00000000000000000000000000110000 G#
-b00000000000000000000000000101100 I#
+0>#
+1@#
+1I#
 1K#
-b01000 L#
-b01111 M#
-b01111 N#
-b00000000000000000000000000000001 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000000001 R#
+1N#
+b01110 Q#
+b00000000000000000000000000001110 R#
+1S#
 #28
 0$
+b00000000000000000000000000001110 4
 0G
+b00000000000000000000000000001110 W
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000001110 z
+b00000000000000000000000000001110 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001110 T#
+b00000000000000000000000000001110 d#
+b00000000000000000000000000001110 '$
 #29
 1$
 1G
 1j
 b00 0!
-b10 1!
+b01 1!
 b00000000000000000000000000110000 2!
-b00000000000000000010111111101000 4!
+b00000000000000000000000000100001 4!
+b00000000000000000000000000000000 5!
+b00000000000000000000000000000000 6!
 b00000000000000000000000000000000 7!
-b00000000000000000000000000110100 <!
 b00000000000000000000000000101100 =!
-b11111110110001000010011100000011 >!
+b00000000000000000000010100010011 >!
 b00000000000000000000000000101100 @!
-1D!
-0G!
+b0001 B!
+1G!
 b00000000000000000000000000101000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000001 M!
-b11111111111111111111111111101100 N!
-b01100 O!
-b01000 P!
-b01111 Q!
-1U!
-b00000000000000000000000000100100 W!
-b00000000000000000000000000000011 X!
-0[!
-0\!
-b00000000000000000000000000000000 ^!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000011 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000000000 e!
-b00000000000100000000011110010011 f!
-1g!
-1h!
-0i!
-1j!
-b00000000000000000000000000110100 t!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0000011 }!
-1""
-1#"
-0$"
-1%"
-1."
-b00000000000000000000000000000011 /"
-b01000 6"
-b01111 7"
-1:"
-0;"
-b00 <"
-b10 ="
-1>"
-b00000000000000000000000000110000 @"
-b00000000000000000000000000101000 B"
-b00000000000000000000000000101100 C"
-b00000000000000000000000000110100 E"
-b01100 *#
-b01010 ,#
-b0000001100 .#
-b0000001010 /#
-b01100 4#
-b0000011 5#
-b01100 6#
-08#
-1=#
-b00000000000000000000000000110000 >#
-b00000000000100000000011110010011 ?#
-b00000000000000000000000000001100 A#
-b11111110110001000010011100000011 B#
-b0000011 D#
-1F#
-b00000000000000000000000000110100 G#
-b00000000000000000000000000110000 I#
-1K#
-b01100 M#
-b00000000000000000000000000000000 O#
-0P#
-b00000000000000000000000000000000 R#
+b00000000000000000000000000001110 N!
+0U!
+0V!
+0W!
+b00000000000000000000000000000000 Y!
+b00000000000000000000000000000000 Z!
+b00000000000000000010111111101000 [!
+b00000000000000000000000000100100 `!
+b01111 a!
+b00000000000000000000000000010011 b!
+b00000000000000000010111111101000 c!
+b00000000000000000000000000010011 e!
+b00000000000000000000000000010011 f!
+b00000000000000000000000000010011 g!
+b11111111111101010100010100010011 h!
+1m!
+b00000000000000000000000000110100 v!
+b0001 z!
+b00000000000000000000000000010011 |!
+b00000000000000000000000000100001 }!
+b10011 !"
+b0010011 ""
+1*"
+11"
+b00000000000000000000000000000000 2"
+b00000000000000000010111111101000 3"
+04"
+b00000000000000000000000000000000 6"
+b00000000000000000000000000000000 8"
+b01111 <"
+0="
+b00 ?"
+b01 @"
+1A"
+b00000000000000000000000000101100 E"
+b00000000000000000000000000101100 F"
+b01011 /#
+b0001011 2#
+b00000 6#
+b00000 7#
+b0010011 8#
+1;#
+1@#
+b00000000000000000000000000110000 A#
+b11111111111101010100010100010011 B#
+b00000000000000000000000000001100 D#
+b00000000000000000000010100010011 E#
+b0010011 G#
+1I#
+b00000000000000000000000000110100 J#
+b00000000000000000000000000110000 L#
+1N#
+b00000 O#
+b00000 P#
+b01111 Q#
+b00000000000000000000000000010011 R#
+b00000000000000000000000000000000 T#
+b00000000000000000000000000000000 U#
 #30
 0$
+b00000000000000000000000000010011 5
 0G
+b00000000000000000000000000010011 X
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000010011 {
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000010011 e#
+b00000000000000000000000000010011 ($
 #31
 1$
 1G
 1j
 b00 1!
 b00000000000000000000000000110100 2!
-b00000000000000000000000000000001 3!
-b00000000000000000000000000000000 6!
-b00000000000000000000000000111000 <!
+b11111111111111111111111111111111 3!
+b00000000000000000000000000000000 4!
 b00000000000000000000000000110000 =!
-b00000000000100000000011110010011 >!
+b11111111111101010100010100010011 >!
 b00000000000000000000000000110000 @!
-0D!
-1E!
-1F!
-1G!
+1C!
 b00000000000000000000000000101100 I!
-b00000000000000000000000000000000 M!
-b01110 O!
-b01100 Q!
-1R!
-0U!
-b00000000000000000000000000101000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000011 Y!
-b01100 Z!
-1\!
-b00000000000000000000000000100100 ^!
-b00000000000000000000000000000011 a!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000000000 O!
+b01010 Q!
+b00000 R!
+b00000 S!
+1W!
+b00000000000000000000000000101000 Y!
+b00000000000000000000000000100001 Z!
+b00000000000000000000000000010011 [!
+0]!
+0^!
+b00000000000000000000000000000000 `!
+b00000000000000000000000000000000 b!
 b00000000000000000000000000000000 c!
-b00000000000000000000000000000011 e!
-b00000000111001111101100001100011 f!
-0g!
-0h!
-b00000000000000000000000000111000 t!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000011 0"
-12"
-b00000000000000000000101111111010 5"
-b01100 7"
-b01100 8"
-0:"
-1;"
-b00 ="
-1>"
-b00000000000000000000000000110100 @"
-b00000000000000000000000000101100 B"
-b00000000000000000000000000110000 C"
-b00000000000000000000000000111000 E"
-b01101 *#
-b01011 ,#
-b0000001101 .#
-b0000001011 /#
-b00000 3#
-b00001 4#
-b0010011 5#
-b01110 6#
-17#
-18#
-1=#
-b00000000000000000000000000110100 >#
-b00000000111001111101100001100011 ?#
-b00000000000000000000000000001101 A#
-b00000000000100000000011110010011 B#
-b00000000000000000000000000000001 C#
-b0010011 D#
-1F#
-b00000000000000000000000000111000 G#
-b00000000000000000000000000110100 I#
-1K#
-b00000 L#
-b00001 M#
-b00000000000000000000000000000011 O#
-1P#
-b00000000000000000000000000000000 Q#
+b00000000000000000000000000000000 d!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000000000 f!
+b00000000000000000000000000000000 g!
+b00000000101000000110010100110011 h!
+b0100 o!
+b00000000000000000000000000111000 v!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000000000 |!
+b00000000000000000000000000000000 }!
+b00000 !"
+b100 #"
+b1111111 $"
+b0100 )"
+11"
+b00000000000000000000000000100001 2"
+b00000000000000000000000000010011 3"
+b00000000000000000000000000001000 8"
+b00000 9"
+b00000 :"
+1="
+0>"
+b00 @"
+1A"
+b00000000000000000000000000110000 E"
+b00000000000000000000000000110000 F"
+b01100 /#
+b0001100 2#
+b01010 6#
+b11111 7#
+b01010 9#
+1@#
+b00000000000000000000000000110100 A#
+b00000000101000000110010100110011 B#
+b00000000000000000000000000001101 D#
+b11111111111101010100010100010011 E#
+b11111111111111111111111111111111 F#
+1I#
+b00000000000000000000000000111000 J#
+b00000000000000000000000000110100 L#
+1N#
+b01010 O#
+b11111 P#
+b00000000000000000000000000000000 R#
+0S#
 #32
 0$
-b00000000000000000000000000000011 5
 0G
-b00000000000000000000000000000011 X
 0j
-b00000000000000000000000000000011 {
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000011 b#
-b00000000000000000000000000000011 %$
+01"
+0A"
+0@#
+0I#
+0N#
 #33
 1$
 1G
 1j
+b10 0!
 b00000000000000000000000000111000 2!
-b00000000000000000000000000010000 3!
-b00000000000000000000000000000001 4!
-b00000000000000000000000000000011 5!
-b00000000000000000000000000000011 6!
-b00000000000000000000000000000001 7!
-b00000000000000000000000000111100 <!
+b00000000000000000000000000000000 3!
+b11111111111111111111111111111111 4!
 b00000000000000000000000000110100 =!
-b00000000111001111101100001100011 >!
+b00000000101000000110010100110011 >!
 b00000000000000000000000000110100 @!
-0E!
-0F!
+b0100 B!
 b00000000000000000000000000110000 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000000001 N!
-b01111 O!
-b00000 P!
-b00001 Q!
-0R!
-1S!
-1T!
-1U!
-b00000000000000000000000000101100 W!
-b00000000000000000000000000000000 Y!
-b01110 Z!
-0\!
-b00000000000000000000000000101000 ^!
-b01100 _!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000000001 d!
-b00000000000000000010111111101000 e!
-b11111110110001000010011110000011 f!
-0j!
-0k!
-b0000 m!
-b00000000000000000000000000111100 t!
-1w!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000000001 z!
-b00000000000000000000000000000001 {!
-b00001 |!
-b1100011 }!
-b101 ~!
-0%"
-b0000 &"
-0'"
-1*"
-1."
-b00000000000000000000000000000000 0"
+b11111111111111111111111111111111 P!
+b01010 R!
+b11111 S!
+b00000000000000000000000000101100 Y!
+b00000000000000000000000000000000 Z!
+b00000000000000000000000000000000 [!
+b01010 \!
+1^!
+b00000000000000000000000000101000 `!
+b00000000000000000000000000100001 c!
+b11111111111111111111111111111111 f!
+b00000000000000000000000000100001 g!
+b00000000110001010111010100010011 h!
+0m!
+b0110 o!
+b00000000000000000000000000111100 v!
+b0100 z!
+b11111111111111111111111111111111 |!
+b11111111111111111111111111111111 }!
+b11111 !"
+b0110011 ""
+b110 #"
+b0000000 $"
+b0110 )"
+0*"
 11"
-02"
-b00000000000000000000000000000011 3"
-b00000 6"
-b00001 7"
-b01110 8"
-b01100 9"
-1:"
-0;"
+b00000000000000000000000000000000 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000000 8"
+b01010 9"
+b11111 :"
+b01010 ;"
 1>"
-b00000000000000000000000000111000 @"
+b10 ?"
 1A"
-b00000000000000000000000000110000 B"
-b00000000000000000000000000110100 C"
-b00000000000000000000000000111100 E"
-b01110 *#
-b01100 ,#
-b0000001110 .#
-b0000001100 /#
-b01111 3#
-b01110 4#
-b1100011 5#
-b01111 6#
-07#
-1=#
-b00000000000000000000000000111000 >#
-b11111110110001000010011110000011 ?#
-b00000000000000000000000000001110 A#
-b00000000111001111101100001100011 B#
-b00000000000000000000000000010000 C#
-b1100011 D#
-1F#
-b00000000000000000000000000111100 G#
-b00000000000000000000000000111000 I#
-1K#
-b01111 L#
-b01110 M#
-b01100 N#
-b00000000000000000010111111101000 O#
-0P#
-b00000000000000000000000000000011 Q#
-b00000000000000000000000000000001 R#
+b00000000000000000000000000110100 E"
+b00000000000000000000000000110100 F"
+b01101 /#
+b0001101 2#
+b00000 6#
+b01010 7#
+b0110011 8#
+1@#
+b00000000000000000000000000111000 A#
+b00000000110001010111010100010011 B#
+b00000000000000000000000000001110 D#
+b00000000101000000110010100110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000000111100 J#
+b00000000000000000000000000111000 L#
+1N#
+b00000 O#
+b01010 P#
+b00000000000000000000000000100001 R#
+1S#
 #34
 0$
+b00000000000000000000000000100001 5
 0G
+b00000000000000000000000000100001 X
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000100001 {
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000100001 e#
+b00000000000000000000000000100001 ($
 #35
 1$
 1G
 1j
-b10 0!
-b01 1!
+b00 0!
+b10 1!
 b00000000000000000000000000111100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001000000 <!
+b00000000000000000000000000001100 3!
 b00000000000000000000000000111000 =!
-b11111110110001000010011110000011 >!
+b00000000110001010111010100010011 >!
 b00000000000000000000000000111000 @!
-b0000 B!
+b0110 B!
 0C!
-0G!
 b00000000000000000000000000110100 I!
-b00000000000000000000000000000011 L!
-b00000000000000000000000000000001 M!
-b00000000000000000000000000010000 N!
-b10000 O!
-b01111 P!
-b01110 Q!
-0S!
-0T!
-b00000000000000000000000000110000 W!
-b00000000000000000000000000000001 X!
-b01111 Z!
-1[!
-1\!
-b00000000000000000000000000101100 ^!
-b01110 _!
-b00000000000000000000000000000011 `!
-b00000000000000000000000000000001 b!
-b00000000000000000000000000000011 c!
-b00000000000000000000000000000011 d!
-b00000000000000000000000000000011 e!
-b00000000001101111000011110010011 f!
-1g!
-1h!
-1j!
-1k!
-b0001 m!
-b00000000000000000000000001000000 t!
-0w!
-b0000 x!
-b00000000000000000000000000000001 y!
-b00000000000000000000000000000011 z!
-b00000000000000000000000000000000 {!
-b00011 |!
-b0000011 }!
-b010 ~!
-b1111111 !"
-1""
-1#"
-1%"
-b0001 &"
-1'"
-0*"
-1."
-b00000000000000000000000000000001 /"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01111 6"
-b01110 7"
-b01111 8"
-b01110 9"
-1;"
-b10 <"
-b01 ="
-1>"
-b00000000000000000000000000111100 @"
-0A"
-b00000000000000000000000000110100 B"
-b00000000000000000000000000111000 C"
-b00000000000000000000000001000000 E"
-b01111 *#
-b01101 ,#
-b0000001111 .#
-b0000001101 /#
-b01000 3#
-b01100 4#
-b0000011 5#
-b10000 6#
-08#
-1=#
-b00000000000000000000000000111100 >#
-b00000000001101111000011110010011 ?#
-b00000000000000000000000000001111 A#
-b11111110110001000010011110000011 B#
-b11111111111111111111111111101100 C#
-b0000011 D#
-1F#
-b00000000000000000000000001000000 G#
-b00000000000000000000000000111100 I#
-1K#
-b01000 L#
-b01100 M#
-b01110 N#
-b00000000000000000000000000000011 O#
-1P#
-b00000000000000000010111111111100 Q#
+b00000000000000000000000000000000 P!
+b00000 R!
+b01010 S!
+b00000000000000000000000000110000 Y!
+b11111111111111111111111111111111 Z!
+b00000000000000000000000000101100 `!
+b01010 a!
+b00000000000000000000000000000000 c!
+b11111111111111111111111111111111 e!
+b00000000000000000000000000000000 g!
+b00000001110001010000010100010011 h!
+1m!
+b0111 o!
+b00000000000000000000000001000000 v!
+b0110 z!
+b0010011 ""
+b111 #"
+b0111 )"
+1*"
+11"
+b11111111111111111111111111111111 2"
+b00111111111111111111111111111111 8"
+b00000 9"
+b01010 :"
+b01010 <"
+b00 ?"
+b10 @"
+1A"
+b00000000000000000000000000111000 E"
+b00000000000000000000000000111000 F"
+b01110 /#
+b0001110 2#
+b01010 6#
+b01100 7#
+b0010011 8#
+1@#
+b00000000000000000000000000111100 A#
+b00000001110001010000010100010011 B#
+b00000000000000000000000000001111 D#
+b00000000110001010111010100010011 E#
+b00000000000000000000000000001100 F#
+b0010011 G#
+1I#
+b00000000000000000000000001000000 J#
+b00000000000000000000000000111100 L#
+1N#
+b01010 O#
+b01100 P#
+b01010 Q#
 b00000000000000000000000000000000 R#
 #36
 0$
-b00000000000000000000000000000011 4
 0G
-b00000000000000000000000000000011 W
 0j
-b00000000000000000000000000000011 z
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000011 a#
-b00000000000000000000000000000011 $$
+01"
+0A"
+0@#
+0I#
+0N#
 #37
 1$
 1G
 1j
-0.!
-b00 0!
+b10 0!
 b00 1!
 b00000000000000000000000001000000 2!
-b00000000000000000000000000000011 3!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000011 6!
-b00000000000000000000000001000100 <!
+b00000000000000000000000000011100 3!
+b00000000000000000000000000001100 4!
 b00000000000000000000000000111100 =!
-b00000000001101111000011110010011 >!
-0?!
+b00000001110001010000010100010011 >!
 b00000000000000000000000000111100 @!
-1A!
-b0001 B!
+b0111 B!
 1C!
-1E!
-1F!
-1G!
 b00000000000000000000000000111000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000000 M!
-b11111111111111111111111111101100 N!
-b01111 O!
-b01000 P!
-b01100 Q!
-0U!
-b00000000000000000000000000110100 W!
-b00000000000000000000000000000000 X!
-b00000000000000000000000000000011 Y!
-b10000 Z!
-0[!
-b00000000000000000000000000110000 ^!
-b01111 _!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000001 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000000 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000000001 e!
-b11111110111101000010011000100011 f!
-0g!
-0h!
-b00000000000000000000000001000100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000011 0"
-b01000 6"
-b01100 7"
-b10000 8"
-b01111 9"
-0:"
-b00 <"
-b00 ="
-1>"
-b00000000000000000000000001000000 @"
-b00000000000000000000000000111000 B"
-b00000000000000000000000000111100 C"
-b00000000000000000000000001000100 E"
-b10000 *#
-b01110 ,#
-b0000010000 .#
-b0000001110 /#
-b01111 3#
-b00011 4#
-b0010011 5#
-b01111 6#
-17#
-18#
-09#
-0:#
-1;#
-1=#
-b00000000000000000000000001000000 >#
-b11111110111101000010011000100011 ?#
-b00000000000000000000000000010000 A#
-b00000000001101111000011110010011 B#
-b00000000000000000000000000000011 C#
-b0010011 D#
-1F#
-b00000000000000000000000001000100 G#
-0H#
-b00000000000000000000000001000000 I#
-1K#
-b01111 L#
-b00011 M#
-b01111 N#
-b00000000000000000000000000000001 O#
-b00000000000000000000000000000011 Q#
+b00000000000000000000000000001100 P!
+b01010 R!
+b01100 S!
+b00000000000000000000000000110100 Y!
+b11111111111111111111111111111111 [!
+b00000000000000000000000000110000 `!
+b11111111111111111111111111111111 c!
+b11111111111111111111111111111111 d!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000001100 f!
+b11111111111111111111111111111111 g!
+b00000000001001010001010100010011 h!
+b0001 o!
+b00000000000000000000000001000100 v!
+b0111 z!
+b11111111111111111111111111111111 {!
+b00000000000000000000000000001100 |!
+b00000000000000000000000000001100 }!
+b01100 !"
+b000 #"
+b0001 )"
+11"
+b11111111111111111111111111111111 3"
+b01010 9"
+b01100 :"
+b10 ?"
+b00 @"
+1A"
+b00000000000000000000000000111100 E"
+b00000000000000000000000000111100 F"
+b01111 /#
+b0001111 2#
+b11100 7#
+1@#
+b00000000000000000000000001000000 A#
+b00000000001001010001010100010011 B#
+b00000000000000000000000000010000 D#
+b00000001110001010000010100010011 E#
+b00000000000000000000000000011100 F#
+1I#
+b00000000000000000000000001000100 J#
+b00000000000000000000000001000000 L#
+1N#
+b11100 P#
+b11111111111111111111111111111111 R#
 #38
 0$
-b00000000000000000000000000000001 5
+b11111111111111111111111111111111 0
 0G
-b00000000000000000000000000000001 X
+b11111111111111111111111111111111 S
 0j
-b00000000000000000000000000000001 {
-b00000000000000000000000000000001 6!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000001 Q#
-b00000000000000000000000000000001 b#
-b00000000000000000000000000000001 %$
+b11111111111111111111111111111111 v
+b11111111111111111111111111111111 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b11111111111111111111111111111111 T#
+b11111111111111111111111111111111 `#
+b11111111111111111111111111111111 #$
 #39
 1$
 1G
 1j
-1.!
-b10 0!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000011 5!
-b00000000000000000000000000000100 =!
-1?!
-0A!
-b0000 B!
-0C!
-0E!
-0F!
-0G!
-b00000000000000000000000000000000 I!
-b00000000000000000000000000000001 L!
-b00000000000000000000000000000011 N!
-b01111 P!
-b00011 Q!
-1S!
-1T!
-1U!
-b00000000000000000000000000111000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000000 Y!
-b01111 Z!
-0\!
-b00000000000000000000000000110100 ^!
-b10000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111101000 b!
-b00000000000000000000000000000000 d!
-b00000000000000000000000000000000 e!
-b0000 x!
-b00000000000000000010111111101000 y!
-b00000000000000000000000000000000 z!
-b00000000000000000000000000000000 {!
-b00000 |!
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000000 0"
+b00000000000000000000000001000100 2!
+b00000000000000000000000000000010 3!
+b00000000000000000000000000101000 4!
+b00000000000000000010111111011100 7!
+b00000000000000000000000001000000 =!
+b00000000001001010001010100010011 >!
+b00000000000000000000000001000000 @!
+b0001 B!
+b00000000000000000000000000111100 I!
+b11111111111111111111111111111111 N!
+b00000000000000000000000000011100 P!
+b11100 S!
+b00000000000000000000000000111000 Y!
+b00000000000000000000000000001100 Z!
+b00000000000000000000000000000000 [!
+b00000000000000000000000000110100 `!
+b00000000000000000000000000001100 d!
+b00000000000000000000000000011100 f!
+b00000000010001010101010100010011 h!
+b0011 o!
+b00000000000000000000000001001000 v!
+b0001 z!
+b00000000000000000000000000001100 {!
+b00000000000000000000000000011100 |!
+b00000000000000000000000000101000 }!
+b11100 !"
+b001 #"
+b0011 )"
 11"
-b00000000000000000000000000000011 3"
-b00000000000000000000101111111010 5"
-b01111 6"
-b00011 7"
-b01111 8"
-b10000 9"
-1:"
-0;"
-b10 <"
-1>"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
-b00000 ,#
-b0000000000 /#
-07#
-08#
-19#
-1:#
-0;#
-1=#
-1F#
-1H#
-1K#
-b10000 N#
-b00000000000000000000000000000000 O#
-0P#
+b00000000000000000000000000001100 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000011 8"
+b11100 :"
+1A"
+b00000000000000000000000001000000 E"
+b00000000000000000000000001000000 F"
+b10000 /#
+b0010000 2#
+b00010 7#
+1@#
+b00000000000000000000000001000100 A#
+b00000000010001010101010100010011 B#
+b00000000000000000000000000010001 D#
+b00000000001001010001010100010011 E#
+b00000000000000000000000000000010 F#
+1I#
+b00000000000000000000000001001000 J#
+b00000000000000000000000001000100 L#
+1N#
+b00010 P#
+b00000000000000000010111111011100 U#
 #40
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+01"
+0A"
+0@#
+0I#
+0N#
 #41
 1$
 1G
 1j
-b01 0!
-b00000000000000000000000001000100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000110 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000001 7!
-b00000000000000000000000001001000 <!
-b00000000000000000000000001000000 =!
-b11111110111101000010011000100011 >!
-b00000000000000000000000001000000 @!
-b0001 B!
-1C!
-1G!
-b00000000000000000000000000111100 I!
-0S!
-0T!
-0U!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
-1[!
-1\!
-b00000000000000000000000000111000 ^!
-b01111 _!
-b00000000000000000000000000000011 `!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000011 b!
-b00000000000000000000000000000011 d!
-b00000000000000000000000000000011 e!
-b11111110110001000010011100000011 f!
-1i!
-0j!
-b00000000000000000000000001001000 t!
-b0001 x!
-b00000000000000000000000000000011 y!
-b00000000000000000000000000000011 z!
-b00000000000000000000000000000110 {!
-b00011 |!
-b0100011 }!
-b010 ~!
-b1111111 !"
-1$"
-0%"
-1."
-b00000000000000000000000000000000 /"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01111 9"
-0:"
-1;"
-b01 <"
-1>"
-b00000000000000000000000001000100 @"
-b00000000000000000000000000111100 B"
-b00000000000000000000000001000000 C"
-b00000000000000000000000001001000 E"
-b10001 *#
-b01111 ,#
-b0000010001 .#
-b0000001111 /#
-b01000 3#
-b01111 4#
-b0100011 5#
-18#
-1=#
-b00000000000000000000000001000100 >#
-b11111110110001000010011100000011 ?#
-b00000000000000000000000000010001 A#
-b11111110111101000010011000100011 B#
-b11111111111111111111111111101100 C#
-b0100011 D#
-1F#
-b00000000000000000000000001001000 G#
-b00000000000000000000000001000100 I#
-1K#
-b01000 L#
-b01111 M#
-b01111 N#
-b00000000000000000000000000000011 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000000001 R#
+b00000000000000000000000001001000 2!
+b00000000000000000000000000000100 3!
+b00000000000000000000000010100000 4!
+b00000000000000000000000000000000 7!
+b00000000000000000000000001000100 =!
+b00000000010001010101010100010011 >!
+b00000000000000000000000001000100 @!
+b0011 B!
+b00000000000000000000000001000000 I!
+b00000000000000000010111111011100 O!
+b00000000000000000000000000000010 P!
+b00010 S!
+b00000000000000000000000000111100 Y!
+b00000000000000000000000000101000 Z!
+b00000000000000000000000000111000 `!
+b00000000000000000000000000001100 c!
+b00000000000000000000000000101000 d!
+b00000000000000000010111111011100 e!
+b00000000000000000000000000000010 f!
+b00000000000000000000000000001100 g!
+b00000000000001010000011000110011 h!
+b0101 o!
+b00000000000000000000000001001100 v!
+b0011 z!
+b00000000000000000000000000101000 {!
+b00000000000000000000000000000010 |!
+b00000000000000000000000010100000 }!
+b00010 !"
+b101 #"
+b0101 )"
+11"
+b00000000000000000000000000101000 2"
+b00000000000000000000000000001010 8"
+b00010 :"
+1A"
+b00000000000000000000000001000100 E"
+b00000000000000000000000001000100 F"
+b10001 /#
+b0010001 2#
+b00100 7#
+1@#
+b00000000000000000000000001001000 A#
+b00000000000001010000011000110011 B#
+b00000000000000000000000000010010 D#
+b00000000010001010101010100010011 E#
+b00000000000000000000000000000100 F#
+1I#
+b00000000000000000000000001001100 J#
+b00000000000000000000000001001000 L#
+1N#
+b00100 P#
+b00000000000000000000000000001100 R#
+b00000000000000000000000000000000 U#
 #42
 0$
-b00000000000000000000000000000011 5
+b00000000000000000000000000001100 0
 0G
-b00000000000000000000000000000011 X
+b00000000000000000000000000001100 S
 0j
-b00000000000000000000000000000011 {
-b00000000000000000000000000000011 7!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000011 R#
-b00000000000000000000000000000011 b#
-b00000000000000000000000000000011 %$
+b00000000000000000000000000001100 v
+b00000000000000000000000000001100 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001100 T#
+b00000000000000000000000000001100 `#
+b00000000000000000000000000001100 #$
 #43
 1$
 1G
 1j
-b00 0!
-b10 1!
-b00000000000000000000000001001000 2!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001001100 <!
-b00000000000000000000000001000100 =!
-b11111110110001000010011100000011 >!
-b00000000000000000000000001000100 @!
-1D!
-0G!
-b00000000000000000000000001000000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000011 M!
-b11111111111111111111111111101100 N!
-b01100 O!
-b01000 P!
-b01111 Q!
-1U!
-b00000000000000000000000000111100 W!
-b00000000000000000000000000000110 X!
-0[!
-0\!
-b00000000000000000000000000000000 ^!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000110 c!
-b11111111111111111111111111101100 d!
+b00000000000000000000000001001100 2!
+b00000000000000000000000000000000 3!
+b00000000000000000000000000001010 4!
+b00000000000000000000000001001000 =!
+b00000000000001010000011000110011 >!
+b00000000000000000000000001001000 @!
+b0101 B!
+b00000000000000000000000001000100 I!
+b00000000000000000000000000001100 N!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000000100 P!
+b00100 S!
+b00000000000000000000000001000000 Y!
+b00000000000000000000000010100000 Z!
+b00000000000000000010111111011100 [!
+b00000000000000000000000000111100 `!
+b00000000000000000000000000101000 c!
+b00000000000000000000000010100000 d!
 b00000000000000000000000000000000 e!
-b00000000100100000000011110010011 f!
-1g!
-1h!
-0i!
-1j!
-b00000000000000000000000001001100 t!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0000011 }!
-1""
-1#"
-0$"
-1%"
-1."
-b00000000000000000000000000000110 /"
-b00000000000000000000000000000001 5"
-b01000 6"
-b01111 7"
-1:"
-0;"
-b00 <"
-b10 ="
-1>"
-b00000000000000000000000001001000 @"
-b00000000000000000000000001000000 B"
-b00000000000000000000000001000100 C"
-b00000000000000000000000001001100 E"
-b10010 *#
-b10000 ,#
-b0000010010 .#
-b0000010000 /#
-b01100 4#
-b0000011 5#
-b01100 6#
-08#
-1=#
-b00000000000000000000000001001000 >#
-b00000000100100000000011110010011 ?#
-b00000000000000000000000000010010 A#
-b11111110110001000010011100000011 B#
-b0000011 D#
-1F#
-b00000000000000000000000001001100 G#
-b00000000000000000000000001001000 I#
-1K#
-b01100 M#
-b00000000000000000000000000000000 O#
-0P#
-b00000000000000000000000000000000 R#
+b00000000000000000000000000000100 f!
+b00000000000000000000000000101000 g!
+b00000001111100000000100010010011 h!
+0m!
+b0001 o!
+b00000000000000000000000001010000 v!
+b0101 z!
+b00000000000000000000000010100000 {!
+b00000000000000000000000000000100 |!
+b00000000000000000000000000001010 }!
+b00100 !"
+b0110011 ""
+b000 #"
+b0001 )"
+0*"
+11"
+b00000000000000000000000010100000 2"
+b00000000000000000010111111011100 3"
+b00000000000000000000000000101000 8"
+b00100 :"
+1A"
+b00000000000000000000000001001000 E"
+b00000000000000000000000001001000 F"
+b10010 /#
+b0010010 2#
+b00000 7#
+b0110011 8#
+1@#
+b00000000000000000000000001001100 A#
+b00000001111100000000100010010011 B#
+b00000000000000000000000000010011 D#
+b00000000000001010000011000110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000001010000 J#
+b00000000000000000000000001001100 L#
+1N#
+b00000 P#
+b00000000000000000000000000101000 R#
 #44
 0$
+b00000000000000000000000000101000 0
 0G
+b00000000000000000000000000101000 S
 0j
-0."
-0>"
-0=#
-0F#
-0K#
+b00000000000000000000000000101000 v
+b00000000000000000000000000101000 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000101000 T#
+b00000000000000000000000000101000 `#
+b00000000000000000000000000101000 #$
 #45
 1$
 1G
 1j
-b00 1!
-b00000000000000000000000001001100 2!
-b00000000000000000000000000001001 3!
+b00000000000000000000000001010000 2!
+b00000000000000000000000000011111 3!
 b00000000000000000000000000000000 6!
-b00000000000000000000000001010000 <!
-b00000000000000000000000001001000 =!
-b00000000100100000000011110010011 >!
-b00000000000000000000000001001000 @!
-0D!
-1E!
-1F!
-1G!
-b00000000000000000000000001000100 I!
-b00000000000000000000000000000000 M!
-b01110 O!
+b00000000000000000000000001001100 =!
+b00000001111100000000100010010011 >!
+b00000000000000000000000001001100 @!
+b0001 B!
+0C!
+b00000000000000000000000001001000 I!
+b00000000000000000000000000101000 N!
+b00000000000000000000000000000000 P!
 b01100 Q!
-1R!
-0U!
-b00000000000000000000000001000000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000110 Y!
-b01100 Z!
-1\!
-b00000000000000000000000000111100 ^!
-b00000000000000000000000000000110 a!
-b00000000000000000000000000000000 c!
-b00000000000000000000000000000110 e!
-b00000000111001111100100001100011 f!
-0g!
-0h!
-b00000000000000000000000001010000 t!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000110 0"
-12"
-b00000000000000000000101111111010 5"
-b01100 7"
-b01100 8"
-0:"
-1;"
-b00 ="
-1>"
-b00000000000000000000000001001100 @"
-b00000000000000000000000001000100 B"
-b00000000000000000000000001001000 C"
-b00000000000000000000000001010000 E"
-b10011 *#
-b10001 ,#
-b0000010011 .#
-b0000010001 /#
-b00000 3#
-b01001 4#
-b0010011 5#
-b01110 6#
-17#
-18#
-1=#
-b00000000000000000000000001001100 >#
-b00000000111001111100100001100011 ?#
-b00000000000000000000000000010011 A#
-b00000000100100000000011110010011 B#
-b00000000000000000000000000001001 C#
-b0010011 D#
-1F#
-b00000000000000000000000001010000 G#
-b00000000000000000000000001001100 I#
-1K#
-b00000 L#
-b01001 M#
-b00000000000000000000000000000110 O#
-1P#
-b00000000000000000000000000000000 Q#
+b00000 S!
+b00000000000000000000000001000100 Y!
+b00000000000000000000000000001010 Z!
+b00000000000000000000000000000000 [!
+b00000000000000000000000001000000 `!
+b00000000000000000000000010100000 c!
+b00000000000000000000000000001010 d!
+b00000000000000000000000000000000 f!
+b00000000000000000000000010100000 g!
+b00000000000000000000000001110011 h!
+1m!
+b00000000000000000000000001010100 v!
+b0001 z!
+b00000000000000000000000000001010 {!
+b00000000000000000000000000000000 |!
+b00000 !"
+b0010011 ""
+1*"
+11"
+b00000000000000000000000000001010 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000010 8"
+b00000 :"
+1A"
+b00000000000000000000000001001100 E"
+b00000000000000000000000001001100 F"
+b10011 /#
+b0010011 2#
+b00000 6#
+b11111 7#
+b0010011 8#
+b01100 9#
+1@#
+b00000000000000000000000001010000 A#
+b00000000000000000000000001110011 B#
+b00000000000000000000000000010100 D#
+b00000001111100000000100010010011 E#
+b00000000000000000000000000011111 F#
+b0010011 G#
+1I#
+b00000000000000000000000001010100 J#
+b00000000000000000000000001010000 L#
+1N#
+b00000 O#
+b11111 P#
+b00000000000000000000000010100000 R#
+b00000000000000000000000000000000 T#
 #46
 0$
-b00000000000000000000000000000110 5
+b00000000000000000000000010100000 0
 0G
-b00000000000000000000000000000110 X
+b00000000000000000000000010100000 S
 0j
-b00000000000000000000000000000110 {
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000110 b#
-b00000000000000000000000000000110 %$
+b00000000000000000000000010100000 v
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000010100000 `#
+b00000000000000000000000010100000 #$
 #47
-1$
-1G
-1j
-b00000000000000000000000001010000 2!
-b00000000000000000000000000010000 3!
-b00000000000000000000000000001001 4!
-b00000000000000000000000000000110 5!
-b00000000000000000000000000000110 6!
-b00000000000000000000000000000011 7!
-b00000000000000000000000001010100 <!
-b00000000000000000000000001001100 =!
-b00000000111001111100100001100011 >!
-b00000000000000000000000001001100 @!
-0E!
-0F!
-b00000000000000000000000001001000 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000001001 N!
-b01111 O!
-b00000 P!
-b01001 Q!
-0R!
-1S!
-1T!
-1U!
-b00000000000000000000000001000100 W!
-b00000000000000000000000000000000 Y!
-b01110 Z!
-0\!
-b00000000000000000000000001000000 ^!
-b01100 _!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000001001 d!
-b00000000000000000010111111101000 e!
-b11111110110001000010011110000011 f!
-0j!
-0k!
-b0000 m!
-b00000000000000000000000001010100 t!
-1w!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000001001 z!
-b00000000000000000000000000001001 {!
-b01001 |!
-b1100011 }!
-b100 ~!
-0%"
-b0000 &"
-0'"
-1*"
-1."
-b00000000000000000000000000000000 0"
-11"
-02"
-b00000000000000000000000000000110 3"
-b00000 6"
-b01001 7"
-b01110 8"
-b01100 9"
-1:"
-0;"
-1>"
-b00000000000000000000000001010000 @"
-1A"
-b00000000000000000000000001001000 B"
-b00000000000000000000000001001100 C"
-b00000000000000000000000001010100 E"
-b10100 *#
-b10010 ,#
-b0000010100 .#
-b0000010010 /#
-b01111 3#
-b01110 4#
-b1100011 5#
-b01111 6#
-07#
-1=#
-b00000000000000000000000001010000 >#
-b11111110110001000010011110000011 ?#
-b00000000000000000000000000010100 A#
-b00000000111001111100100001100011 B#
-b00000000000000000000000000010000 C#
-b1100011 D#
-1F#
-b00000000000000000000000001010100 G#
-b00000000000000000000000001010000 I#
-1K#
-b01111 L#
-b01110 M#
-b01100 N#
-b00000000000000000010111111101000 O#
-0P#
-b00000000000000000000000000000110 Q#
-b00000000000000000000000000000011 R#
-#48
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#49
-1$
-1G
-1j
-b10 0!
-b01 1!
-b00000000000000000000000001010100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001011000 <!
-b00000000000000000000000001010000 =!
-b11111110110001000010011110000011 >!
-b00000000000000000000000001010000 @!
-b0000 B!
-0C!
-0G!
-b00000000000000000000000001001100 I!
-b00000000000000000000000000000110 L!
-b00000000000000000000000000000011 M!
-b00000000000000000000000000010000 N!
-b10000 O!
-b01111 P!
-b01110 Q!
-0S!
-0T!
-b00000000000000000000000001001000 W!
-b00000000000000000000000000001001 X!
-b01111 Z!
-1[!
-1\!
-b00000000000000000000000001000100 ^!
-b01110 _!
-b00000000000000000000000000000110 `!
-b00000000000000000000000000001001 b!
-b00000000000000000000000000000110 c!
-b00000000000000000000000000000110 d!
-b00000000000000000000000000000110 e!
-b00000000010001111000011110010011 f!
-1g!
-1h!
-1j!
-1k!
-b0001 m!
-b00000000000000000000000001011000 t!
-0w!
-b0000 x!
-b00000000000000000000000000001001 y!
-b00000000000000000000000000000110 z!
-b00000000000000000000000000000000 {!
-b00110 |!
-b0000011 }!
-b010 ~!
-b1111111 !"
-1""
-1#"
-1%"
-b0001 &"
-1'"
-0*"
-1."
-b00000000000000000000000000001001 /"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000010 5"
-b01111 6"
-b01110 7"
-b01111 8"
-b01110 9"
-1;"
-b10 <"
-b01 ="
-1>"
-b00000000000000000000000001010100 @"
-0A"
-b00000000000000000000000001001100 B"
-b00000000000000000000000001010000 C"
-b00000000000000000000000001011000 E"
-b10101 *#
-b10011 ,#
-b0000010101 .#
-b0000010011 /#
-b01000 3#
-b01100 4#
-b0000011 5#
-b10000 6#
-08#
-1=#
-b00000000000000000000000001010100 >#
-b00000000010001111000011110010011 ?#
-b00000000000000000000000000010101 A#
-b11111110110001000010011110000011 B#
-b11111111111111111111111111101100 C#
-b0000011 D#
-1F#
-b00000000000000000000000001011000 G#
-b00000000000000000000000001010100 I#
-1K#
-b01000 L#
-b01100 M#
-b01110 N#
-b00000000000000000000000000000110 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000000000 R#
-#50
-0$
-b00000000000000000000000000000110 4
-0G
-b00000000000000000000000000000110 W
-0j
-b00000000000000000000000000000110 z
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000110 a#
-b00000000000000000000000000000110 $$
-#51
-1$
-1G
-1j
-0.!
-b00 0!
-b00 1!
-b00000000000000000000000001011000 2!
-b00000000000000000000000000000100 3!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000110 6!
-b00000000000000000000000001011100 <!
-b00000000000000000000000001010100 =!
-b00000000010001111000011110010011 >!
-0?!
-b00000000000000000000000001010100 @!
-1A!
-b0001 B!
-1C!
-1E!
-1F!
-1G!
-b00000000000000000000000001010000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000000 M!
-b11111111111111111111111111101100 N!
-b01111 O!
-b01000 P!
-b01100 Q!
-0U!
-b00000000000000000000000001001100 W!
-b00000000000000000000000000000000 X!
-b00000000000000000000000000000110 Y!
-b10000 Z!
-0[!
-b00000000000000000000000001001000 ^!
-b01111 _!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000001001 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000000 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000001001 e!
-b11111110111101000010011000100011 f!
-0g!
-0h!
-b00000000000000000000000001011100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000110 0"
-b00000000000000000000000000000000 5"
-b01000 6"
-b01100 7"
-b10000 8"
-b01111 9"
-0:"
-b00 <"
-b00 ="
-1>"
-b00000000000000000000000001011000 @"
-b00000000000000000000000001010000 B"
-b00000000000000000000000001010100 C"
-b00000000000000000000000001011100 E"
-b10110 *#
-b10100 ,#
-b0000010110 .#
-b0000010100 /#
-b01111 3#
-b00100 4#
-b0010011 5#
-b01111 6#
-17#
-18#
-09#
-0:#
-1;#
-1=#
-b00000000000000000000000001011000 >#
-b11111110111101000010011000100011 ?#
-b00000000000000000000000000010110 A#
-b00000000010001111000011110010011 B#
-b00000000000000000000000000000100 C#
-b0010011 D#
-1F#
-b00000000000000000000000001011100 G#
-0H#
-b00000000000000000000000001011000 I#
-1K#
-b01111 L#
-b00100 M#
-b01111 N#
-b00000000000000000000000000001001 O#
-b00000000000000000000000000000110 Q#
-#52
-0$
-b00000000000000000000000000001001 5
-0G
-b00000000000000000000000000001001 X
-0j
-b00000000000000000000000000001001 {
-b00000000000000000000000000001001 6!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001001 Q#
-b00000000000000000000000000001001 b#
-b00000000000000000000000000001001 %$
-#53
-1$
-1G
-1j
-1.!
-b10 0!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000110 5!
-b00000000000000000000000000000100 =!
-1?!
-0A!
-b0000 B!
-0C!
-0E!
-0F!
-0G!
-b00000000000000000000000000000000 I!
-b00000000000000000000000000001001 L!
-b00000000000000000000000000000100 N!
-b01111 P!
-b00100 Q!
-1S!
-1T!
-1U!
-b00000000000000000000000001010000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000000 Y!
-b01111 Z!
-0\!
-b00000000000000000000000001001100 ^!
-b10000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111101000 b!
-b00000000000000000000000000000000 d!
-b00000000000000000000000000000000 e!
-b0000 x!
-b00000000000000000010111111101000 y!
-b00000000000000000000000000000000 z!
-b00000000000000000000000000000000 {!
-b00000 |!
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000000 0"
-11"
-b00000000000000000000000000000110 3"
-b00000000000000000000101111111010 5"
-b01111 6"
-b00100 7"
-b01111 8"
-b10000 9"
-1:"
-0;"
-b10 <"
-1>"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
-b00000 ,#
-b0000000000 /#
-07#
-08#
-19#
-1:#
-0;#
-1=#
-1F#
-1H#
-1K#
-b10000 N#
-b00000000000000000000000000000000 O#
-0P#
-#54
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#55
-1$
-1G
-1j
-b01 0!
-b00000000000000000000000001011100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000001010 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000001001 7!
-b00000000000000000000000001100000 <!
-b00000000000000000000000001011000 =!
-b11111110111101000010011000100011 >!
-b00000000000000000000000001011000 @!
-b0001 B!
-1C!
-1G!
-b00000000000000000000000001010100 I!
-0S!
-0T!
-0U!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
-1[!
-1\!
-b00000000000000000000000001010000 ^!
-b01111 _!
-b00000000000000000000000000000110 `!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000110 b!
-b00000000000000000000000000000100 d!
-b00000000000000000000000000000110 e!
-b11111110110001000010011100000011 f!
-1i!
-0j!
-b00000000000000000000000001100000 t!
-b0001 x!
-b00000000000000000000000000000110 y!
-b00000000000000000000000000000100 z!
-b00000000000000000000000000001010 {!
-b00100 |!
-b0100011 }!
-b010 ~!
-b1111111 !"
-1$"
-0%"
-1."
-b00000000000000000000000000000000 /"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01111 9"
-0:"
-1;"
-b01 <"
-1>"
-b00000000000000000000000001011100 @"
-b00000000000000000000000001010100 B"
-b00000000000000000000000001011000 C"
-b00000000000000000000000001100000 E"
-b10111 *#
-b10101 ,#
-b0000010111 .#
-b0000010101 /#
-b01000 3#
-b01111 4#
-b0100011 5#
-18#
-1=#
-b00000000000000000000000001011100 >#
-b11111110110001000010011100000011 ?#
-b00000000000000000000000000010111 A#
-b11111110111101000010011000100011 B#
-b11111111111111111111111111101100 C#
-b0100011 D#
-1F#
-b00000000000000000000000001100000 G#
-b00000000000000000000000001011100 I#
-1K#
-b01000 L#
-b01111 M#
-b01111 N#
-b00000000000000000000000000000110 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000001001 R#
-#56
-0$
-b00000000000000000000000000000110 5
-0G
-b00000000000000000000000000000110 X
-0j
-b00000000000000000000000000000110 {
-b00000000000000000000000000000110 7!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000110 R#
-b00000000000000000000000000000110 b#
-b00000000000000000000000000000110 %$
-#57
-1$
-1G
-1j
-b00 0!
-b10 1!
-b00000000000000000000000001100000 2!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001100100 <!
-b00000000000000000000000001011100 =!
-b11111110110001000010011100000011 >!
-b00000000000000000000000001011100 @!
-1D!
-0G!
-b00000000000000000000000001011000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000110 M!
-b11111111111111111111111111101100 N!
-b01100 O!
-b01000 P!
-b01111 Q!
-1U!
-b00000000000000000000000001010100 W!
-b00000000000000000000000000001010 X!
-0[!
-0\!
-b00000000000000000000000000000000 ^!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000001010 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000000000 e!
-b00000000100100000000011110010011 f!
-1g!
-1h!
-0i!
-1j!
-b00000000000000000000000001100100 t!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0000011 }!
-1""
-1#"
-0$"
-1%"
-1."
-b00000000000000000000000000001010 /"
-b00000000000000000000000000000010 5"
-b01000 6"
-b01111 7"
-1:"
-0;"
-b00 <"
-b10 ="
-1>"
-b00000000000000000000000001100000 @"
-b00000000000000000000000001011000 B"
-b00000000000000000000000001011100 C"
-b00000000000000000000000001100100 E"
-b11000 *#
-b10110 ,#
-b0000011000 .#
-b0000010110 /#
-b01100 4#
-b0000011 5#
-b01100 6#
-08#
-1=#
-b00000000000000000000000001100000 >#
-b00000000100100000000011110010011 ?#
-b00000000000000000000000000011000 A#
-b11111110110001000010011100000011 B#
-b0000011 D#
-1F#
-b00000000000000000000000001100100 G#
-b00000000000000000000000001100000 I#
-1K#
-b01100 M#
-b00000000000000000000000000000000 O#
-0P#
-b00000000000000000000000000000000 R#
-#58
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#59
-1$
-1G
-1j
-b00 1!
-b00000000000000000000000001100100 2!
-b00000000000000000000000000001001 3!
-b00000000000000000000000000000000 6!
-b00000000000000000000000001101000 <!
-b00000000000000000000000001100000 =!
-b00000000100100000000011110010011 >!
-b00000000000000000000000001100000 @!
-0D!
-1E!
-1F!
-1G!
-b00000000000000000000000001011100 I!
-b00000000000000000000000000000000 M!
-b01110 O!
-b01100 Q!
-1R!
-0U!
-b00000000000000000000000001011000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000001010 Y!
-b01100 Z!
-1\!
-b00000000000000000000000001010100 ^!
-b00000000000000000000000000001010 a!
-b00000000000000000000000000000000 c!
-b00000000000000000000000000001010 e!
-b00000000111101110000100001100011 f!
-0g!
-0h!
-b00000000000000000000000001101000 t!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0""
-0#"
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000001010 0"
-12"
-b00000000000000000000101111111010 5"
-b01100 7"
-b01100 8"
-0:"
-1;"
-b00 ="
-1>"
-b00000000000000000000000001100100 @"
-b00000000000000000000000001011100 B"
-b00000000000000000000000001100000 C"
-b00000000000000000000000001101000 E"
-b11001 *#
-b10111 ,#
-b0000011001 .#
-b0000010111 /#
-b00000 3#
-b01001 4#
-b0010011 5#
-b01110 6#
-17#
-18#
-1=#
-b00000000000000000000000001100100 >#
-b00000000111101110000100001100011 ?#
-b00000000000000000000000000011001 A#
-b00000000100100000000011110010011 B#
-b00000000000000000000000000001001 C#
-b0010011 D#
-1F#
-b00000000000000000000000001101000 G#
-b00000000000000000000000001100100 I#
-1K#
-b00000 L#
-b01001 M#
-b00000000000000000000000000001010 O#
-1P#
-b00000000000000000000000000000000 Q#
-#60
-0$
-b00000000000000000000000000001010 5
-0G
-b00000000000000000000000000001010 X
-0j
-b00000000000000000000000000001010 {
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001010 b#
-b00000000000000000000000000001010 %$
-#61
-1$
-1G
-1j
-b00000000000000000000000001101000 2!
-b00000000000000000000000000010000 3!
-b00000000000000000000000000001001 4!
-b00000000000000000000000000001010 5!
-b00000000000000000000000000000110 6!
-b00000000000000000000000000001010 7!
-b00000000000000000000000001101100 <!
-b00000000000000000000000001100100 =!
-b00000000111101110000100001100011 >!
-b00000000000000000000000001100100 @!
-0E!
-0F!
-b00000000000000000000000001100000 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000001001 N!
-b01111 O!
-b00000 P!
-b01001 Q!
-0R!
-1S!
-1T!
-1U!
-b00000000000000000000000001011100 W!
-b00000000000000000000000000000000 Y!
-b01110 Z!
-0\!
-b00000000000000000000000001011000 ^!
-b01100 _!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000001001 d!
-b00000000000000000010111111101000 e!
-b11111110110001000010011110000011 f!
-0j!
-0k!
-b0000 m!
-b00000000000000000000000001101100 t!
-1w!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000001001 z!
-b00000000000000000000000000001001 {!
-b01001 |!
-b1100011 }!
-0%"
-b0000 &"
-0'"
-1*"
-1."
-b00000000000000000000000000000000 0"
-11"
-02"
-b00000000000000000000000000001010 3"
-b00000 6"
-b01001 7"
-b01110 8"
-b01100 9"
-1:"
-0;"
-1>"
-b00000000000000000000000001101000 @"
-1A"
-b00000000000000000000000001100000 B"
-b00000000000000000000000001100100 C"
-b00000000000000000000000001101100 E"
-b11010 *#
-b11000 ,#
-b0000011010 .#
-b0000011000 /#
-b01110 3#
-b01111 4#
-b1100011 5#
-b01111 6#
-07#
-1=#
-b00000000000000000000000001101000 >#
-b11111110110001000010011110000011 ?#
-b00000000000000000000000000011010 A#
-b00000000111101110000100001100011 B#
-b00000000000000000000000000010000 C#
-b1100011 D#
-1F#
-b00000000000000000000000001101100 G#
-b00000000000000000000000001101000 I#
-1K#
-b01110 L#
-b01111 M#
-b01100 N#
-b00000000000000000010111111101000 O#
-0P#
-b00000000000000000000000000000110 Q#
-b00000000000000000000000000001010 R#
-#62
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#63
-1$
-1G
-1j
-b01 0!
-b10 1!
-b00000000000000000000000001101100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001110000 <!
-b00000000000000000000000001101000 =!
-b11111110110001000010011110000011 >!
-b00000000000000000000000001101000 @!
-b0000 B!
-0C!
-0G!
-b00000000000000000000000001100100 I!
-b00000000000000000000000000000110 L!
-b00000000000000000000000000001010 M!
-b00000000000000000000000000010000 N!
-b10000 O!
-b01110 P!
-b01111 Q!
-0S!
-0T!
-b00000000000000000000000001100000 W!
-b00000000000000000000000000001001 X!
-b01111 Z!
-1[!
-1\!
-b00000000000000000000000001011100 ^!
-b01110 _!
-b00000000000000000000000000001010 `!
-b00000000000000000000000000001010 b!
-b00000000000000000000000000001001 c!
-b00000000000000000000000000001010 e!
-b00000000001001111001011110010011 f!
-1g!
-1h!
-1j!
-1k!
-b0001 m!
-b00000000000000000000000001110000 t!
-0w!
-b0000 x!
-b00000000000000000000000000001010 y!
-b00000000000000000000000000000000 {!
-b0000011 }!
-b010 ~!
-b1111111 !"
-1""
-1#"
-1%"
-b0001 &"
-1'"
-0*"
-1."
-b00000000000000000000000000001001 /"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000010 5"
-b01110 6"
-b01111 7"
-b01111 8"
-b01110 9"
-1;"
-b01 <"
-b10 ="
-1>"
-b00000000000000000000000001101100 @"
-0A"
-b00000000000000000000000001100100 B"
-b00000000000000000000000001101000 C"
-b00000000000000000000000001110000 E"
-b11011 *#
-b11001 ,#
-b0000011011 .#
-b0000011001 /#
-b01000 3#
-b01100 4#
-b0000011 5#
-b10000 6#
-08#
-1=#
-b00000000000000000000000001101100 >#
-b00000000001001111001011110010011 ?#
-b00000000000000000000000000011011 A#
-b11111110110001000010011110000011 B#
-b11111111111111111111111111101100 C#
-b0000011 D#
-1F#
-b00000000000000000000000001110000 G#
-b00000000000000000000000001101100 I#
-1K#
-b01000 L#
-b01100 M#
-b01110 N#
-b00000000000000000000000000001010 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000000000 R#
-#64
-0$
-b00000000000000000000000000001010 4
-0G
-b00000000000000000000000000001010 W
-0j
-b00000000000000000000000000001010 z
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001010 a#
-b00000000000000000000000000001010 $$
-#65
-1$
-1G
-1j
-0.!
-b00 0!
-b00 1!
-b00000000000000000000000001110000 2!
-b00000000000000000000000000000010 3!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000001010 6!
-b00000000000000000010111111011100 7!
-b00000000000000000000000001110100 <!
-b00000000000000000000000001101100 =!
-b00000000001001111001011110010011 >!
-0?!
-b00000000000000000000000001101100 @!
-1A!
-b0001 B!
-1C!
-1E!
-1F!
-1G!
-b00000000000000000000000001101000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000000000 M!
-b11111111111111111111111111101100 N!
-b01111 O!
-b01000 P!
-b01100 Q!
-0U!
-b00000000000000000000000001100100 W!
-b00000000000000000000000000000000 X!
-b00000000000000000000000000001001 Y!
-b10000 Z!
-0[!
-b00000000000000000000000001100000 ^!
-b01111 _!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000001001 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000000000 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000001001 e!
-b11111110111101000010011000100011 f!
-0g!
-0h!
-b0011 m!
-b00000000000000000000000001110100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0010011 }!
-b001 ~!
-b0000000 !"
-0""
-0#"
-b0011 &"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000001001 0"
-b00000000000000000000000000000000 5"
-b01000 6"
-b01100 7"
-b10000 8"
-b01111 9"
-0:"
-b00 <"
-b00 ="
-1>"
-b00000000000000000000000001110000 @"
-b00000000000000000000000001101000 B"
-b00000000000000000000000001101100 C"
-b00000000000000000000000001110100 E"
-b11100 *#
-b11010 ,#
-b0000011100 .#
-b0000011010 /#
-b01111 3#
-b00010 4#
-b0010011 5#
-b01111 6#
-17#
-18#
-09#
-0:#
-1;#
-1=#
-b00000000000000000000000001110000 >#
-b11111110111101000010011000100011 ?#
-b00000000000000000000000000011100 A#
-b00000000001001111001011110010011 B#
-b00000000000000000000000000000010 C#
-b0010011 D#
-1F#
-b00000000000000000000000001110100 G#
-0H#
-b00000000000000000000000001110000 I#
-1K#
-b01111 L#
-b00010 M#
-b01111 N#
-b00000000000000000000000000001001 O#
-b00000000000000000000000000001010 Q#
-b00000000000000000010111111011100 R#
-#66
-0$
-b00000000000000000000000000001001 5
-0G
-b00000000000000000000000000001001 X
-0j
-b00000000000000000000000000001001 {
-b00000000000000000000000000001001 6!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001001 Q#
-b00000000000000000000000000001001 b#
-b00000000000000000000000000001001 %$
-#67
-1$
-1G
-1j
-1.!
-b10 0!
-b00000000000000000000000000000000 4!
-b00000000000000000000000000001010 5!
-b00000000000000000000000000000100 =!
-1?!
-0A!
-b0000 B!
-0C!
-0E!
-0F!
-0G!
-b00000000000000000000000000000000 I!
-b00000000000000000000000000001001 L!
-b00000000000000000010111111011100 M!
-b00000000000000000000000000000010 N!
-b01111 P!
-b00010 Q!
-1S!
-1T!
-1U!
-b00000000000000000000000001101000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000000000 Y!
-b01111 Z!
-0\!
-b00000000000000000000000001100100 ^!
-b10000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111101000 b!
-b00000000000000000010111111011100 c!
-b00000000000000000010111111011100 d!
-b00000000000000000000000000000000 e!
-b0000 x!
-b00000000000000000010111111101000 y!
-b00000000000000000010111111011100 z!
-b00000000000000000000000000000000 {!
-b11100 |!
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000000000 0"
-11"
-b00000000000000000000000000001010 3"
-b00000000000000000000101111111010 5"
-b01111 6"
-b00010 7"
-b01111 8"
-b10000 9"
-1:"
-0;"
-b10 <"
-1>"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
-b00000 ,#
-b0000000000 /#
-07#
-08#
-19#
-1:#
-0;#
-1=#
-1F#
-1H#
-1K#
-b10000 N#
-b00000000000000000000000000000000 O#
-0P#
-#68
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#69
-1$
-1G
-1j
-b01 0!
-b00000000000000000000000001110100 2!
-b11111111111111111111111111101100 3!
-b00000000000000000000000000101000 4!
-b00000000000000000000000000000000 5!
-b00000000000000000010111111111100 6!
-b00000000000000000000000000001001 7!
-b00000000000000000000000001111000 <!
-b00000000000000000000000001110000 =!
-b11111110111101000010011000100011 >!
-b00000000000000000000000001110000 @!
-b0011 B!
-1C!
-1G!
-b00000000000000000000000001101100 I!
-0S!
-0T!
-0U!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
-b00000000000000000010111111011100 Y!
-1[!
-1\!
-b00000000000000000000000001101000 ^!
-b01111 _!
-b00000000000000000000000000001010 `!
-b00000000000000000010111111101000 a!
-b00000000000000000000000000001010 b!
-b00000000000000000000000000000010 d!
-b00000000000000000000000000001010 e!
-b00000000000000000000000000010011 f!
-1i!
-0j!
-b0001 m!
-b00000000000000000000000001111000 t!
-b0011 x!
-b00000000000000000000000000001010 y!
-b00000000000000000000000000000010 z!
-b00000000000000000000000000101000 {!
-b00010 |!
-b0100011 }!
-b010 ~!
-b1111111 !"
-1$"
-0%"
-b0001 &"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000010111111011100 0"
-01"
-b00000000000000000000000000000000 3"
-b00000000000000000000000000000000 5"
-b01111 9"
-0:"
-1;"
-b01 <"
-1>"
-b00000000000000000000000001110100 @"
-b00000000000000000000000001101100 B"
-b00000000000000000000000001110000 C"
-b00000000000000000000000001111000 E"
-b11101 *#
-b11011 ,#
-b0000011101 .#
-b0000011011 /#
-b01000 3#
-b01111 4#
-b0100011 5#
-18#
-1=#
-b00000000000000000000000001110100 >#
-b00000000000000000000000000010011 ?#
-b00000000000000000000000000011101 A#
-b11111110111101000010011000100011 B#
-b11111111111111111111111111101100 C#
-b0100011 D#
-1F#
-b00000000000000000000000001111000 G#
-b00000000000000000000000001110100 I#
-1K#
-b01000 L#
-b01111 M#
-b01111 N#
-b00000000000000000000000000001010 O#
-1P#
-b00000000000000000010111111111100 Q#
-b00000000000000000000000000001001 R#
-#70
-0$
-b00000000000000000000000000001010 5
-0G
-b00000000000000000000000000001010 X
-0j
-b00000000000000000000000000001010 {
-b00000000000000000000000000001010 7!
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001010 R#
-b00000000000000000000000000001010 b#
-b00000000000000000000000000001010 %$
-#71
-1$
-1G
-1j
-b00 0!
-b10 1!
-b00000000000000000000000001111000 2!
-b00000000000000000000000000000000 3!
-b00000000000000000010111111101000 4!
-b00000000000000000000000000000000 6!
-b00000000000000000000000000000000 7!
-b00000000000000000000000001111100 <!
-b00000000000000000000000001110100 =!
-b00000000000000000000000000010011 >!
-b00000000000000000000000001110100 @!
-b0001 B!
-1D!
-0G!
-b00000000000000000000000001110000 I!
-b00000000000000000010111111111100 L!
-b00000000000000000000000000001010 M!
-b11111111111111111111111111101100 N!
-b01100 O!
-b01000 P!
-b01111 Q!
-1U!
-b00000000000000000000000001101100 W!
-b00000000000000000000000000101000 X!
-0[!
-0\!
-b00000000000000000000000000000000 ^!
-b00000000000000000000000000000000 `!
-b00000000000000000000000000000000 a!
-b00000000000000000010111111111100 b!
-b00000000000000000000000000101000 c!
-b11111111111111111111111111101100 d!
-b00000000000000000000000000000000 e!
-b00000001110000010010010000000011 f!
-0i!
-1j!
-b00000000000000000000000001111100 t!
-b0001 x!
-b00000000000000000010111111111100 y!
-b11111111111111111111111111101100 z!
-b00000000000000000010111111101000 {!
-b01100 |!
-b0010011 }!
-b000 ~!
-b0000000 !"
-0$"
-1%"
-1."
-b00000000000000000000000000101000 /"
-b00000000000000000000000000001010 5"
-b01000 6"
-b01111 7"
-1:"
-0;"
-b00 <"
-b10 ="
-1>"
-b00000000000000000000000001111000 @"
-b00000000000000000000000001110000 B"
-b00000000000000000000000001110100 C"
-b00000000000000000000000001111100 E"
-b11110 *#
-b11100 ,#
-b0000011110 .#
-b0000011100 /#
-b00000 3#
-b00000 4#
-b0010011 5#
-b01100 6#
-08#
-1=#
-b00000000000000000000000001111000 >#
-b00000001110000010010010000000011 ?#
-b00000000000000000000000000011110 A#
-b00000000000000000000000000010011 B#
-b00000000000000000000000000000000 C#
-b0010011 D#
-1F#
-b00000000000000000000000001111100 G#
-b00000000000000000000000001111000 I#
-1K#
-b00000 L#
-b00000 M#
-b00000000000000000000000000000000 O#
-0P#
-b00000000000000000000000000000000 Q#
-b00000000000000000000000000000000 R#
-#72
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#73
-1$
-1G
-1j
-b00 1!
-b00000000000000000000000001111100 2!
-b00000000000000000000000000011100 3!
-b00000000000000000000000000000000 4!
-b00000000000000000010111111011100 6!
-b00000000000000000000000010000000 <!
-b00000000000000000000000001111000 =!
-b00000001110000010010010000000011 >!
-b00000000000000000000000001111000 @!
-0D!
-1G!
-b00000000000000000000000001110100 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000000000 M!
-b00000000000000000000000000000000 N!
-b00000 O!
-b00000 P!
-b00000 Q!
-1R!
-0U!
-b00000000000000000000000001110000 W!
-b00000000000000000010111111101000 X!
-b00000000000000000000000000101000 Y!
-b01100 Z!
-1\!
-b00000000000000000000000001101100 ^!
-b00000000000000000000000000101000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000000000 c!
-b00000000000000000000000000000000 d!
-b00000000000000000000000000101000 e!
-b00000010000000010000000100010011 f!
-1g!
-1h!
-b00000000000000000000000010000000 t!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000000000 z!
-b00000000000000000000000000000000 {!
-b00000 |!
-b0000011 }!
-b010 ~!
-1""
-1#"
-1."
-b00000000000000000010111111101000 /"
-b00000000000000000000000000101000 0"
-12"
-b00000000000000000000101111111010 5"
-b00000 6"
-b00000 7"
-b01100 8"
-0:"
-1;"
-b00 ="
-1>"
-b00000000000000000000000001111100 @"
-b00000000000000000000000001110100 B"
-b00000000000000000000000001111000 C"
-b00000000000000000000000010000000 E"
-b11111 *#
-b11101 ,#
-b0000011111 .#
-b0000011101 /#
-b00010 3#
-b11100 4#
-b0000011 5#
-b00000 6#
-18#
-1=#
-b00000000000000000000000001111100 >#
-b00000010000000010000000100010011 ?#
-b00000000000000000000000000011111 A#
-b00000001110000010010010000000011 B#
-b00000000000000000000000000011100 C#
-b0000011 D#
-1F#
-b00000000000000000000000010000000 G#
-b00000000000000000000000001111100 I#
-1K#
-b00010 L#
-b11100 M#
-b00000000000000000000000000101000 O#
-1P#
-b00000000000000000010111111011100 Q#
-#74
-0$
-b00000000000000000000000000101000 5
-0G
-b00000000000000000000000000101000 X
-0j
-b00000000000000000000000000101000 {
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000101000 b#
-b00000000000000000000000000101000 %$
-#75
-1$
-1G
-1j
-b00000000000000000000000010000000 2!
-b00000000000000000000000000100000 3!
-b00000000000000000010111111111000 4!
-b00000000000000000000000010000100 <!
-b00000000000000000000000001111100 =!
-b00000010000000010000000100010011 >!
-b00000000000000000000000001111100 @!
-1E!
-1F!
-b00000000000000000000000001111000 I!
-b00000000000000000010111111011100 L!
-b00000000000000000000000000011100 N!
-b01000 O!
-b00010 P!
-b11100 Q!
-0R!
-1U!
-b00000000000000000000000001110100 W!
-b00000000000000000000000000000000 X!
-b00000000000000000000000000000000 Y!
-b00000 Z!
-0\!
-b00000000000000000000000001110000 ^!
-b01100 _!
-b00000000000000000010111111101000 a!
-b00000000000000000010111111011100 b!
-b00000000000000000000000000011100 d!
-b00000000000000000010111111101000 e!
-b00000000101000000000100010010011 f!
-0g!
-0h!
-b00000000000000000000000010000100 t!
-b00000000000000000010111111011100 y!
-b00000000000000000000000000011100 z!
-b00000000000000000010111111111000 {!
-b11100 |!
-b0010011 }!
-b000 ~!
-b0000001 !"
-0""
-0#"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000000 0"
-02"
-b00000000000000000000000000000000 5"
-b00010 6"
-b11100 7"
-b00000 8"
-b01100 9"
-1:"
-0;"
-1>"
-b00000000000000000000000010000000 @"
-b00000000000000000000000001111000 B"
-b00000000000000000000000001111100 C"
-b00000000000000000000000010000100 E"
-b00000 *#
-b0000000000000000000000001 +#
-b11110 ,#
-b0000100000 .#
-b0000011110 /#
-00#
-b00000 4#
-b0010011 5#
-b01000 6#
-17#
-1=#
-b00000000000000000000000010000000 >#
-b00000000101000000000100010010011 ?#
-b00000000000000000000000000100000 A#
-b00000010000000010000000100010011 B#
-b00000000000000000000000000100000 C#
-b0010011 D#
-1F#
-b00000000000000000000000010000100 G#
-b00000000000000000000000010000000 I#
-1K#
-b00000 M#
-b01100 N#
-b00000000000000000010111111101000 O#
-0P#
-#76
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#77
-1$
-1G
-1j
-b00000000000000000000000010000100 2!
-b00000000000000000000000000001010 3!
-b00000000000000000010111111111100 4!
-b00000000000000000000000000000000 6!
-b00000000000000000000000010001000 <!
-b00000000000000000000000010000000 =!
-b00000000101000000000100010010011 >!
-b00000000000000000000000010000000 @!
-0E!
-0F!
-b00000000000000000000000001111100 I!
-b00000000000000000000000000100000 N!
-b00010 O!
-b00000 Q!
-1S!
-1T!
-b00000000000000000000000001111000 W!
-b00000000000000000010111111111000 X!
-b01000 Z!
-1\!
-b00000000000000000000000001110100 ^!
-b00000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000000000000100000 d!
-b00000000000000000000000000000000 e!
-b00000000000000000000000001110011 f!
-b00000000000000000000000010001000 t!
-b00000000000000000000000000100000 z!
-b00000000000000000010111111111100 {!
-b00000 |!
-b0000000 !"
-1."
-b00000000000000000010111111111000 /"
-11"
-b00000000000000000000101111111110 5"
-b00000 7"
-b01000 8"
-b00000 9"
-1;"
-1>"
-b00000000000000000000000010000100 @"
-b00000000000000000000000001111100 B"
-b00000000000000000000000010000000 C"
-b00000000000000000000000010001000 E"
-b00001 *#
-b11111 ,#
-b0000100001 .#
-b0000011111 /#
-b00000 3#
-b01010 4#
-b00010 6#
-07#
-1=#
-b00000000000000000000000010000100 >#
-b00000000000000000000000001110011 ?#
-b00000000000000000000000000100001 A#
-b00000000101000000000100010010011 B#
-b00000000000000000000000000001010 C#
-1F#
-b00000000000000000000000010001000 G#
-b00000000000000000000000010000100 I#
-1K#
-b00000 L#
-b01010 M#
-b00000 N#
-b00000000000000000000000000000000 O#
-1P#
-b00000000000000000000000000000000 Q#
-#78
-0$
-0G
-0j
-0."
-0>"
-0=#
-0F#
-0K#
-#79
 1$
 1G
 1j
 0.!
 1/!
-b00000000000000000000000010001000 2!
+b00 0!
+b00000000000000000000000001010100 2!
 b00000000000000000000000000000000 3!
-b00000000000000000000000000001010 4!
-b00000000000000000000000010001100 <!
-b00000000000000000000000010000100 =!
+b00000000000000000000000000011111 4!
+b00000000000000000000000001010000 =!
 b00000000000000000000000001110011 >!
 0?!
-b00000000000000000000000010000100 @!
+b00000000000000000000000001010000 @!
 1A!
-b00000000000000000000000010000000 I!
-b00000000000000000000000000000000 L!
-b00000000000000000000000000001010 N!
-b10001 O!
-b00000 P!
-b01010 Q!
-0S!
-0T!
-b00000000000000000000000001111100 W!
-b00000000000000000010111111111100 X!
-b00010 Z!
-1[!
-b00000000000000000000000001111000 ^!
-b01000 _!
-b00000000000000000010111111111000 a!
-b00000000000000000000000000000000 b!
-b00000000000000000000000000001010 d!
-b00000000000000000000000000000000 f!
-0j!
-0k!
-b0000 m!
-b00000000000000000000000010001100 t!
-b00000000000000000000000000000000 y!
-b00000000000000000000000000001010 z!
-b00000000000000000000000000001010 {!
-b01010 |!
-b1110011 }!
-0%"
-b0000 &"
-0'"
-1,"
-1."
-b00000000000000000010111111111100 /"
+1C!
+b00000000000000000000000001001100 I!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000011111 P!
+b10001 Q!
+b00000 R!
+b11111 S!
+b00000000000000000000000001001000 Y!
+b01100 \!
+b00000000000000000000000001000100 `!
+b00000000000000000000000000001010 c!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000011111 f!
+b00000000000000000000000000001010 g!
+b00000000000001100000010100110011 h!
+0l!
+0m!
+b0000 o!
+b00000000000000000000000001011000 v!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000011111 |!
+b00000000000000000000000000011111 }!
+b11111 !"
+b1110011 ""
+0("
+b0000 )"
+0*"
+1/"
+11"
+b00000 9"
+b11111 :"
+b01100 ;"
+b00 ?"
+1A"
+b00000000000000000000000001010000 E"
+b00000000000000000000000001010000 F"
+b10100 /#
+b0010100 2#
+b00000 7#
+b1110011 8#
+b10001 9#
+0<#
+0=#
+1>#
+1@#
+b00000000000000000000000001010100 A#
+b00000000000001100000010100110011 B#
+b00000000000000000000000000010101 D#
+b00000000000000000000000001110011 E#
+b00000000000000000000000000000000 F#
+b1110011 G#
+1I#
+b00000000000000000000000001011000 J#
+0K#
+b00000000000000000000000001010100 L#
+1N#
+b00000 P#
+b00000000000000000000000000001010 R#
+#48
+0$
+b00000000000000000000000000001010 0
+0G
+b00000000000000000000000000001010 S
+0j
+b00000000000000000000000000001010 v
 01"
-b00000000000000000000101111111111 5"
-b00000 6"
-b01010 7"
-b00010 8"
-b01000 9"
-1>"
-b00000000000000000000000010001000 @"
-b00000000000000000000000010000000 B"
-b00000000000000000000000010000100 C"
-b00000000000000000000000010001100 E"
-b00010 *#
-b00000 ,#
-b0000000000000000000000001 -#
-b0000100010 .#
-b0000100000 /#
-b00000 4#
-b1110011 5#
-b10001 6#
-09#
-0:#
-1;#
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001010 `#
+b00000000000000000000000000001010 #$
+#49
+1$
+1G
+1j
+1.!
+b00000000000000000000000000000000 4!
+b00000000000000000000000000000100 =!
+1?!
+0A!
+b0000 B!
+0C!
+0G!
+b00000000000000000000000000000000 I!
+b00000000000000000000000000000000 P!
+b00000 Q!
+b00000 S!
+b00000000000000000000000001001100 Y!
+b00000000000000000000000000011111 Z!
+b10001 \!
+b00000000000000000000000001001000 `!
+b01100 a!
+b00000000000000000000000000000000 f!
+b0000 z!
+b00000000000000000000000000000000 |!
+b00000000000000000000000000000000 }!
+b00000 !"
+11"
+b00000000000000000000000000011111 2"
+b00000000000000000000000000000111 8"
+b00000 :"
+b10001 ;"
+b01100 <"
+1A"
+b00000000000000000000000000000100 F"
+b00000 9#
+0;#
+1<#
 1=#
-b00000000000000000000000010001000 >#
-b00000000000000000000000000000000 ?#
-b00000000000000000000000000100010 A#
-b00000000000000000000000001110011 B#
-b00000000000000000000000000000000 C#
-b1110011 D#
-1F#
-b00000000000000000000000010001100 G#
-0H#
-b00000000000000000000000010001000 I#
+0>#
+1@#
+1I#
 1K#
-b00000 M#
-b01000 N#
+1N#
+b01100 Q#
+#50
+0$
+b00000000000000000000000000001010 2
+0G
+b00000000000000000000000000001010 U
+0j
+b00000000000000000000000000001010 x
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001010 b#
+b00000000000000000000000000001010 %$
+#51
+1$
+1G
+1j
+0/!
+b00000000000000000000000001011000 2!
+b00000000000000000000000000001010 6!
+b00000000000000000000000001010100 =!
+b00000000000001100000010100110011 >!
+b00000000000000000000000001010100 @!
+b00000000000000000000000001010000 I!
+0W!
+b00000000000000000000000000000000 Y!
+b00000000000000000000000000000000 Z!
+b00000 \!
+b00000000000000000000000001001100 `!
+b10001 a!
+b00000000000000000000000000011111 c!
+b00000000000000000000000000011111 g!
+b00000000111000000110100000010011 h!
+1l!
+b0001 o!
+b00000000000000000000000001011100 v!
+b0110011 ""
+1("
+b0001 )"
+0/"
+11"
+b00000000000000000000000000000000 2"
+b00000000000000000000000000000000 8"
+b00000 ;"
+b10001 <"
+0="
+1A"
+b00000000000000000000000001010100 E"
+b00000000000000000000000001010100 F"
+b10101 /#
+b0010101 2#
+b01100 6#
+b0110011 8#
+1@#
+b00000000000000000000000001011000 A#
+b00000000111000000110100000010011 B#
+b00000000000000000000000000010110 D#
+b00000000000001100000010100110011 E#
+b0110011 G#
+1I#
+b00000000000000000000000001011100 J#
+b00000000000000000000000001011000 L#
+1N#
+b01100 O#
+b10001 Q#
+b00000000000000000000000000011111 R#
+b00000000000000000000000000001010 T#
+#52
+0$
+b00000000000000000000000000011111 7
+0G
+b00000000000000000000000000011111 Z
+0j
+b00000000000000000000000000011111 }
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000011111 g#
+b00000000000000000000000000011111 *$
+#53
+1$
+1G
+1j
+b00000000000000000000000001011100 2!
+b00000000000000000000000000001110 3!
+b00000000000000000000000000001010 4!
+b00000000000000000000000000000000 6!
+b00000000000000000000000000001110 7!
+b00000000000000000000000001011000 =!
+b00000000111000000110100000010011 >!
+b00000000000000000000000001011000 @!
+b0001 B!
+1G!
+b00000000000000000000000001010100 I!
+b00000000000000000000000000001010 N!
+b01010 Q!
+b01100 R!
+b00000000000000000000000001010000 Y!
+0^!
+b00000000000000000000000000000000 `!
+b00000 a!
+b00000000000000000000000000000000 c!
+b00000000000000000000000000001010 d!
+b00000000000000000000000000000000 g!
+b00000000010000000000100010010011 h!
+1m!
+b0110 o!
+b00000000000000000000000001100000 v!
+b0001 z!
+b00000000000000000000000000001010 {!
+b00000000000000000000000000001010 }!
+b0010011 ""
+b110 #"
+b0110 )"
+1*"
+11"
+b01100 9"
+b00000 <"
+0>"
+1A"
+b00000000000000000000000001011000 E"
+b00000000000000000000000001011000 F"
+b10110 /#
+b0010110 2#
+b00000 6#
+b01110 7#
+b0010011 8#
+b01010 9#
+1;#
+1@#
+b00000000000000000000000001011100 A#
+b00000000010000000000100010010011 B#
+b00000000000000000000000000010111 D#
+b00000000111000000110100000010011 E#
+b00000000000000000000000000001110 F#
+b0010011 G#
+1I#
+b00000000000000000000000001100000 J#
+b00000000000000000000000001011100 L#
+1N#
+b00000 O#
+b01110 P#
+b00000 Q#
+b00000000000000000000000000000000 R#
+0S#
+b00000000000000000000000000000000 T#
+b00000000000000000000000000001110 U#
+#54
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#55
+1$
+1G
+1j
+b00000000000000000000000001100000 2!
+b00000000000000000000000000000100 3!
+b00000000000000000000000000001110 4!
+b00000000000000000000000000000000 7!
+b00000000000000000000000001011100 =!
+b00000000010000000000100010010011 >!
+b00000000000000000000000001011100 @!
+b0110 B!
+1C!
+b00000000000000000000000001011000 I!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000001110 O!
+b00000000000000000000000000001110 P!
+b10000 Q!
+b00000 R!
+b01110 S!
+1W!
+b00000000000000000000000001010100 Y!
+b00000000000000000000000000001010 Z!
+b01010 \!
+b00000000000000000000000001010000 `!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000001110 e!
+b00000000000000000000000000001110 f!
+b00000001000110000001100010110011 h!
+b0001 o!
+b00000000000000000000000001100100 v!
+b0110 z!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000001110 |!
+b00000000000000000000000000001110 }!
+b01110 !"
+b000 #"
+b0001 )"
+11"
+b00000000000000000000000000001010 2"
+b00000000000000000000000000000010 8"
+b00000 9"
+b01110 :"
+b01010 ;"
+1="
+1A"
+b00000000000000000000000001011100 E"
+b00000000000000000000000001011100 F"
+b10111 /#
+b0010111 2#
+b00100 7#
+b10000 9#
+1@#
+b00000000000000000000000001100000 A#
+b00000001000110000001100010110011 B#
+b00000000000000000000000000011000 D#
+b00000000010000000000100010010011 E#
+b00000000000000000000000000000100 F#
+1I#
+b00000000000000000000000001100100 J#
+b00000000000000000000000001100000 L#
+1N#
+b00100 P#
+b00000000000000000000000000000000 U#
+#56
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#57
+1$
+1G
+1j
+b00000000000000000000000001100100 2!
+b00000000000000000000000000000000 3!
+b00000000000000000000000000000100 4!
+b00000000000000000000000000011111 7!
+b00000000000000000000000001100000 =!
+b00000001000110000001100010110011 >!
+b00000000000000000000000001100000 @!
+b0001 B!
+b00000000000000000000000001011100 I!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000000100 P!
+b10001 Q!
+b00100 S!
+b00000000000000000000000001011000 Y!
+b00000000000000000000000000001110 Z!
+b00000000000000000000000000001110 [!
+b10000 \!
+1^!
+b00000000000000000000000001010100 `!
+b01010 a!
+b00000000000000000000000000001010 c!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000000100 f!
+b00000000000000000000000000001010 g!
+b00000000101010001100100010110011 h!
+0m!
+b0011 o!
+b00000000000000000000000001101000 v!
+b0001 z!
+b00000000000000000000000000000100 |!
+b00000000000000000000000000000100 }!
+b00100 !"
+b0110011 ""
+b001 #"
+b0011 )"
+0*"
+11"
+b00000000000000000000000000001110 2"
+b00000000000000000000000000001110 3"
+b00000000000000000000000000000011 8"
+b00100 :"
+b10000 ;"
+b01010 <"
+1>"
+1A"
+b00000000000000000000000001100000 E"
+b00000000000000000000000001100000 F"
+b11000 /#
+b0011000 2#
+b10000 6#
+b10001 7#
+b0110011 8#
+b10001 9#
+1@#
+b00000000000000000000000001100100 A#
+b00000000101010001100100010110011 B#
+b00000000000000000000000000011001 D#
+b00000001000110000001100010110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000001101000 J#
+b00000000000000000000000001100100 L#
+1N#
+b10000 O#
+b10001 P#
+b01010 Q#
+b00000000000000000000000000001010 R#
+1S#
+b00000000000000000000000000011111 U#
+#58
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#59
+1$
+1G
+1j
+b01 0!
+b10 1!
+b00000000000000000000000001101000 2!
+b00000000000000000000000011100000 4!
+b00000000000000000000000000011111 6!
+b00000000000000000000000000001010 7!
+b00000000000000000000000001100100 =!
+b00000000101010001100100010110011 >!
+b00000000000000000000000001100100 @!
+b0011 B!
+0C!
+b00000000000000000000000001100000 I!
+b00000000000000000000000000011111 O!
+b00000000000000000000000000000000 P!
+b10000 R!
+b10001 S!
+b00000000000000000000000001011100 Y!
+b00000000000000000000000000000100 Z!
+b00000000000000000000000000000000 [!
+b10001 \!
+b00000000000000000000000001011000 `!
+b10000 a!
+b00000000000000000000000000001110 c!
+b00000000000000000000000000001110 d!
+b00000000000000000000000000000100 e!
+b00000000000000000000000000001110 g!
+b01000000101010000000100000110011 h!
+b0100 o!
+b00000000000000000000000001101100 v!
+b0011 z!
+b00000000000000000000000000001110 {!
+b00000000000000000000000011100000 }!
+b100 #"
+b0100 )"
+11"
+b00000000000000000000000000000100 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000001 8"
+b10000 9"
+b10001 :"
+b10001 ;"
+b10000 <"
+b01 ?"
+b10 @"
+1A"
+b00000000000000000000000001100100 E"
+b00000000000000000000000001100100 F"
+b11001 /#
+b0011001 2#
+b10001 6#
+b01010 7#
+1@#
+b00000000000000000000000001101000 A#
+b01000000101010000000100000110011 B#
+b00000000000000000000000000011010 D#
+b00000000101010001100100010110011 E#
+1I#
+b00000000000000000000000001101100 J#
+b00000000000000000000000001101000 L#
+1N#
+b10001 O#
+b01010 P#
+b10000 Q#
+b00000000000000000000000000001110 R#
+b00000000000000000000000000011111 T#
+b00000000000000000000000000001010 U#
+#60
+0$
+b00000000000000000000000000001110 6
+0G
+b00000000000000000000000000001110 Y
+0j
+b00000000000000000000000000001110 |
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001110 f#
+b00000000000000000000000000001110 )$
+#61
+1$
+1G
+1j
+b10 0!
+b00 1!
+b00000000000000000000000001101100 2!
+b00000000000000000000000011101010 4!
+b00000000000000000000000000001110 6!
+b00000000000000000000000001101000 =!
+b01000000101010000000100000110011 >!
+b00000000000000000000000001101000 @!
+b0100 B!
+b00000000000000000000000001100100 I!
+b00000000000000000000000000011111 N!
+b00000000000000000000000000001010 O!
+b10001 R!
+b01010 S!
+b00000000000000000000000001100000 Y!
+b00000000000000000000000011100000 Z!
+b00000000000000000000000000000100 [!
+b00000000000000000000000001011100 `!
+b10001 a!
+b00000000000000000000000000000100 c!
+b00000000000000000000000011100000 d!
+b00000000000000000000000000001010 e!
+b00000000000000000000000000001010 f!
+b00000000000000000000000000000100 g!
+b00000001000010001101100010110011 h!
+b0010 o!
+b00000000000000000000000001110000 v!
+b0100 z!
+b00000000000000000000000011100000 {!
+b00000000000000000000000000001010 |!
+b00000000000000000000000011101010 }!
+b01010 !"
+b000 #"
+b0100000 $"
+b0010 )"
+11"
+b00000000000000000000000011100000 2"
+b00000000000000000000000000000100 3"
+b00000000000000000000000000111000 8"
+b10001 9"
+b01010 :"
+b10001 <"
+b10 ?"
+b00 @"
+1A"
+b00000000000000000000000001101000 E"
+b00000000000000000000000001101000 F"
+b11010 /#
+b0011010 2#
+b10000 6#
+1@#
+b00000000000000000000000001101100 A#
+b00000001000010001101100010110011 B#
+b00000000000000000000000000011011 D#
+b01000000101010000000100000110011 E#
+1I#
+b00000000000000000000000001110000 J#
+b00000000000000000000000001101100 L#
+1N#
+b10000 O#
+b10001 Q#
+b00000000000000000000000000000100 R#
+b00000000000000000000000000001110 T#
+#62
+0$
+b00000000000000000000000000000100 7
+0G
+b00000000000000000000000000000100 Z
+0j
+b00000000000000000000000000000100 }
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000000100 g#
+b00000000000000000000000000000100 *$
+#63
+1$
+1G
+1j
+b00 0!
+b00000000000000000000000001110000 2!
+b00000000000000000000000000000100 4!
+b00000000000000000000000000000100 6!
+b00000000000000000000000000001110 7!
+b00000000000000000000000001101100 =!
+b00000001000010001101100010110011 >!
+b00000000000000000000000001101100 @!
+b0010 B!
+b00000000000000000000000001101000 I!
+b00000000000000000000000000001110 N!
+b10000 Q!
+b10000 R!
+b00000000000000000000000001100100 Y!
+b00000000000000000000000011101010 Z!
+b00000000000000000000000000001010 [!
+b00000000000000000000000001100000 `!
+b00000000000000000000000011100000 c!
+b00000000000000000000000000001110 d!
+b00000000000000000000000011100000 g!
+b00000011111100000000010110010011 h!
+b0101 o!
+b00000000000000000000000001110100 v!
+b0010 z!
+b00000000000000000000000000001110 {!
+b00000000000000000000000000000100 }!
+b101 #"
+b0000000 $"
+b0101 )"
+11"
+b00000000000000000000000011101010 2"
+b00000000000000000000000000001010 3"
+b00000000000000000000000000111010 8"
+b10000 9"
+b00 ?"
+1A"
+b00000000000000000000000001101100 E"
+b00000000000000000000000001101100 F"
+b11011 /#
+b0011011 2#
+b10001 6#
+b10000 7#
+b10000 9#
+1@#
+b00000000000000000000000001110000 A#
+b00000011111100000000010110010011 B#
+b00000000000000000000000000011100 D#
+b00000001000010001101100010110011 E#
+1I#
+b00000000000000000000000001110100 J#
+b00000000000000000000000001110000 L#
+1N#
+b10001 O#
+b10000 P#
+b00000000000000000000000011100000 R#
+b00000000000000000000000000000100 T#
+b00000000000000000000000000001110 U#
+#64
+0$
+b00000000000000000000000011100000 7
+0G
+b00000000000000000000000011100000 Z
+0j
+b00000000000000000000000011100000 }
+b00000000000000000000000011100000 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000011100000 T#
+b00000000000000000000000011100000 g#
+b00000000000000000000000011100000 *$
+#65
+1$
+1G
+1j
+b01 0!
+b10 1!
+b00000000000000000000000001110100 2!
+b00000000000000000000000000111111 3!
+b00000000000000000000000000001110 4!
+b00000000000000000000000000000000 6!
+b00000000000000000000000000000000 7!
+b00000000000000000000000001110000 =!
+b00000011111100000000010110010011 >!
+b00000000000000000000000001110000 @!
+b0101 B!
+b00000000000000000000000001101100 I!
+b00000000000000000000000011100000 N!
+b00000000000000000000000000001110 O!
+b10001 Q!
+b10001 R!
+b10000 S!
+b00000000000000000000000001101000 Y!
+b00000000000000000000000000000100 Z!
+b10000 \!
+b00000000000000000000000001100100 `!
+b00000000000000000000000011101010 c!
+b00000000000000000000000011101010 d!
+b00000000000000000000000000000100 e!
+b00000000000000000000000000000100 f!
+b00000000000000000000000011101010 g!
+b00000000101110001111011010110011 h!
+1m!
+b0001 o!
+b00000000000000000000000001111000 v!
+b0101 z!
+b00000000000000000000000011101010 {!
+b00000000000000000000000000000100 |!
+b00000000000000000000000000001110 }!
+b00100 !"
+b0010011 ""
+b000 #"
+b0000001 $"
+b0001 )"
+1*"
+11"
+b00000000000000000000000000000100 2"
+b00000000000000000000000000000001 8"
+b10001 9"
+b10000 :"
+b10000 ;"
+b01 ?"
+b10 @"
+1A"
+b00000000000000000000000001110000 E"
+b00000000000000000000000001110000 F"
+b11100 /#
+b0011100 2#
+b00000 6#
+b11111 7#
+b0010011 8#
+b10001 9#
+1@#
+b00000000000000000000000001110100 A#
+b00000000101110001111011010110011 B#
+b00000000000000000000000000011101 D#
+b00000011111100000000010110010011 E#
+b00000000000000000000000000111111 F#
+b0010011 G#
+1I#
+b00000000000000000000000001111000 J#
+b00000000000000000000000001110100 L#
+1N#
+b00000 O#
+b11111 P#
+b00000000000000000000000011101010 R#
+b00000000000000000000000000000000 T#
+b00000000000000000000000000000000 U#
+#66
+0$
+b00000000000000000000000011101010 7
+0G
+b00000000000000000000000011101010 Z
+0j
+b00000000000000000000000011101010 }
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000011101010 g#
+b00000000000000000000000011101010 *$
+#67
+1$
+1G
+1j
+b00 0!
+b00 1!
+b00000000000000000000000001111000 2!
+b00000000000000000000000000000000 3!
+b00000000000000000000000000111111 4!
+b00000000000000000000000011101010 6!
+b00000000000000000000000001110100 =!
+b00000000101110001111011010110011 >!
+b00000000000000000000000001110100 @!
+b0001 B!
+1C!
+b00000000000000000000000001110000 I!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000111111 P!
+b01011 Q!
+b00000 R!
+b11111 S!
+b00000000000000000000000001101100 Y!
+b00000000000000000000000000001110 Z!
+b00000000000000000000000000000100 [!
+b10001 \!
+b00000000000000000000000001101000 `!
+b10000 a!
+b00000000000000000000000000000100 c!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000111111 f!
+b00000000000000000000000000000100 g!
+b11111111111110001100011000010011 h!
+0m!
+b0111 o!
+b00000000000000000000000001111100 v!
+b0001 z!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000111111 |!
+b00000000000000000000000000111111 }!
+b11111 !"
+b0110011 ""
+b111 #"
+b0000000 $"
+b0111 )"
+0*"
+11"
+b00000000000000000000000000001110 2"
+b00000000000000000000000000000100 3"
+b00000000000000000000000000000011 8"
+b00000 9"
+b11111 :"
+b10001 ;"
+b10000 <"
+b00 ?"
+b00 @"
+1A"
+b00000000000000000000000001110100 E"
+b00000000000000000000000001110100 F"
+b11101 /#
+b0011101 2#
+b10001 6#
+b01011 7#
+b0110011 8#
+b01011 9#
+1@#
+b00000000000000000000000001111000 A#
+b11111111111110001100011000010011 B#
+b00000000000000000000000000011110 D#
+b00000000101110001111011010110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000001111100 J#
+b00000000000000000000000001111000 L#
+1N#
+b10001 O#
+b01011 P#
+b10000 Q#
+b00000000000000000000000000000100 R#
+b00000000000000000000000011101010 T#
+#68
+0$
+b00000000000000000000000000000100 6
+0G
+b00000000000000000000000000000100 Y
+0j
+b00000000000000000000000000000100 |
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000000100 f#
+b00000000000000000000000000000100 )$
+#69
+1$
+1G
+1j
+b01 0!
+b10 1!
+b00000000000000000000000001111100 2!
+b11111111111111111111111111111111 3!
+b00000000000000000000000000001110 4!
+b00000000000000000000000001111000 =!
+b11111111111110001100011000010011 >!
+b00000000000000000000000001111000 @!
+b0111 B!
+0C!
+b00000000000000000000000001110100 I!
+b00000000000000000000000011101010 N!
+b00000000000000000000000000000000 P!
+b01101 Q!
+b10001 R!
+b01011 S!
+b00000000000000000000000001110000 Y!
+b00000000000000000000000000111111 Z!
+b00000000000000000000000000000000 [!
+b01011 \!
+b00000000000000000000000001101100 `!
+b10001 a!
+b00000000000000000000000000001110 c!
+b00000000000000000000000000001110 d!
+b00000000000000000000000000111111 e!
+b00000000000000000000000000001110 g!
+b01000001000010001000100000110011 h!
+1m!
+b0100 o!
+b00000000000000000000000010000000 v!
+b0111 z!
+b00000000000000000000000000001110 {!
+b00000000000000000000000000001110 }!
+b0010011 ""
+b100 #"
+b1111111 $"
+b0100 )"
+1*"
+11"
+b00000000000000000000000000111111 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000001111 8"
+b10001 9"
+b01011 :"
+b01011 ;"
+b10001 <"
+b01 ?"
+b10 @"
+1A"
+b00000000000000000000000001111000 E"
+b00000000000000000000000001111000 F"
+b11110 /#
+b0011110 2#
+b11111 7#
+b0010011 8#
+b01101 9#
+1@#
+b00000000000000000000000001111100 A#
+b01000001000010001000100000110011 B#
+b00000000000000000000000000011111 D#
+b11111111111110001100011000010011 E#
+b11111111111111111111111111111111 F#
+b0010011 G#
+1I#
+b00000000000000000000000010000000 J#
+b00000000000000000000000001111100 L#
+1N#
+b11111 P#
+b10001 Q#
+b00000000000000000000000000001110 R#
+#70
+0$
+b00000000000000000000000000001110 7
+0G
+b00000000000000000000000000001110 Z
+0j
+b00000000000000000000000000001110 }
+b00000000000000000000000000001110 6!
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001110 T#
+b00000000000000000000000000001110 g#
+b00000000000000000000000000001110 *$
+#71
+1$
+1G
+1j
+b00 0!
+b00 1!
+b00000000000000000000000010000000 2!
+b00000000000000000000000000000000 3!
+b11111111111111111111111111110001 4!
+b00000000000000000000000000000100 7!
+b00000000000000000000000001111100 =!
+b01000001000010001000100000110011 >!
+b00000000000000000000000001111100 @!
+b0100 B!
+1C!
+b00000000000000000000000001111000 I!
+b00000000000000000000000000001110 N!
+b11111111111111111111111111111111 P!
+b01100 Q!
+b11111 S!
+b00000000000000000000000001110100 Y!
+b00000000000000000000000000001110 Z!
+b00000000000000000000000000111111 [!
+b01101 \!
+b00000000000000000000000001110000 `!
+b01011 a!
+b00000000000000000000000000111111 c!
+b00000000000000000000000000000000 e!
+b11111111111111111111111111111111 f!
+b00000000000000000000000000111111 g!
+b00000000001110001101100010010011 h!
+0m!
+b0010 o!
+b00000000000000000000000010000100 v!
+b0100 z!
+b11111111111111111111111111111111 |!
+b11111111111111111111111111110001 }!
+b0110011 ""
+b000 #"
+b0100000 $"
+b0010 )"
+0*"
+11"
+b00000000000000000000000000001110 2"
+b00000000000000000000000000111111 3"
+b00000000000000000000000000000011 8"
+b11111 :"
+b01101 ;"
+b01011 <"
+b00 ?"
+b00 @"
+1A"
+b00000000000000000000000001111100 E"
+b00000000000000000000000001111100 F"
+b11111 /#
+b0011111 2#
+b10000 7#
+b0110011 8#
+b01100 9#
+1@#
+b00000000000000000000000010000000 A#
+b00000000001110001101100010010011 B#
+b00000000000000000000000000100000 D#
+b01000001000010001000100000110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000010000100 J#
+b00000000000000000000000010000000 L#
+1N#
+b10000 P#
+b01011 Q#
+b00000000000000000000000000111111 R#
+b00000000000000000000000000000100 U#
+#72
+0$
+b00000000000000000000000000111111 1
+0G
+b00000000000000000000000000111111 T
+0j
+b00000000000000000000000000111111 w
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000111111 a#
+b00000000000000000000000000111111 $$
+#73
+1$
+1G
+1j
+b00000000000000000000000010000100 2!
+b00000000000000000000000000000011 3!
+b00000000000000000000000000001010 4!
+b00000000000000000000000000000000 7!
+b00000000000000000000000010000000 =!
+b00000000001110001101100010010011 >!
+b00000000000000000000000010000000 @!
+b0010 B!
+0C!
+b00000000000000000000000001111100 I!
+b00000000000000000000000000000100 O!
+b00000000000000000000000000000000 P!
+b10000 Q!
+b10000 S!
+b00000000000000000000000001111000 Y!
+b11111111111111111111111111110001 Z!
+b00000000000000000000000000000000 [!
+b01100 \!
+b00000000000000000000000001110100 `!
+b01101 a!
+b00000000000000000000000000001110 c!
+b00000000000000000000000000000100 e!
+b00000000000000000000000000000100 f!
+b00000000000000000000000000001110 g!
+b00000000111101110110011010110011 h!
+1m!
+b0101 o!
+b00000000000000000000000010001000 v!
+b0010 z!
+b00000000000000000000000000000100 |!
+b00000000000000000000000000001010 }!
+b00100 !"
+b0010011 ""
+b101 #"
+b0000000 $"
+b0101 )"
+1*"
+11"
+b11111111111111111111111111110001 2"
+b00000000000000000000000000000000 3"
+b00111111111111111111111111111100 8"
+b10000 :"
+b01100 ;"
+b01101 <"
+1A"
+b00000000000000000000000010000000 E"
+b00000000000000000000000010000000 F"
+b00000 /#
+b0000000000000000000000001 0#
+b0100000 2#
+b00011 7#
+b0010011 8#
+b10000 9#
+1@#
+b00000000000000000000000010000100 A#
+b00000000111101110110011010110011 B#
+b00000000000000000000000000100001 D#
+b00000000001110001101100010010011 E#
+b00000000000000000000000000000011 F#
+b0010011 G#
+1I#
+b00000000000000000000000010001000 J#
+b00000000000000000000000010000100 L#
+1N#
+b00011 P#
+b01101 Q#
+b00000000000000000000000000001110 R#
+b00000000000000000000000000000000 U#
+#74
+0$
+b00000000000000000000000000001110 3
+0G
+b00000000000000000000000000001110 V
+0j
+b00000000000000000000000000001110 y
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001110 c#
+b00000000000000000000000000001110 &$
+#75
+1$
+1G
+1j
+b00000000000000000000000010001000 2!
+b00000000000000000000000000000000 3!
+b00000000000000000000000000000001 4!
+b00000000000000000000000000100001 7!
+b00000000000000000000000010000100 =!
+b00000000111101110110011010110011 >!
+b00000000000000000000000010000100 @!
+b0101 B!
+1C!
+b00000000000000000000000010000000 I!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000000011 P!
+b10001 Q!
+b00011 S!
+b00000000000000000000000001111100 Y!
+b00000000000000000000000000001010 Z!
+b00000000000000000000000000000100 [!
+b10000 \!
+b00000000000000000000000001111000 `!
+b01100 a!
+b11111111111111111111111111110001 c!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000000011 f!
+b11111111111111111111111111110001 g!
+b00000001110000010010000010000011 h!
+0m!
+b0110 o!
+b00000000000000000000000010001100 v!
+b0101 z!
+b00000000000000000000000000000011 |!
+b00000000000000000000000000000001 }!
+b00011 !"
+b0110011 ""
+b110 #"
+b0110 )"
+0*"
+11"
+b00000000000000000000000000001010 2"
+b00000000000000000000000000000100 3"
+b00000000000000000000000000000010 8"
+b00011 :"
+b10000 ;"
+b01100 <"
+1A"
+b00000000000000000000000010000100 E"
+b00000000000000000000000010000100 F"
+b00001 /#
+b0100001 2#
+b01110 6#
+b01111 7#
+b0110011 8#
+b10001 9#
+1@#
+b00000000000000000000000010001000 A#
+b00000001110000010010000010000011 B#
+b00000000000000000000000000100010 D#
+b00000000111101110110011010110011 E#
+b00000000000000000000000000000000 F#
+b0110011 G#
+1I#
+b00000000000000000000000010001100 J#
+b00000000000000000000000010001000 L#
+1N#
+b01110 O#
+b01111 P#
+b01100 Q#
+b11111111111111111111111111110001 R#
+b00000000000000000000000000100001 U#
+#76
+0$
+b11111111111111111111111111110001 2
+0G
+b11111111111111111111111111110001 U
+0j
+b11111111111111111111111111110001 x
+01"
+0A"
+0@#
+0I#
+0N#
+b11111111111111111111111111110001 b#
+b11111111111111111111111111110001 %$
+#77
+1$
+1G
+1j
+b00000000000000000000000010001100 2!
+b00000000000000000000000000011100 3!
+b00000000000000000000000000101111 4!
+b00000000000000000010111111011100 6!
+b00000000000000000000000000000000 7!
+b00000000000000000000000010001000 =!
+b00000001110000010010000010000011 >!
+b00000000000000000000000010001000 @!
+b0110 B!
+0C!
+b00000000000000000000000010000100 I!
+b00000000000000000000000000100001 O!
+b00000000000000000000000000000000 P!
+b01101 Q!
+b01110 R!
+b01111 S!
+b00000000000000000000000010000000 Y!
+b00000000000000000000000000000001 Z!
+b00000000000000000000000000000000 [!
+b10001 \!
+b00000000000000000000000001111100 `!
+b10000 a!
+b00000000000000000000000000001010 c!
+b00000000000000000000000000100001 e!
+b00000000000000000000000000100001 f!
+b00000000000000000000000000001010 g!
+b00000001100000010010010000000011 h!
+1i!
+1j!
+1m!
+b0001 o!
+b00000000000000000000000010010000 v!
+b0110 z!
+b00000000000000000000000000100001 |!
+b00000000000000000000000000101111 }!
+b00001 !"
+b0000011 ""
+b010 #"
+1%"
+1&"
+b0001 )"
+1*"
+11"
+b00000000000000000000000000000001 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000000 8"
+b01110 9"
+b01111 :"
+b10001 ;"
+b10000 <"
+1A"
+b00000000000000000000000010001000 E"
+b00000000000000000000000010001000 F"
+b00010 /#
+b0100010 2#
+b00010 6#
+b11100 7#
+b0000011 8#
+b01101 9#
+1@#
+b00000000000000000000000010001100 A#
+b00000001100000010010010000000011 B#
+b00000000000000000000000000100011 D#
+b00000001110000010010000010000011 E#
+b00000000000000000000000000011100 F#
+b0000011 G#
+1I#
+b00000000000000000000000010010000 J#
+b00000000000000000000000010001100 L#
+1N#
+b00010 O#
+b11100 P#
+b10000 Q#
+b00000000000000000000000000001010 R#
+b00000000000000000010111111011100 T#
+b00000000000000000000000000000000 U#
+#78
+0$
+b00000000000000000000000000001010 6
+0G
+b00000000000000000000000000001010 Y
+0j
+b00000000000000000000000000001010 |
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001010 f#
+b00000000000000000000000000001010 )$
+#79
+1$
+1G
+1j
+b00000000000000000000000010010000 2!
+b00000000000000000000000000011000 3!
+b00000000000000000010111111111000 4!
+b00000000000000000000000010001100 =!
+b00000001100000010010010000000011 >!
+b00000000000000000000000010001100 @!
+b0001 B!
+1C!
+1E!
+1F!
+b00000000000000000000000010001000 I!
+b00000000000000000010111111011100 N!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000011100 P!
+b00001 Q!
+b00010 R!
+b11100 S!
+b00000000000000000000000010000100 Y!
+b00000000000000000000000000101111 Z!
+b00000000000000000000000000100001 [!
+b01101 \!
+b00000000000000000000000010000000 `!
+b10001 a!
+b00000000000000000000000000000001 c!
+b00000000000000000010111111011100 d!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000011100 f!
+b00000000000000000000000000000001 g!
+b00000010000000010000000100010011 h!
+b00000000000000000000000010010100 v!
+b0001 z!
+b00000000000000000010111111011100 {!
+b00000000000000000000000000011100 |!
+b00000000000000000010111111111000 }!
+b11100 !"
+11"
+b00000000000000000000000000101111 2"
+b00000000000000000000000000100001 3"
+b00000000000000000000000000001011 8"
+b00010 9"
+b11100 :"
+b01101 ;"
+b10001 <"
+1A"
+b00000000000000000000000010001100 E"
+b00000000000000000000000010001100 F"
+b00011 /#
+b0100011 2#
+b11000 7#
+b00001 9#
+1:#
+1@#
+b00000000000000000000000010010000 A#
+b00000010000000010000000100010011 B#
+b00000000000000000000000000100100 D#
+b00000001100000010010010000000011 E#
+b00000000000000000000000000011000 F#
+1I#
+b00000000000000000000000010010100 J#
+b00000000000000000000000010010000 L#
+1N#
+b11000 P#
+b10001 Q#
+b00000000000000000000000000000001 R#
 #80
+0$
+b00000000000000000000000000000001 7
+0G
+b00000000000000000000000000000001 Z
+0j
+b00000000000000000000000000000001 }
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000000001 g#
+b00000000000000000000000000000001 *$
+#81
+1$
+1G
+1j
+b00000000000000000000000010010100 2!
+b00000000000000000000000000100000 3!
+b00000000000000000010111111110100 4!
+b00000000000000000000000010010000 =!
+b00000010000000010000000100010011 >!
+b00000000000000000000000010010000 @!
+b00000000000000000000000010001100 I!
+b00000000000000000000000000011000 P!
+b01000 Q!
+b11000 S!
+1U!
+1V!
+b00000000000000000000000010001000 Y!
+b00000000000000000010111111111000 Z!
+b00000000000000000000000000000000 [!
+b00001 \!
+b00000000000000000000000010000100 `!
+b01101 a!
+b00000000000000000000000000101111 c!
+b00000000000000000000000000011000 f!
+b00000000000000000000000000101111 g!
+b00000000101000000000100010010011 h!
+0i!
+0j!
+b00000000000000000000000010011000 v!
+b00000000000000000000000000011000 |!
+b00000000000000000010111111110100 }!
+b11000 !"
+b0010011 ""
+b000 #"
+b0000001 $"
+0%"
+0&"
+11"
+b00000000000000000010111111111000 2"
+b00000000000000000000000000000000 3"
+14"
+b00000000000000000000101111111110 8"
+b11000 :"
+b00001 ;"
+b01101 <"
+1A"
+b00000000000000000000000010010000 E"
+b00000000000000000000000010010000 F"
+b00100 /#
+b0100100 2#
+b00000 7#
+b0010011 8#
+b01000 9#
+1@#
+b00000000000000000000000010010100 A#
+b00000000101000000000100010010011 B#
+b00000000000000000000000000100101 D#
+b00000010000000010000000100010011 E#
+b00000000000000000000000000100000 F#
+b0010011 G#
+1I#
+b00000000000000000000000010011000 J#
+b00000000000000000000000010010100 L#
+1N#
+b00000 P#
+b01101 Q#
+b00000000000000000000000000101111 R#
+#82
+0$
+b00000000000000000000000000101111 3
+0G
+b00000000000000000000000000101111 V
+0j
+b00000000000000000000000000101111 y
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000101111 c#
+b00000000000000000000000000101111 &$
+#83
+1$
+1G
+1j
+b00000000000000000000000010011000 2!
+b00000000000000000000000000001010 3!
+b00000000000000000010111111111100 4!
+b00000000000000000000000000000000 6!
+b00000000000000000000000000001010 7!
+b00000000000000000000000010010100 =!
+b00000000101000000000100010010011 >!
+b00000000000000000000000010010100 @!
+0E!
+0F!
+b00000000000000000000000010010000 I!
+b00000000000000000000000000100000 P!
+b00010 Q!
+b00000 S!
+b00000000000000000000000010001100 Y!
+b00000000000000000010111111110100 Z!
+b01000 \!
+1]!
+b00000000000000000000000010001000 `!
+b00001 a!
+b00000000000000000010111111111000 c!
+b00000000000000000000000000100000 f!
+b00000000000000000000000000000000 g!
+b00000000000000000000000001110011 h!
+b00000000000000000000000010011100 v!
+b00000000000000000000000000100000 |!
+b00000000000000000010111111111100 }!
+b00000 !"
+b0000000 $"
+11"
+b00000000000000000010111111110100 2"
+b00000000000000000000101111111101 8"
+b00000 :"
+b01000 ;"
+b00001 <"
+1A"
+b00000000000000000000000010010100 E"
+b00000000000000000000000010010100 F"
+b00101 /#
+b0100101 2#
+b00000 6#
+b01010 7#
+b00010 9#
+0:#
+1@#
+b00000000000000000000000010011000 A#
+b00000000000000000000000001110011 B#
+b00000000000000000000000000100110 D#
+b00000000101000000000100010010011 E#
+b00000000000000000000000000001010 F#
+1I#
+b00000000000000000000000010011100 J#
+b00000000000000000000000010011000 L#
+1N#
+b00000 O#
+b01010 P#
+b00001 Q#
+b00000000000000000000000000000000 R#
+b00000000000000000000000000000000 T#
+b00000000000000000000000000001010 U#
+#84
+0$
+0G
+0j
+01"
+0A"
+0@#
+0I#
+0N#
+#85
+1$
+1G
+1j
+0.!
+1/!
+b00000000000000000000000010011100 2!
+b00000000000000000000000000000000 3!
+b00000000000000000000000000001010 4!
+b00000000000000000000000000000000 7!
+b00000000000000000000000010011000 =!
+b00000000000000000000000001110011 >!
+0?!
+b00000000000000000000000010011000 @!
+1A!
+b00000000000000000000000010010100 I!
+b00000000000000000000000000000000 N!
+b00000000000000000000000000001010 O!
+b00000000000000000000000000001010 P!
+b10001 Q!
+b00000 R!
+b01010 S!
+0U!
+0V!
+b00000000000000000000000010010000 Y!
+b00000000000000000010111111111100 Z!
+b00010 \!
+b00000000000000000000000010001100 `!
+b01000 a!
+b00000000000000000010111111110100 c!
+b00000000000000000000000000000000 d!
+b00000000000000000000000000001010 e!
+b00000000000000000000000000001010 f!
+b00000000000000000000000000000000 h!
+0l!
+0m!
+b0000 o!
+b00000000000000000000000010100000 v!
+b00000000000000000000000000000000 {!
+b00000000000000000000000000001010 |!
+b00000000000000000000000000001010 }!
+b01010 !"
+b1110011 ""
+0("
+b0000 )"
+0*"
+1/"
+11"
+b00000000000000000010111111111100 2"
+04"
+b00000000000000000000101111111111 8"
+b00000 9"
+b01010 :"
+b00010 ;"
+b01000 <"
+1A"
+b00000000000000000000000010011000 E"
+b00000000000000000000000010011000 F"
+b00110 /#
+b0100110 2#
+b00000 7#
+b1110011 8#
+b10001 9#
+0<#
+0=#
+1>#
+1@#
+b00000000000000000000000010011100 A#
+b00000000000000000000000000000000 B#
+b00000000000000000000000000100111 D#
+b00000000000000000000000001110011 E#
+b00000000000000000000000000000000 F#
+b1110011 G#
+1I#
+b00000000000000000000000010100000 J#
+0K#
+b00000000000000000000000010011100 L#
+1N#
+b00000 P#
+b01000 Q#
+b00000000000000000000000000000000 U#
+#86
 0$
 b00000000000000000000000000000000 .
 0G
 b00000000000000000000000000000000 Q
 0j
 b00000000000000000000000000000000 t
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000000000 [#
-b00000000000000000000000000000000 |#
-#81
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000000000 ^#
+b00000000000000000000000000000000 !$
+#87
 1$
 1G
 1j
@@ -4910,205 +4510,192 @@ b0000 B!
 0C!
 0G!
 b00000000000000000000000000000000 I!
-b00000000000000000000000000000000 N!
-b00000 O!
+b00000000000000000000000000000000 O!
+b00000000000000000000000000000000 P!
 b00000 Q!
-b00000000000000000000000010000000 W!
-b00000000000000000000000000001010 X!
-b10001 Z!
-0[!
-b00000000000000000000000001111100 ^!
-b00010 _!
-b00000000000000000010111111111100 a!
-b00000000000000000000000000000000 d!
-b00000000000000000010111111111100 e!
-1n!
-b0000 x!
-b00000000000000000000000000000000 z!
-b00000000000000000000000000000000 {!
-b00000 |!
-1."
-b00000000000000000000000000001010 /"
-b00000000000000000000000000000010 5"
-b00000 7"
-b10001 8"
-b00010 9"
-1>"
-b00000000000000000000000000000000 B"
-b00000000000000000000000000000100 C"
-b0000000000000000000000000 -#
-b0000000000 /#
-b00000 6#
-08#
-19#
-1:#
+b00000 S!
+b00000000000000000000000010010100 Y!
+b00000000000000000000000000001010 Z!
+b00000000000000000000000000001010 [!
+b10001 \!
+0]!
+b00000000000000000000000010010000 `!
+b00010 a!
+b00000000000000000010111111111100 c!
+b00000000000000000000000000000000 e!
+b00000000000000000000000000000000 f!
+b00000000000000000010111111111100 g!
+1p!
+b0000 z!
+b00000000000000000000000000000000 |!
+b00000000000000000000000000000000 }!
+b00000 !"
+11"
+b00000000000000000000000000001010 2"
+b00000000000000000000000000001010 3"
+b00000000000000000000000000000010 8"
+b00000 :"
+b10001 ;"
+b00010 <"
+1A"
+b00000000000000000000000000000100 F"
+b00000 9#
 0;#
+1<#
 1=#
-1F#
-1H#
+0>#
+1@#
+1I#
 1K#
-b00010 N#
-b00000000000000000010111111111100 O#
-#82
+1N#
+b00010 Q#
+b00000000000000000010111111111100 R#
+#88
 0$
 b00000000000000000010111111111100 (
 0G
 b00000000000000000010111111111100 K
 0j
 b00000000000000000010111111111100 n
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000010111111111100 U#
-b00000000000000000010111111111100 v#
-#83
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000010111111111100 X#
+b00000000000000000010111111111100 y#
+#89
 1$
 1G
 1j
 0/!
-b00000000000000000000000010001100 2!
-b00000000000000000000000010010000 <!
-b00000000000000000000000010001000 =!
+b00000000000000000000000010100000 2!
+b00000000000000000000000010011100 =!
 b00000000000000000000000000000000 >!
-b00000000000000000000000010001000 @!
-b00000000000000000000000010000100 I!
-0U!
-b00000000000000000000000000000000 W!
-b00000000000000000000000000000000 X!
-b00000 Z!
-b00000000000000000000000010000000 ^!
-b10001 _!
-b00000000000000000000000000001010 a!
-b00000000000000000000000000001010 e!
-0n!
-1o!
-b00000000000000000000000010010000 t!
-b0000000 }!
-0,"
-1."
-b00000000000000000000000000000000 /"
-b00000000000000000000000000000000 5"
-b00000 8"
-b10001 9"
-0:"
-1>"
-b00000000000000000000000010001100 @"
-b00000000000000000000000010000100 B"
-b00000000000000000000000010001000 C"
-b00000000000000000000000010010000 E"
-b00011 *#
-b00001 ,#
-b0000000000000000000000001 -#
-b0000100011 .#
-b0000100001 /#
-b0000000 5#
-1=#
-b00000000000000000000000010001100 >#
-b00000000000000000000000000100011 A#
-b00000000000000000000000000000000 B#
-b0000000 D#
-1F#
-b00000000000000000000000010010000 G#
-b00000000000000000000000010001100 I#
-1K#
-b10001 N#
-b00000000000000000000000000001010 O#
-#84
+b00000000000000000000000010011100 @!
+b00000000000000000000000010011000 I!
+0W!
+b00000000000000000000000000000000 Y!
+b00000000000000000000000000000000 Z!
+b00000000000000000000000000000000 [!
+b00000 \!
+b00000000000000000000000010010100 `!
+b10001 a!
+b00000000000000000000000000001010 c!
+b00000000000000000000000000001010 g!
+0p!
+1q!
+b00000000000000000000000010100100 v!
+b0000000 ""
+0/"
+11"
+b00000000000000000000000000000000 2"
+b00000000000000000000000000000000 3"
+b00000000000000000000000000000000 8"
+b00000 ;"
+b10001 <"
+0="
+1A"
+b00000000000000000000000010011100 E"
+b00000000000000000000000010011100 F"
+b00111 /#
+b0100111 2#
+b0000000 8#
+1@#
+b00000000000000000000000010100000 A#
+b00000000000000000000000000101000 D#
+b00000000000000000000000000000000 E#
+b0000000 G#
+1I#
+b00000000000000000000000010100100 J#
+b00000000000000000000000010100000 L#
+1N#
+b10001 Q#
+b00000000000000000000000000001010 R#
+#90
 0$
 b00000000000000000000000000001010 7
 0G
 b00000000000000000000000000001010 Z
 0j
 b00000000000000000000000000001010 }
-0."
-0>"
-0=#
-0F#
-0K#
-b00000000000000000000000000001010 d#
-b00000000000000000000000000001010 '$
-#85
+01"
+0A"
+0@#
+0I#
+0N#
+b00000000000000000000000000001010 g#
+b00000000000000000000000000001010 *$
+#91
 1$
 1G
 1j
-b00000000000000000000000010010000 2!
-b00000000000000000000000010010100 <!
-b00000000000000000000000010001100 =!
-b00000000000000000000000010001100 @!
-b00000000000000000000000010001000 I!
-b00000000000000000000000010000100 W!
-0\!
-b00000000000000000000000000000000 ^!
-b00000 _!
-b00000000000000000000000000000000 a!
-b00000000000000000000000000000000 e!
-0o!
-1p!
-b00000000000000000000000010010100 t!
-1."
-b00000 9"
-0;"
-1>"
-b00000000000000000000000010010000 @"
-b00000000000000000000000010001000 B"
-b00000000000000000000000010001100 C"
-b00000000000000000000000010010100 E"
-b00100 *#
-b00010 ,#
-b0000100100 .#
-b0000100010 /#
-1=#
-b00000000000000000000000010010000 >#
-b00000000000000000000000000100100 A#
-1F#
-b00000000000000000000000010010100 G#
-b00000000000000000000000010010000 I#
-1K#
-b00000 N#
-b00000000000000000000000000000000 O#
-0P#
-#86
+b00000000000000000000000010100100 2!
+b00000000000000000000000010100000 =!
+b00000000000000000000000010100000 @!
+b00000000000000000000000010011100 I!
+b00000000000000000000000010011000 Y!
+0^!
+b00000000000000000000000000000000 `!
+b00000 a!
+b00000000000000000000000000000000 c!
+b00000000000000000000000000000000 g!
+0q!
+1r!
+b00000000000000000000000010101000 v!
+11"
+b00000 <"
+0>"
+1A"
+b00000000000000000000000010100000 E"
+b00000000000000000000000010100000 F"
+b01000 /#
+b0101000 2#
+1@#
+b00000000000000000000000010100100 A#
+b00000000000000000000000000101001 D#
+1I#
+b00000000000000000000000010101000 J#
+b00000000000000000000000010100100 L#
+1N#
+b00000 Q#
+b00000000000000000000000000000000 R#
+0S#
+#92
 0$
 0G
 0j
-0."
-0>"
-0=#
-0F#
-0K#
-#87
+01"
+0A"
+0@#
+0I#
+0N#
+#93
 1$
 1%
 1G
 1H
 1j
 1k
-b00000000000000000000000010010100 2!
-b00000000000000000000000010011000 <!
-b00000000000000000000000010010000 =!
-b00000000000000000000000010010000 @!
-b00000000000000000000000010001100 I!
-b00000000000000000000000010001000 W!
-b00000000000000000000000010000100 ^!
-0p!
-1q!
-b00000000000000000000000010011000 t!
-1."
-1>"
-b00000000000000000000000010010100 @"
-b00000000000000000000000010001100 B"
-b00000000000000000000000010010000 C"
-b00000000000000000000000010011000 E"
-b00101 *#
-b00011 ,#
-b0000100101 .#
-b0000100011 /#
-1=#
-b00000000000000000000000010010100 >#
-b00000000000000000000000000100101 A#
-1F#
-b00000000000000000000000010011000 G#
-b00000000000000000000000010010100 I#
-1K#
+b00000000000000000000000010101000 2!
+b00000000000000000000000010100100 =!
+b00000000000000000000000010100100 @!
+b00000000000000000000000010100000 I!
+b00000000000000000000000010011100 Y!
+b00000000000000000000000010011000 `!
+0r!
+1s!
+b00000000000000000000000010101100 v!
+11"
+1A"
+b00000000000000000000000010100100 E"
+b00000000000000000000000010100100 F"
+b01001 /#
+b0101001 2#
+1@#
+b00000000000000000000000010101000 A#
+b00000000000000000000000000101010 D#
+1I#
+b00000000000000000000000010101100 J#
+b00000000000000000000000010101000 L#
+1N#

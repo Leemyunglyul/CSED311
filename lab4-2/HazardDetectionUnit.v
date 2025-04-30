@@ -11,13 +11,14 @@ module HazardDetectionUnit (
 );
 
     always @(*) begin
-        if(rs1 == ID_EX_rd && rs1 != 0 && ID_EX_mem_read && opcode != `ECALL) begin
+        if(rs1 == ID_EX_rd && rs1 != 0 && ID_EX_mem_read && (opcode != `ECALL || opcode != `JAL)) begin
             pc_write = 0;
             IF_ID_write = 0;
             ID_EX_sel = 1;
         end
         else if(rs2 == ID_EX_rd && rs2 != 0 && ID_EX_mem_read) begin
-            if(opcode == `LOAD || opcode == `ARITHMETIC_IMM || opcode == `ECALL) begin
+            if(opcode == `LOAD || opcode == `ARITHMETIC_IMM || opcode == `ECALL
+                || opcode == `JALR || opcode == `JAL) begin
                 pc_write = 1;
                 IF_ID_write = 1;
                 ID_EX_sel = 0;

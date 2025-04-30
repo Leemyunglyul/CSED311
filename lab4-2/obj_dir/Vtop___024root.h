@@ -32,7 +32,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__gshare_predict_taken;
         CData/*0:0*/ top__DOT__cpu__DOT__actual_taken;
         CData/*0:0*/ top__DOT__cpu__DOT__branch_mispredicted;
-        CData/*0:0*/ top__DOT__cpu__DOT__jalr_mispredicted;
+        CData/*0:0*/ top__DOT__cpu__DOT__gshare_enable;
         CData/*0:0*/ top__DOT__cpu__DOT__IF_ID_write;
         CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_sel;
         CData/*3:0*/ top__DOT__cpu__DOT__ID_EX_alu_op;
@@ -43,7 +43,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_reg_write;
         CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_pc_to_reg;
         CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_is_jalr;
-        CData/*0:0*/ top__DOT__cpu__DOT__bcond;
+        CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_is_jal;
+        CData/*0:0*/ top__DOT__cpu__DOT__ID_EX_is_branch;
+        CData/*0:0*/ top__DOT__cpu__DOT__alu_bcond;
         CData/*4:0*/ top__DOT__cpu__DOT__ID_EX_rd;
         CData/*4:0*/ top__DOT__cpu__DOT__ID_EX_rs1;
         CData/*4:0*/ top__DOT__cpu__DOT__ID_EX_rs2;
@@ -72,16 +74,18 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__is_jalr;
         CData/*0:0*/ top__DOT__cpu__DOT__is_branch;
         CData/*0:0*/ top__DOT__cpu__DOT____Vcellinp__gshare__update_valid;
-        CData/*0:0*/ top__DOT__cpu__DOT____VdfgRegularize_hcce91bd5_1_0;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__clk;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__reset;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__update_valid;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__update_taken;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__predict_taken;
-        CData/*4:0*/ top__DOT__cpu__DOT__gshare__DOT__pc_idx;
-        CData/*4:0*/ top__DOT__cpu__DOT__gshare__DOT__update_idx;
+        CData/*6:0*/ top__DOT__cpu__DOT__gshare__DOT__bhsr;
     };
     struct {
+        CData/*4:0*/ top__DOT__cpu__DOT__gshare__DOT__pc_idx;
+        CData/*4:0*/ top__DOT__cpu__DOT__gshare__DOT__update_idx;
+        CData/*6:0*/ top__DOT__cpu__DOT__gshare__DOT__pht_idx;
+        CData/*6:0*/ top__DOT__cpu__DOT__gshare__DOT__update_pht_idx;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__tag_match;
         CData/*0:0*/ top__DOT__cpu__DOT__gshare__DOT__pht_taken;
         CData/*0:0*/ top__DOT__cpu__DOT__pc__DOT__reset;
@@ -120,6 +124,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ top__DOT__cpu__DOT__hazard_detector__DOT__IF_ID_write;
         CData/*0:0*/ top__DOT__cpu__DOT__hazard_detector__DOT__ID_EX_sel;
         CData/*3:0*/ top__DOT__cpu__DOT__alu__DOT__alu_op;
+        CData/*0:0*/ top__DOT__cpu__DOT__alu__DOT__alu_bcond;
         CData/*4:0*/ top__DOT__cpu__DOT__alu__DOT__shamt;
         CData/*4:0*/ top__DOT__cpu__DOT__forwarding__DOT__rs1;
         CData/*4:0*/ top__DOT__cpu__DOT__forwarding__DOT__rs2;
@@ -138,16 +143,13 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
         CData/*0:0*/ __VactDidInit;
         CData/*0:0*/ __VactContinue;
-        SData/*9:0*/ top__DOT__cpu__DOT__gshare__DOT__bhsr;
-        SData/*9:0*/ top__DOT__cpu__DOT__gshare__DOT__pht_idx;
-        SData/*9:0*/ top__DOT__cpu__DOT__gshare__DOT__update_pht_idx;
         IData/*31:0*/ top__DOT__cpu__DOT__current_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__imm_gen_out;
         IData/*31:0*/ top__DOT__cpu__DOT__alu_out;
-        IData/*31:0*/ top__DOT__cpu__DOT__mem_dout;
-        IData/*31:0*/ top__DOT__cpu__DOT__rs1_dout;
     };
     struct {
+        IData/*31:0*/ top__DOT__cpu__DOT__mem_dout;
+        IData/*31:0*/ top__DOT__cpu__DOT__rs1_dout;
         IData/*31:0*/ top__DOT__cpu__DOT__rs2_dout;
         IData/*31:0*/ top__DOT__cpu__DOT__gshare_next_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__correct_pc;
@@ -171,7 +173,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         IData/*31:0*/ top__DOT__cpu__DOT__jalr_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__jal_pc;
         IData/*31:0*/ top__DOT__cpu__DOT__next_pc;
-        IData/*31:0*/ top__DOT__cpu__DOT____Vcellinp__gshare__update_target;
         IData/*31:0*/ top__DOT__cpu__DOT____Vcellinp__reg_file__rd_din;
         IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__pc;
         IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__update_pc;
@@ -204,7 +205,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         VL_OUT(print_reg[32],31,0);
         VlUnpacked<IData/*31:0*/, 32> top__DOT__print_reg;
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__print_reg;
-        VlUnpacked<CData/*1:0*/, 1024> top__DOT__cpu__DOT__gshare__DOT__pht;
+        VlUnpacked<CData/*1:0*/, 128> top__DOT__cpu__DOT__gshare__DOT__pht;
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__gshare__DOT__btb;
         VlUnpacked<IData/*24:0*/, 32> top__DOT__cpu__DOT__gshare__DOT__tag_table;
         VlUnpacked<IData/*31:0*/, 1024> top__DOT__cpu__DOT__imem__DOT__mem;
@@ -212,7 +213,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         VlUnpacked<IData/*31:0*/, 32> top__DOT__cpu__DOT__reg_file__DOT__rf;
         VlUnpacked<IData/*31:0*/, 16384> top__DOT__cpu__DOT__dmem__DOT__mem;
     };
-    VlNBACommitQueue<VlUnpacked<CData/*1:0*/, 1024>, false, CData/*1:0*/, 1> __VdlyCommitQueuetop__DOT__cpu__DOT__gshare__DOT__pht;
+    VlNBACommitQueue<VlUnpacked<CData/*1:0*/, 128>, false, CData/*1:0*/, 1> __VdlyCommitQueuetop__DOT__cpu__DOT__gshare__DOT__pht;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;
     VlTriggerVec<2> __VactTriggered;
@@ -222,10 +223,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     Vtop__Syms* const vlSymsp;
 
     // PARAMETERS
-    static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__GHR_BITS = 0x0000000aU;
+    static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__GHR_BITS = 7U;
     static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__PC_TAG_BITS = 0x00000019U;
     static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__PC_INDEX_BITS = 5U;
-    static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__PHT_SIZE = 0x00000400U;
+    static constexpr IData/*31:0*/ top__DOT__cpu__DOT__gshare__DOT__PHT_SIZE = 0x00000080U;
     static constexpr IData/*31:0*/ top__DOT__cpu__DOT__imem__DOT__MEM_DEPTH = 0x00000400U;
     static constexpr IData/*31:0*/ top__DOT__cpu__DOT__dmem__DOT__MEM_DEPTH = 0x00004000U;
 
