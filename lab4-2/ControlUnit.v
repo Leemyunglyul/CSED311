@@ -8,6 +8,10 @@ module ControlUnit(
     output reg reg_write,
     output reg [3:0] alu_op,
     output reg alu_src,
+    output reg is_jal,
+    output reg is_jalr,
+    output reg is_branch,
+    output reg pc_to_reg,
     output reg is_ecall
 );
 
@@ -18,6 +22,10 @@ module ControlUnit(
         reg_write = 0;
         alu_op = 0;
         alu_src = 0;
+        is_jal = 0;
+        is_jalr = 0;
+        is_branch = 0;
+        pc_to_reg = 0;
         is_ecall = 0;
         case(opcode)
             `ARITHMETIC: begin
@@ -56,6 +64,21 @@ module ControlUnit(
                 mem_write = 1;
                 alu_op = 4'b0001;
                 alu_src = 1;
+            end
+            `JALR: begin
+                is_jalr = 1;
+                pc_to_reg = 1;
+                reg_write = 1;
+                alu_src = 1;
+                alu_op = 4'b0001;
+            end
+            `JAL: begin
+                is_jal = 1;
+                pc_to_reg = 1;
+                reg_write = 1;
+            end
+            `BRANCH: begin
+                is_branch = 1;
             end
             `ECALL: is_ecall = 1;
             default: ; 

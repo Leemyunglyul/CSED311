@@ -20,6 +20,8 @@ module cpu(input reset,       // positive reset signal
   wire [31:0] current_pc;
   wire [31:0] imm_gen_out, alu_out, mem_dout;
   wire [31:0] rs1_dout, rs2_dout;
+  wire gshare_predict_taken, actual_taken, branch_mispredicted, jalr_mispredicted;
+  wire [31:0] gshare_next_pc, correct_pc;
   
   /***** Register declarations *****/
   // You need to modify the width of registers
@@ -29,6 +31,7 @@ module cpu(input reset,       // positive reset signal
   /***** IF/ID pipeline registers *****/
   reg [31:0] IF_ID_inst;           // will be used in ID stage
   reg IF_ID_write;
+  reg [31:0] IF_ID_pc;
   reg ID_EX_sel;
   /***** ID/EX pipeline registers *****/
   // From the control unit
@@ -38,6 +41,10 @@ module cpu(input reset,       // positive reset signal
   reg ID_EX_mem_read;       // will be used in MEM stage
   reg ID_EX_mem_to_reg;     // will be used in WB stage
   reg ID_EX_reg_write;      // will be used in WB stage
+  reg ID_EX_pc_to_reg;
+  reg [31:0] ID_EX_pc;
+  reg ID_EX_is_jalr;
+  reg bcond;
   // From others
   reg [31:0] ID_EX_rs1_data;
   reg [31:0] ID_EX_rs2_data;
@@ -50,6 +57,8 @@ module cpu(input reset,       // positive reset signal
   reg EX_MEM_mem_read;      // will be used in MEM stage
   reg EX_MEM_mem_to_reg;    // will be used in WB stage
   reg EX_MEM_reg_write;     // will be used in WB stage
+  reg EX_MEM_pc_to_reg;
+  reg [31:0] EX_MEM_pc;
   // From others
   reg [31:0] EX_MEM_alu_out;
   reg [31:0]EX_MEM_dmem_data;
@@ -59,19 +68,20 @@ module cpu(input reset,       // positive reset signal
   // From the control unit
   reg MEM_WB_mem_to_reg;    // will be used in WB stage
   reg MEM_WB_reg_write;     // will be used in WB stage
+  reg MEM_WB_pc_to_reg;
+  reg [31:0] MEM_WB_pc;
   reg [4:0] MEM_WB_rd;
   // From others
   reg [31:0] MEM_WB_mem_to_reg_src_1;
   reg [31:0] MEM_WB_mem_to_reg_src_2;
 
   reg [31:0] alu_in_1, alu_in_2_pre, alu_in_2, wb_data, inst;
-  reg mem_read, mem_to_reg, mem_write, reg_write, alu_src;
+  reg mem_read, mem_to_reg, mem_write, reg_write, alu_src, pc_to_reg;
   reg [3:0] alu_op;
 
   reg ID_EX_halt, EX_MEM_halt, MEM_WB_halt, final_halt;
-
-  //assign check_halt = is_ecall && (print_reg[17] == 32'd10);
-  //assign is_halted = MEM_WB_halt;
+  reg [31:0] jalr_pc, jal_pc, next_pc;
+  reg is_jal, is_jalr, is_branch;
 
   assign is_halted = final_halt;
 
@@ -108,12 +118,58 @@ module cpu(input reset,       // positive reset signal
     else wb_data = MEM_WB_mem_to_reg_src_2;
   end
 
+  always @(*) begin
+    if(is_branch) begin
+      case(alu_op)
+        4'b1000: bcond = (rs1_dout == rs2_dout); // BEQ
+        4'b1001: bcond = (rs1_dout != rs2_dout); // BNE
+        4'b1010: bcond = ($signed(rs1_dout) < $signed(rs2_dout)); // BLT
+        4'b1011: bcond = ($signed(rs1_dout) >= $signed(rs2_dout)); // BGE
+        default: bcond = 1'b0;
+      endcase
+    end
+    else bcond = 0;
+  end
+
+  assign actual_taken = ID_EX_is_jalr || is_jal || (is_branch && bcond);
+
+  assign branch_mispredicted = 
+      (is_branch || is_jal || ID_EX_is_jalr) && 
+      ( (gshare_predict_taken != actual_taken) || 
+        (gshare_predict_taken && (gshare_next_pc != correct_pc)) );
+
+  assign jalr_mispredicted = ID_EX_is_jalr && (gshare_predict_taken != actual_taken);
+  
+  assign correct_pc = ID_EX_is_jalr ? alu_out :
+                      actual_taken ? ID_EX_pc + ID_EX_imm : ID_EX_pc + 4;
+
+  always @(*) begin
+    if(branch_mispredicted)
+      next_pc = correct_pc;
+    else if(gshare_predict_taken)
+      next_pc = gshare_next_pc;
+    else next_pc = current_pc + 4;  
+  end
+
+  // branch prediction은 비동기, update는 동기.
+  Gshare gshare(
+    .clk(clk),
+    .reset(reset),
+    .pc(current_pc),
+    .update_valid(is_branch || is_jal || ID_EX_is_jalr),
+    .update_pc(ID_EX_pc),
+    .update_target(actual_taken ? (ID_EX_pc + ID_EX_imm) : ID_EX_pc + 4),
+    .update_taken(actual_taken),
+    .next_pc(gshare_next_pc),
+    .predict_taken(gshare_predict_taken)
+  );
+
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
   PC pc(
     .reset(reset),       // input (Use reset to initialize PC. Initial value must be 0)
     .clk(clk),         // input
-    .next_pc(current_pc + 4),     // input
+    .next_pc(next_pc),     // input
     .pc_write(pc_write),
     .current_pc(current_pc)   // output
   );
@@ -128,12 +184,15 @@ module cpu(input reset,       // positive reset signal
 
   // Update IF/ID pipeline registers here
   always @(posedge clk) begin
-    if (reset) begin
+    if (reset || branch_mispredicted) begin
       IF_ID_inst <= 0;
+      IF_ID_pc <= 0;
     end
     else begin
-      if(IF_ID_write)
+      if(IF_ID_write) begin
         IF_ID_inst <= inst;
+        IF_ID_pc <= current_pc;
+      end
     end
   end
 
@@ -144,7 +203,7 @@ module cpu(input reset,       // positive reset signal
     .rs1 (IF_ID_inst[19:15]),          // input
     .rs2 (IF_ID_inst[24:20]),          // input
     .rd (MEM_WB_rd),           // input
-    .rd_din (wb_data),       // input
+    .rd_din (MEM_WB_pc_to_reg? MEM_WB_pc + 4 : wb_data),       // input
     .write_enable (MEM_WB_reg_write),    // input
     .rs1_dout (rs1_dout),     // output
     .rs2_dout (rs2_dout),      // output
@@ -162,6 +221,10 @@ module cpu(input reset,       // positive reset signal
     .reg_write(reg_write),  // output
     .alu_op(alu_op),        // output
     .alu_src(alu_src),
+    .is_jal(is_jal),
+    .is_jalr(is_jalr),
+    .is_branch(is_branch),
+    .pc_to_reg(pc_to_reg),
     .is_ecall(is_ecall)       // output (ecall inst)
   );
 
@@ -185,7 +248,7 @@ module cpu(input reset,       // positive reset signal
 
   // Update ID/EX pipeline registers here
   always @(posedge clk) begin
-    if (reset) begin
+    if (reset || branch_mispredicted) begin
       ID_EX_imm <= 0;
       ID_EX_mem_read <= 0;
       ID_EX_mem_to_reg <= 0;
@@ -199,6 +262,9 @@ module cpu(input reset,       // positive reset signal
       ID_EX_rs1 <= 0;
       ID_EX_rs2 <= 0;
       ID_EX_halt <= 0;
+      ID_EX_pc_to_reg <= 0;
+      ID_EX_pc <= 0;
+      ID_EX_is_jalr <= 0;
     end 
     else begin
       if(ID_EX_sel) begin
@@ -208,6 +274,9 @@ module cpu(input reset,       // positive reset signal
         ID_EX_reg_write <= 0;
         ID_EX_alu_op <= 0;
         ID_EX_alu_src <= 0;
+        ID_EX_pc_to_reg <= 0;
+        ID_EX_pc <= 0;
+        ID_EX_is_jalr <= 0;
       end
       else begin
         ID_EX_mem_read <= mem_read;
@@ -216,6 +285,9 @@ module cpu(input reset,       // positive reset signal
         ID_EX_reg_write <= reg_write;
         ID_EX_alu_op <= alu_op;
         ID_EX_alu_src <= alu_src;
+        ID_EX_pc_to_reg <= pc_to_reg;
+        ID_EX_pc <= IF_ID_pc;
+        ID_EX_is_jalr <= is_jalr;
       end
       ID_EX_imm <= imm_gen_out;
       ID_EX_rs1_data <= rs1_dout;
@@ -248,7 +320,7 @@ module cpu(input reset,       // positive reset signal
 
   // Update EX/MEM pipeline registers here
   always @(posedge clk) begin
-    if (reset) begin
+    if (reset || jalr_mispredicted) begin
       EX_MEM_mem_read <= 0;
       EX_MEM_mem_to_reg <= 0;
       EX_MEM_mem_write <= 0;
@@ -257,6 +329,8 @@ module cpu(input reset,       // positive reset signal
       EX_MEM_rd <= 0;
       EX_MEM_dmem_data <= 0;
       EX_MEM_halt <= 0;
+      EX_MEM_pc_to_reg <= 0;
+      EX_MEM_pc <= 0;
     end
     else begin
       EX_MEM_mem_read <= ID_EX_mem_read;
@@ -267,6 +341,8 @@ module cpu(input reset,       // positive reset signal
       EX_MEM_rd <= ID_EX_rd;
       EX_MEM_dmem_data <= alu_in_2_pre;
       EX_MEM_halt <= ID_EX_halt;
+      EX_MEM_pc_to_reg <= ID_EX_pc_to_reg;
+      EX_MEM_pc <= ID_EX_pc;
     end
   end
 
@@ -290,6 +366,8 @@ module cpu(input reset,       // positive reset signal
       MEM_WB_mem_to_reg <= 0;
       MEM_WB_reg_write <= 0;
       MEM_WB_halt <= 0;
+      MEM_WB_pc_to_reg <= 0;
+      MEM_WB_pc <= 0;
     end
     else begin
       MEM_WB_mem_to_reg_src_1 <= mem_dout;
@@ -298,6 +376,8 @@ module cpu(input reset,       // positive reset signal
       MEM_WB_mem_to_reg <= EX_MEM_mem_to_reg;
       MEM_WB_reg_write <= EX_MEM_reg_write;
       MEM_WB_halt <= EX_MEM_halt;
+      MEM_WB_pc_to_reg <= EX_MEM_pc_to_reg;
+      MEM_WB_pc <= EX_MEM_pc;
     end
   end
 
