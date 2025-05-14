@@ -22,6 +22,7 @@ module cpu(input reset,       // positive reset signal
   wire [31:0] rs1_dout, rs2_dout;
   wire gshare_predict_taken, actual_taken, branch_mispredicted, gshare_enable;
   wire [31:0] gshare_next_pc, correct_pc;
+  wire is_ready, is_output_valid, is_hit, cache_busy;
   
   /***** Register declarations *****/
   // You need to modify the width of registers
@@ -176,6 +177,7 @@ module cpu(input reset,       // positive reset signal
       IF_ID_inst <= 0;
       IF_ID_pc <= 0;
     end
+    else if(cache_busy);
     else begin
       if(IF_ID_write) begin
         IF_ID_inst <= inst;
@@ -256,6 +258,7 @@ module cpu(input reset,       // positive reset signal
       ID_EX_is_jal <= 0;
       ID_EX_is_branch <= 0;
     end 
+    else if(cache_busy);
     else begin
       if(ID_EX_sel) begin
         ID_EX_mem_read <= 0;
@@ -327,6 +330,7 @@ module cpu(input reset,       // positive reset signal
       EX_MEM_pc_to_reg <= 0;
       EX_MEM_pc <= 0;
     end
+    else if(cache_busy);
     else begin
       EX_MEM_mem_read <= ID_EX_mem_read;
       EX_MEM_mem_to_reg <= ID_EX_mem_to_reg;
@@ -341,7 +345,7 @@ module cpu(input reset,       // positive reset signal
     end
   end
 
-  // ---------- Data Memory ----------
+  /*// ---------- Data Memory ----------
   DataMemory dmem(
     .reset (reset),      // input
     .clk (clk),        // input
@@ -350,7 +354,23 @@ module cpu(input reset,       // positive reset signal
     .mem_read (EX_MEM_mem_read),   // input
     .mem_write (EX_MEM_mem_write),  // input
     .dout (mem_dout)        // output
+  );*/
+
+  Cache cache(
+    .reset(reset),
+    .clk(clk),
+    .is_input_valid(EX_MEM_mem_read || EX_MEM_mem_write),
+    .addr(EX_MEM_alu_out),
+    .mem_read(EX_MEM_mem_read),
+    .mem_write(EX_MEM_mem_write),
+    .din(EX_MEM_dmem_data),
+    .is_ready(is_ready),
+    .is_output_valid(is_output_valid),
+    .dout(mem_dout),
+    .is_hit(is_hit)
   );
+
+  assign cache_busy = (EX_MEM_mem_read || EX_MEM_mem_write) && !is_ready; 
 
   // Update MEM/WB pipeline registers here
   always @(posedge clk) begin
@@ -364,6 +384,7 @@ module cpu(input reset,       // positive reset signal
       MEM_WB_pc_to_reg <= 0;
       MEM_WB_pc <= 0;
     end
+    //else if(cache_busy);
     else begin
       MEM_WB_mem_to_reg_src_1 <= mem_dout;
       MEM_WB_mem_to_reg_src_2 <= EX_MEM_alu_out;

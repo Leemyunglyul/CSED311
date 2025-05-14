@@ -12,7 +12,7 @@
 using namespace std;
 #include "Vtop.h"
 
-#define MAX_SIM_TIME 10000
+#define MAX_SIM_TIME 1000000
 int sim_time = 0;
 int total_cycle = 0;
 
@@ -28,7 +28,7 @@ void next_cycle(Vtop* dut, VerilatedVcdC* m_trace) {
 
 int main(int argc, char** argv, char** env) {
     // TO DO : CHANGE "filename" TO PROVIDED "answer_*.txt" PATH
-    string filename = "/root/verilator/lab/lab4-2/student_tb/answer_recursive.txt";
+    string filename = "/root/verilator/lab/lab5/Lab5_student_tb/naive_ripes_result.txt";
     ifstream file(filename);
     stringstream ss;
     string reg_hex;
