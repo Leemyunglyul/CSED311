@@ -7,6 +7,10 @@
 #include "Vtop___024root.h"
 
 // Parameter definitions for Vtop___024root
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__gshare__DOT__GHR_BITS;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__gshare__DOT__PC_TAG_BITS;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__gshare__DOT__PC_INDEX_BITS;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__gshare__DOT__PHT_SIZE;
 constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__imem__DOT__MEM_DEPTH;
 constexpr IData/*31:0*/ Vtop___024root::top__DOT__cpu__DOT__dmem__DOT__MEM_DEPTH;
 

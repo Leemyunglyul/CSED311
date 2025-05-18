@@ -90,6 +90,7 @@ module cpu(input reset,       // positive reset signal
 
   always @(posedge clk) begin
     if(reset) final_halt <= 0;
+    else if(cache_busy);
     else final_halt <= MEM_WB_halt;
   end
 
@@ -159,7 +160,7 @@ module cpu(input reset,       // positive reset signal
     .reset(reset),       // input (Use reset to initialize PC. Initial value must be 0)
     .clk(clk),         // input
     .next_pc(next_pc),     // input
-    .pc_write(pc_write),
+    .pc_write(pc_write & !cache_busy),
     .current_pc(current_pc)   // output
   );
   
@@ -356,10 +357,13 @@ module cpu(input reset,       // positive reset signal
     .dout (mem_dout)        // output
   );*/
 
+  wire is_input_valid; 
+  assign is_input_valid = EX_MEM_mem_read | EX_MEM_mem_write;
+
   Cache cache(
     .reset(reset),
     .clk(clk),
-    .is_input_valid(EX_MEM_mem_read || EX_MEM_mem_write),
+    .is_input_valid(EX_MEM_mem_read | EX_MEM_mem_write),
     .addr(EX_MEM_alu_out),
     .mem_read(EX_MEM_mem_read),
     .mem_write(EX_MEM_mem_write),
@@ -370,7 +374,8 @@ module cpu(input reset,       // positive reset signal
     .is_hit(is_hit)
   );
 
-  assign cache_busy = (EX_MEM_mem_read || EX_MEM_mem_write) && !is_ready; 
+  assign cache_busy = is_input_valid & (!is_ready | !is_hit);
+
 
   // Update MEM/WB pipeline registers here
   always @(posedge clk) begin
@@ -384,7 +389,7 @@ module cpu(input reset,       // positive reset signal
       MEM_WB_pc_to_reg <= 0;
       MEM_WB_pc <= 0;
     end
-    //else if(cache_busy);
+    else if(cache_busy);
     else begin
       MEM_WB_mem_to_reg_src_1 <= mem_dout;
       MEM_WB_mem_to_reg_src_2 <= EX_MEM_alu_out;
